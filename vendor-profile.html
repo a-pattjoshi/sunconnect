@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — SunConnect Vendor</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item "   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item "       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item "  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item "    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item "       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item active"     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">My Business Profile</div>
+        <div class="breadcrumb">Manage how customers see you on SunConnect marketplace</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <button class="btn btn-primary btn-sm" onclick="saveProfile()">💾 Save Changes</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Profile completeness -->
+      <div class="card mb-24" style="border-left:4px solid var(--green);">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:2px;">Profile Completeness: 82%</div>
+            <div style="font-size:0.82rem;color:var(--grey);">Complete your profile to rank higher in marketplace search results.</div>
+          </div>
+          <div style="min-width:200px;flex:1;max-width:300px;">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill green" style="width:82%"></div></div>
+            <div style="font-size:0.72rem;color:var(--grey);margin-top:4px;">Missing: GST Certificate, 2 more photos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap:24px;align-items:start;">
+        <!-- Left: Edit Form -->
+        <div>
+          <!-- Basic Info -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:16px;">🏢 Business Information</h4>
+            <div class="form-group">
+              <label class="form-label">Company / Business Name</label>
+              <input class="form-input" type="text" value="Pratham Solar">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Owner / Contact Person</label>
+                <input class="form-input" type="text" value="Satish Kumar">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Years in Business</label>
+                <input class="form-input" type="number" value="8">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input class="form-input" type="tel" value="9742675715">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input class="form-input" type="email" value="satish@prathamsolar.com">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Primary Area (Headquarters)</label>
+                <select class="form-select">
+                  <option selected>Whitefield</option><option>Koramangala</option>
+                  <option>HSR Layout</option><option>Marathahalli</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">PIN Code</label>
+                <input class="form-input" type="text" value="560066">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">About Your Business</label>
+              <textarea class="form-textarea" style="min-height:110px;">Pratham Solar has been serving Whitefield and East Bangalore since 2016. We specialise in residential rooftop installations with Remote Monitoring Systems (RMS) for daily performance tracking. With 420+ successful installations, we guarantee quality that lasts 25 years.</textarea>
+              <div class="form-hint">This appears on your public profile. Keep it clear and customer-focused.</div>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:16px;">⚙️ Services & Specialization</h4>
+            <div class="form-group">
+              <label class="form-label">Specialization</label>
+              <div id="specialization-checks" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Panel Brands Offered</label>
+              <div id="brands-checks" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Price Range (₹ per kW) — Min</label>
+                <input class="form-input" type="number" value="45000" placeholder="e.g. 45000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Price Range (₹ per kW) — Max</label>
+                <input class="form-input" type="number" value="65000" placeholder="e.g. 65000">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Typical Project Timeline</label>
+                <input class="form-input" type="text" value="30–45 days" placeholder="e.g. 21–35 days">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Panel + Inverter Warranty</label>
+                <input class="form-input" type="text" value="25 yr panel / 10 yr inverter">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Service Areas in Bangalore</label>
+              <div id="service-areas-checks" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+          </div>
+
+          <!-- Documents -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:16px;">📄 Certifications & Documents</h4>
+            <div id="documents-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+          </div>
+        </div>
+
+        <!-- Right: Live Preview + Stats -->
+        <div>
+          <!-- Live preview card -->
+          <div class="card mb-24">
+            <div style="font-size:0.72rem;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">👁 Live Marketplace Preview</div>
+            <div style="border:1px solid var(--border);border-radius:var(--radius);padding:20px;">
+              <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+                <div class="vendor-avatar">☀</div>
+                <div>
+                  <div class="vendor-name">Pratham Solar</div>
+                  <div class="vendor-location">📍 Whitefield, Bangalore</div>
+                  <div class="rating-display" style="margin-top:4px;">
+                    <span id="preview-stars"></span>
+                    <span class="rating-number">4.5</span>
+                    <span class="rating-count">(87 reviews)</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+                <span class="badge badge-gold">PM Surya Ghar Registered</span>
+                <span class="badge badge-gold">MNRE Approved</span>
+                <span class="badge badge-grey">Residential</span>
+              </div>
+              <div style="font-size:0.8rem;color:var(--grey);margin-bottom:12px;">🏷 ₹45K–₹65K per kW &nbsp;·&nbsp; Tata Solar, Waaree</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border-top:1px solid var(--border);padding-top:12px;">
+                <div class="text-center"><div class="vendor-stat-value">420+</div><div class="vendor-stat-label">Installs</div></div>
+                <div class="text-center"><div class="vendor-stat-value">8 yrs</div><div class="vendor-stat-label">Exp</div></div>
+                <div class="text-center"><div class="vendor-stat-value">30d+</div><div class="vendor-stat-label">Timeline</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ratings Summary -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:16px;">⭐ Rating Summary</h4>
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px;">
+              <div style="text-align:center;">
+                <div style="font-size:3rem;font-weight:800;color:var(--dark);line-height:1;">4.5</div>
+                <div style="color:var(--primary);">★★★★½</div>
+                <div style="font-size:0.75rem;color:var(--grey);margin-top:2px;">87 reviews</div>
+              </div>
+              <div id="rating-bars" style="flex:1;"></div>
+            </div>
+            <div class="alert alert-info" style="margin-bottom:0;">
+              <span class="alert-icon">💡</span>
+              <div><div class="alert-title">Tip: Improve Your Rating</div>
+              <div class="alert-text">Ask every completed customer to leave a review on SunConnect. Vendors with 100+ reviews get 40% more leads on average.</div></div>
+            </div>
+          </div>
+
+          <!-- Marketplace performance -->
+          <div class="card">
+            <h4 style="margin-bottom:16px;">📊 Marketplace Performance</h4>
+            <div id="performance-stats" style="display:flex;flex-direction:column;gap:12px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  // Specialization checkboxes
+  document.getElementById('specialization-checks').innerHTML =
+    ['Residential','Commercial','Industrial','Government / B2G','Agricultural'].map(s =>
+      `<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.875rem;">
+        <input type="checkbox" ${s==='Residential'?'checked':''} style="accent-color:var(--primary)"> ${s}
+      </label>`).join('');
+
+  // Panel brands checkboxes
+  document.getElementById('brands-checks').innerHTML =
+    ['Tata Solar','Waaree','Adani','Vikram','Rayzon','RenewSys','GoodWe','Premier'].map(b =>
+      `<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.875rem;">
+        <input type="checkbox" ${['Tata Solar','Waaree'].includes(b)?'checked':''} style="accent-color:var(--primary)"> ${b}
+      </label>`).join('');
+
+  // Service areas checkboxes
+  document.getElementById('service-areas-checks').innerHTML =
+    ['Whitefield','Marathahalli','Brookefield','KR Puram','Kadugodi','Koramangala','HSR Layout','Indiranagar','Jayanagar','BTM Layout','Electronic City','Bellandur'].map(a =>
+      `<label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:0.82rem;background:var(--bg);padding:5px 10px;border-radius:100px;">
+        <input type="checkbox" ${['Whitefield','Marathahalli','Brookefield','KR Puram','Kadugodi'].includes(a)?'checked':''} style="accent-color:var(--primary)"> ${a}
+      </label>`).join('');
+
+  // Documents list
+  document.getElementById('documents-list').innerHTML = [
+    { label:'MNRE Registration Certificate', status:'verified', file:'MNRE_Pratham_2024.pdf' },
+    { label:'PM Surya Ghar Empanelment',     status:'verified', file:'PMSG_Pratham.pdf' },
+    { label:'BESCOM Approved Installer',     status:'verified', file:'BESCOM_Approval.pdf' },
+    { label:'GST Registration Certificate', status:'missing',  file:'' },
+    { label:'PAN Card (Business)',           status:'verified', file:'PAN_Pratham.pdf' },
+  ].map(d => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg);border-radius:var(--radius-sm);gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.1rem;">${d.status==='verified'?'✅':'⚠️'}</span>
+        <div>
+          <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${d.label}</div>
+          ${d.file ? `<div style="font-size:0.72rem;color:var(--grey);">${d.file}</div>` : '<div style="font-size:0.72rem;color:var(--red);">Not uploaded</div>'}
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="showToast('${d.status==='missing'?'Upload dialog opened':'Document verified ✓'}','${d.status==='missing'?'':'success'}')">
+        ${d.status==='missing'?'⬆ Upload':'👁 View'}
+      </button>
+    </div>`).join('');
+
+  // Preview stars
+  document.getElementById('preview-stars').innerHTML = renderStarsStatic(4.5);
+
+  // Rating breakdown bars
+  const ratingCounts = {5:52,4:24,3:7,2:3,1:1};
+  document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(s => `
+    <div class="rating-bar-row">
+      <div class="rating-bar-label">${s}</div>
+      <div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:${Math.round(ratingCounts[s]/87*100)}%"></div></div>
+      <div class="rating-bar-count">${ratingCounts[s]}</div>
+    </div>`).join('');
+
+  // Performance stats
+  document.getElementById('performance-stats').innerHTML = [
+    ['Profile Views (May)','142','↑ 38% vs Apr'],
+    ['Quote Requests Received','12','↑ 2 new this week'],
+    ['Shortlisted by Customers','28','Active consideration'],
+    ['Conversion Rate','18.5%','Industry avg: 12%'],
+    ['Search Rank (Whitefield)','#2','Top 3 in your area'],
+  ].map(([l,v,sub]) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg);border-radius:var(--radius-sm);">
+      <div style="font-size:0.83rem;color:var(--dark-3);">${l}</div>
+      <div style="text-align:right;">
+        <div style="font-size:0.95rem;font-weight:700;color:var(--dark);">${v}</div>
+        <div style="font-size:0.7rem;color:var(--green);">${sub}</div>
+      </div>
+    </div>`).join('');
+
+  function renderStarsStatic(r) {
+    let h=''; for(let i=1;i<=5;i++) h+=i<=Math.floor(r)?'★':i===Math.ceil(r)&&r%1?'½':'☆';
+    return `<span class="stars">${h}</span>`;
+  }
+
+  function saveProfile() {
+    showToast('Profile saved! Changes are now live on the marketplace.', 'success');
+  }
+</script>
+</body>
+</html>

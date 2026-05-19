@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Inquiry — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item active"     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">My Solar Inquiry</div>
+        <div class="breadcrumb">Submit your requirements & compare quotes from verified installers</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">2</span></button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Submitted state -->
+      <div id="submitted-view">
+        <div class="alert alert-success" style="margin-bottom:24px;">
+          <span class="alert-icon">✅</span>
+          <div>
+            <div class="alert-title">Your inquiry is live! Installers are reviewing it.</div>
+            <div class="alert-text">Submitted on 28 Apr 2026 &nbsp;·&nbsp; 4 installers have responded so far.</div>
+          </div>
+        </div>
+
+        <!-- Inquiry Summary -->
+        <div class="grid-2" style="margin-bottom:24px;">
+          <div class="card">
+            <h4 style="margin-bottom:16px;">📋 Your Requirements</h4>
+            <div id="requirements-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="showNewForm()">✏️ Edit Requirements</button>
+          </div>
+
+          <div class="card">
+            <h4 style="margin-bottom:16px;">📊 Inquiry Stats</h4>
+            <div class="stats-grid" style="grid-template-columns:1fr 1fr;margin-bottom:0;">
+              <div class="stat-card" style="flex-direction:column;text-align:center;gap:4px;">
+                <div class="stat-value" style="font-size:2rem;">4</div>
+                <div class="stat-label">Responses</div>
+              </div>
+              <div class="stat-card" style="flex-direction:column;text-align:center;gap:4px;">
+                <div class="stat-value" style="font-size:2rem;color:var(--green);">1</div>
+                <div class="stat-label">Quote Accepted</div>
+              </div>
+              <div class="stat-card" style="flex-direction:column;text-align:center;gap:4px;">
+                <div class="stat-value" style="font-size:1.4rem;">₹2.25L</div>
+                <div class="stat-label">Lowest Quote</div>
+              </div>
+              <div class="stat-card" style="flex-direction:column;text-align:center;gap:4px;">
+                <div class="stat-value" style="font-size:1.4rem;">₹2.85L</div>
+                <div class="stat-label">Highest Quote</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quotes Table -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">💬 Quotes Received</div>
+            <a href="customer-marketplace.html" class="btn btn-outline btn-sm">+ Browse More Installers</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Installer</th><th>Rating</th><th>System Size</th>
+                  <th>Quote Amount</th><th>Timeline</th><th>Brands</th><th>Status</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="quotes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- New inquiry form -->
+      <div id="new-form-view" style="display:none;">
+        <div class="card" style="max-width:760px;">
+          <h3 style="margin-bottom:6px;">📋 Submit a New Solar Inquiry</h3>
+          <p style="font-size:0.85rem;color:var(--grey);margin-bottom:24px;">Fill in your details and multiple verified installers will respond with quotes.</p>
+
+          <!-- Step wizard -->
+          <div class="step-wizard" id="step-wizard"></div>
+
+          <form id="inquiry-form">
+            <!-- Step 1 -->
+            <div id="step-1">
+              <h4 style="margin-bottom:16px;">Step 1: Property Details</h4>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Property Type</label>
+                  <select class="form-select"><option>3BHK Independent House</option><option>2BHK Apartment</option><option>Villa</option><option>Commercial Office</option></select></div>
+                <div class="form-group"><label class="form-label">Area in Bangalore</label>
+                  <select class="form-select"><option>HSR Layout</option><option>Whitefield</option><option>Koramangala</option><option>Indiranagar</option><option>Jayanagar</option><option>Marathahalli</option></select></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Approx. Terrace / Roof Size</label>
+                  <input class="form-input" type="text" placeholder="e.g. 800 sq ft"></div>
+                <div class="form-group"><label class="form-label">Number of Floors</label>
+                  <select class="form-select"><option>1</option><option>2</option><option>3+</option></select></div>
+              </div>
+              <button type="button" class="btn btn-primary" onclick="goStep(2)">Next: Energy Usage →</button>
+            </div>
+
+            <!-- Step 2 -->
+            <div id="step-2" style="display:none;">
+              <h4 style="margin-bottom:16px;">Step 2: Energy Usage</h4>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Average Monthly Electricity Bill</label>
+                  <input class="form-input" type="text" placeholder="e.g. ₹5,500"></div>
+                <div class="form-group"><label class="form-label">Peak Bill Month</label>
+                  <input class="form-input" type="text" placeholder="e.g. ₹8,000 in summer"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Number of ACs</label>
+                  <select class="form-select"><option>0</option><option>1</option><option>2</option><option>3+</option></select></div>
+                <div class="form-group"><label class="form-label">Preferred System Size</label>
+                  <select class="form-select"><option>Not sure</option><option>1–3 kW</option><option>4–5 kW</option><option>6–10 kW</option></select></div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button type="button" class="btn btn-ghost" onclick="goStep(1)">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="goStep(3)">Next: Preferences →</button>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div id="step-3" style="display:none;">
+              <h4 style="margin-bottom:16px;">Step 3: Preferences</h4>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Budget Range</label>
+                  <select class="form-select"><option>₹1–2 Lakhs</option><option>₹2–3 Lakhs</option><option>₹3–5 Lakhs</option><option>₹5 Lakhs+</option></select></div>
+                <div class="form-group"><label class="form-label">Preferred Panel Brand</label>
+                  <select class="form-select"><option>No preference</option><option>Tata Solar</option><option>Waaree</option><option>Adani</option><option>Vikram</option></select></div>
+              </div>
+              <div class="form-group"><label class="form-label">Are you interested in government subsidies?</label>
+                <select class="form-select"><option>Yes — please guide me</option><option>Already aware, just need installation</option><option>No</option></select></div>
+              <div class="form-group"><label class="form-label">Additional Notes</label>
+                <textarea class="form-textarea" placeholder="Any specific requirements, concerns, or questions for installers…"></textarea></div>
+              <div style="display:flex;gap:10px;">
+                <button type="button" class="btn btn-ghost" onclick="goStep(2)">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="goStep(4)">Next: Contact Details →</button>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div id="step-4" style="display:none;">
+              <h4 style="margin-bottom:16px;">Step 4: Contact Details</h4>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Full Name</label>
+                  <input class="form-input" type="text" value="Priya Sharma"></div>
+                <div class="form-group"><label class="form-label">Mobile Number</label>
+                  <input class="form-input" type="tel" placeholder="10-digit mobile number"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email Address</label>
+                <input class="form-input" type="email" value="customer@sunconnect.in"></div>
+              <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--bg);padding:12px;border-radius:var(--radius-sm);">
+                <input type="checkbox" id="consent" checked style="accent-color:var(--primary);width:15px;height:15px;">
+                <label for="consent" style="font-size:0.82rem;color:var(--dark-3);cursor:pointer;">I agree to be contacted by verified SunConnect installers for this inquiry only.</label>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button type="button" class="btn btn-ghost" onclick="goStep(3)">← Back</button>
+                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;">🚀 Submit Inquiry to All Installers</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  document.getElementById('requirements-grid').innerHTML = [
+    ['Property Type','3BHK Independent House'],['Area','HSR Layout, Bangalore'],
+    ['Terrace Size','~800 sq ft'],['Monthly Bill','₹5,500'],
+    ['Recommended Size','5 kW'],['Budget','₹2–3 Lakhs'],
+    ['Brands Preferred','Tata Solar, Waaree'],['Subsidy Interest','Yes — PM Surya Ghar']
+  ].map(([k,val]) => `
+    <div style="background:var(--bg);border-radius:var(--radius-sm);padding:11px;">
+      <div style="font-size:0.72rem;color:var(--grey);margin-bottom:2px;">${k}</div>
+      <div style="font-size:0.85rem;font-weight:600;color:var(--dark);">${val}</div>
+    </div>`).join('');
+
+  const STEPS = ['Property','Energy Usage','Preferences','Contact'];
+  let currentStep = 1;
+
+  function renderWizard() {
+    document.getElementById('step-wizard').innerHTML = STEPS.map((s, i) => {
+      const n = i + 1;
+      const cls = n < currentStep ? 'completed' : n === currentStep ? 'active' : '';
+      const conn = i < STEPS.length - 1 ? `<div class="step-connector ${n < currentStep ? 'done' : ''}"></div>` : '';
+      return `<div class="step-item ${cls}">
+        <div class="step-circle">${n < currentStep ? '✓' : n}</div>
+        <div class="step-label">${s}</div>
+      </div>${conn}`;
+    }).join('');
+  }
+
+  function goStep(n) {
+    document.getElementById(`step-${currentStep}`).style.display = 'none';
+    currentStep = n;
+    renderWizard();
+    document.getElementById(`step-${n}`).style.display = 'block';
+  }
+
+  function showNewForm() {
+    document.getElementById('submitted-view').style.display = 'none';
+    document.getElementById('new-form-view').style.display = 'block';
+    currentStep = 1; renderWizard();
+  }
+
+  document.getElementById('inquiry-form').addEventListener('submit', e => {
+    e.preventDefault();
+    document.getElementById('new-form-view').style.display = 'none';
+    document.getElementById('submitted-view').style.display = 'block';
+    showToast('Inquiry submitted! Installers will respond within 24 hours.', 'success');
+  });
+
+  // Quotes table
+  const quotes = [
+    { vendor:"SuryamTech Solar",       rating:4.6, system:"5 kW", amount:"₹2,75,000", timeline:"14–30 days", brands:"Tata Solar",       status:"accepted" },
+    { vendor:"Pratham Solar",          rating:4.5, system:"5 kW", amount:"₹2,60,000", timeline:"30–45 days", brands:"Tata / Waaree",     status:"reviewing" },
+    { vendor:"Apollo Solar Solutions", rating:4.3, system:"5 kW", amount:"₹2,40,000", timeline:"21–35 days", brands:"Adani / Waaree",    status:"reviewing" },
+    { vendor:"Charvi Solar Solution",  rating:4.2, system:"5 kW", amount:"₹2,25,000", timeline:"25–40 days", brands:"Waaree / Vikram",   status:"reviewing" },
+  ];
+  const smap = { accepted:'badge-green', reviewing:'badge-blue', declined:'badge-red' };
+  document.getElementById('quotes-tbody').innerHTML = quotes.map((q,i) => `
+    <tr>
+      <td><a href="customer-vendor-profile.html?id=${i+1}" style="color:var(--primary);font-weight:600;">${q.vendor}</a></td>
+      <td><div class="rating-display">${renderStars(q.rating)}<span style="font-size:0.8rem;font-weight:600;margin-left:4px;">${q.rating}</span></div></td>
+      <td>${q.system}</td>
+      <td><strong>${q.amount}</strong></td>
+      <td>${q.timeline}</td>
+      <td><span class="badge badge-blue">${q.brands}</span></td>
+      <td><span class="badge ${smap[q.status]}">${q.status}</span></td>
+      <td>
+        ${q.status === 'accepted'
+          ? `<a href="customer-tracker.html" class="btn btn-success btn-sm">Track →</a>`
+          : `<button class="btn btn-primary btn-sm" onclick="showToast('Quote request sent to ${q.vendor}','success')">View Quote</button>`}
+      </td>
+    </tr>`).join('');
+
+  renderWizard();
+</script>
+</body>
+</html>

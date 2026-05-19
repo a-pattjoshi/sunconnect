@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labor Pool — SunConnect Vendor</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item "   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item "       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item "  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item "    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item active"       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item "     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Labor Pool</div>
+        <div class="breadcrumb">Find verified solar technicians available in Bangalore</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <button class="btn btn-primary btn-sm" onclick="openRegisterModal()">+ Register a Worker</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="alert alert-success">
+        <span class="alert-icon">👷</span>
+        <div>
+          <div class="alert-title">8 technicians available right now in Bangalore</div>
+          <div class="alert-text">SunConnect's shared labor pool connects you with verified, NSDC-certified solar technicians on demand. No recruitment hassle.</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-value">8</div><div class="stat-label">Available Now</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">🔴</div><div><div class="stat-value">3</div><div class="stat-label">Currently Busy</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">🔶</div><div><div class="stat-value">2</div><div class="stat-label">Partially Available</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">🏅</div><div><div class="stat-value">12</div><div class="stat-label">Total in Pool</div></div></div>
+      </div>
+
+      <!-- Search & Filter -->
+      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <div class="search-bar" style="flex:1;min-width:200px;margin-bottom:0;">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="worker-search" placeholder="Search by name, skill or area…" oninput="filterWorkers()">
+        </div>
+        <select class="form-select" style="width:auto;" id="avail-filter" onchange="filterWorkers()">
+          <option value="">All Availability</option>
+          <option value="available">Available Now</option>
+          <option value="partial">Partially Available</option>
+          <option value="busy">Currently Busy</option>
+        </select>
+        <select class="form-select" style="width:auto;" id="skill-filter" onchange="filterWorkers()">
+          <option value="">All Skills</option>
+          <option value="Panel Mounting">Panel Mounting</option>
+          <option value="AC Wiring">AC Wiring</option>
+          <option value="Inverter Install">Inverter Install</option>
+          <option value="Civil Work">Civil Work</option>
+          <option value="Commissioning">Commissioning</option>
+        </select>
+      </div>
+
+      <div class="worker-grid" id="worker-grid"></div>
+
+      <div class="empty-state" id="worker-empty" style="display:none;">
+        <div class="empty-icon">👷</div>
+        <div class="empty-title">No workers match your filters</div>
+        <div class="empty-text">Try adjusting your search or availability filter.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Worker Request Modal -->
+<div class="modal-overlay" id="request-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="req-modal-title">Request Technician</div>
+      <button class="modal-close" onclick="closeReqModal()">✕</button>
+    </div>
+    <div id="req-modal-body"></div>
+    <div class="form-group" style="margin-top:16px;">
+      <label class="form-label">Project / Site</label>
+      <select class="form-select">
+        <option>PRJ-001 — Meenakshi V. (Kadugodi, 4 kW)</option>
+        <option>PRJ-002 — Pradeep S. (Whitefield, 3 kW)</option>
+        <option>PRJ-003 — Savitha Rao (Marathahalli, 5 kW)</option>
+        <option>New project (specify below)</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Start Date</label>
+        <input class="form-input" type="date" value="2026-05-18">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Duration (days)</label>
+        <input class="form-input" type="number" value="3" min="1" max="30">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Task Description</label>
+      <textarea class="form-textarea" placeholder="e.g. Panel mounting and DC wiring for 5 kW residential installation…"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" onclick="closeReqModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="sendRequest()">Send Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Worker Modal -->
+<div class="modal-overlay" id="register-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">+ Register a Worker</div>
+      <button class="modal-close" onclick="closeRegisterModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" placeholder="Worker's full name"></div>
+      <div class="form-group"><label class="form-label">Mobile Number</label><input class="form-input" type="tel" placeholder="10-digit number"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Primary Skill</label>
+        <select class="form-select"><option>Panel Mounting</option><option>AC/DC Wiring</option><option>Inverter Installation</option><option>Civil / Structural</option><option>Commissioning</option></select></div>
+      <div class="form-group"><label class="form-label">Years of Experience</label><input class="form-input" type="number" placeholder="e.g. 4" min="0" max="30"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Area in Bangalore</label>
+      <select class="form-select"><option>Whitefield</option><option>Marathahalli</option><option>HSR Layout</option><option>Koramangala</option><option>Electronic City</option><option>Other</option></select></div>
+    <div class="form-group"><label class="form-label">Certifications (if any)</label>
+      <input class="form-input" type="text" placeholder="e.g. NSDC Solar Technician L3, MNRE Certified"></div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-ghost" onclick="closeRegisterModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="registerWorker()">Register Worker</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  let selectedWorker = null;
+
+  function filterWorkers() {
+    const q    = document.getElementById('worker-search').value.toLowerCase();
+    const avail= document.getElementById('avail-filter').value;
+    const skill= document.getElementById('skill-filter').value;
+
+    const data = SC_WORKERS.filter(w => {
+      if (avail && w.avail !== avail) return false;
+      if (skill && !w.skills.some(s => s.includes(skill))) return false;
+      if (q && !w.name.toLowerCase().includes(q) && !w.area.toLowerCase().includes(q) && !w.skills.join(' ').toLowerCase().includes(q)) return false;
+      return true;
+    });
+
+    const grid  = document.getElementById('worker-grid');
+    const empty = document.getElementById('worker-empty');
+    if (!data.length) { grid.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display = 'none';
+
+    grid.innerHTML = data.map(w => `
+      <div class="worker-card">
+        <div class="worker-header">
+          <div class="worker-avatar">${w.initials}</div>
+          <div>
+            <div class="worker-name">${w.name}</div>
+            <div class="worker-exp">📍 ${w.area} &nbsp;·&nbsp; ${w.exp} experience</div>
+          </div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div class="avail-dot ${w.avail}" style="margin-bottom:6px;">
+            ${w.avail==='available'?'Available Now':w.avail==='busy'?'Currently Busy':'Partially Available'}
+          </div>
+          <div class="rating-display" style="margin-top:4px;">
+            ${renderStars(w.rating)}<span class="rating-number" style="font-size:0.8rem;">${w.rating}</span>
+            <span class="rating-count">${w.jobs} jobs done</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;">
+          ${w.skills.map(s=>`<span class="badge badge-blue" style="font-size:0.7rem;">${s}</span>`).join('')}
+        </div>
+        <div style="margin-bottom:12px;">
+          ${w.certs.map(c=>`<div style="font-size:0.72rem;color:var(--grey);padding:2px 0;">🏅 ${c}</div>`).join('')}
+        </div>
+        <button class="btn btn-primary btn-full btn-sm" onclick="openReqModal(${w.id})" ${w.avail==='busy'?'disabled style="opacity:0.5;cursor:not-allowed;"':''}>
+          ${w.avail==='busy'?'Currently Unavailable':'Request Technician'}
+        </button>
+      </div>`).join('');
+  }
+
+  function openReqModal(id) {
+    selectedWorker = SC_WORKERS.find(w => w.id === id);
+    document.getElementById('req-modal-title').textContent = `Request — ${selectedWorker.name}`;
+    document.getElementById('req-modal-body').innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;background:var(--bg);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+        <div class="worker-avatar">${selectedWorker.initials}</div>
+        <div>
+          <div style="font-weight:700;color:var(--dark);">${selectedWorker.name}</div>
+          <div style="font-size:0.78rem;color:var(--grey);">${selectedWorker.area} &nbsp;·&nbsp; ${selectedWorker.exp}</div>
+          <div style="margin-top:4px;">${selectedWorker.skills.slice(0,3).map(s=>`<span class="badge badge-blue" style="font-size:0.68rem;">${s}</span>`).join(' ')}</div>
+        </div>
+      </div>`;
+    document.getElementById('request-modal').classList.add('open');
+  }
+
+  function closeReqModal()      { document.getElementById('request-modal').classList.remove('open'); }
+  function openRegisterModal()  { document.getElementById('register-modal').classList.add('open'); }
+  function closeRegisterModal() { document.getElementById('register-modal').classList.remove('open'); }
+
+  function sendRequest() {
+    closeReqModal();
+    showToast(`Request sent to ${selectedWorker.name}! They'll confirm within 2 hours.`, 'success');
+  }
+  function registerWorker() {
+    closeRegisterModal();
+    showToast('Worker registered in SunConnect Labor Pool!', 'success');
+  }
+
+  filterWorkers();
+</script>
+</body>
+</html>

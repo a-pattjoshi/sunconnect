@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leads — SunConnect Vendor</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item "   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item active"       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item "  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item "    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item "       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item "     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Lead Management</div>
+        <div class="breadcrumb">All customer inquiries from SunConnect marketplace</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Lead export ready!','success')">⬇ Export CSV</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Stats row -->
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon blue">📥</div><div><div class="stat-value">8</div><div class="stat-label">Total Leads</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">🆕</div><div><div class="stat-value">3</div><div class="stat-label">New Today</div><div class="stat-change up">↑ Action needed</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">🏆</div><div><div class="stat-value">1</div><div class="stat-label">Converted (Won)</div><div class="stat-change up">18.5% rate</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">❌</div><div><div class="stat-value">1</div><div class="stat-label">Lost</div><div class="stat-change down">Price competition</div></div></div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="tab-all"       onclick="filterLeads('all')">All (8)</button>
+        <button class="btn btn-ghost  btn-sm" id="tab-new"        onclick="filterLeads('new')">🆕 New (3)</button>
+        <button class="btn btn-ghost  btn-sm" id="tab-contacted"  onclick="filterLeads('contacted')">📞 Contacted (2)</button>
+        <button class="btn btn-ghost  btn-sm" id="tab-quote_sent" onclick="filterLeads('quote_sent')">📄 Quote Sent (1)</button>
+        <button class="btn btn-ghost  btn-sm" id="tab-won"        onclick="filterLeads('won')">✅ Won (1)</button>
+        <button class="btn btn-ghost  btn-sm" id="tab-lost"       onclick="filterLeads('lost')">❌ Lost (1)</button>
+      </div>
+
+      <!-- Leads table -->
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th><th>Location</th><th>System</th>
+                <th>Monthly Bill</th><th>Date</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Lead Detail Modal -->
+<div class="modal-overlay" id="lead-modal">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-lead-title">Lead Details</div>
+      <button class="modal-close" onclick="closeLeadModal()">✕</button>
+    </div>
+    <div id="modal-lead-body"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      <button class="btn btn-ghost" onclick="closeLeadModal()">Close</button>
+      <button class="btn btn-outline" onclick="showToast('Calling customer…','success');closeLeadModal()">📞 Call Customer</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="window.location.href='vendor-quotations.html'">📄 Create Quotation →</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  const STATUS_BADGE = { new:'badge-blue', contacted:'badge-gold', quote_sent:'badge-purple', won:'badge-green', lost:'badge-red' };
+  const STATUS_LABEL = { new:'New', contacted:'Contacted', quote_sent:'Quote Sent', won:'Won ✓', lost:'Lost' };
+  let activeFilter = 'all';
+
+  function filterLeads(f) {
+    activeFilter = f;
+    document.querySelectorAll('[id^=tab-]').forEach(b => { b.className = 'btn btn-ghost btn-sm'; });
+    document.getElementById(`tab-${f}`).className = 'btn btn-primary btn-sm';
+    renderLeads();
+  }
+
+  function renderLeads() {
+    const data = activeFilter === 'all' ? SC_LEADS : SC_LEADS.filter(l => l.status === activeFilter);
+    if (!data.length) {
+      document.getElementById('leads-tbody').innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--grey);">No leads in this category.</td></tr>`;
+      return;
+    }
+    document.getElementById('leads-tbody').innerHTML = data.map(l => `
+      <tr>
+        <td>
+          <div style="font-weight:600;color:var(--dark);">${l.customer}</div>
+          <div style="font-size:0.72rem;color:var(--grey);">${l.phone}</div>
+        </td>
+        <td>📍 ${l.area}</td>
+        <td><strong>${l.system}</strong><br><span style="font-size:0.75rem;color:var(--grey);">${l.type}</span></td>
+        <td>${l.bill}</td>
+        <td style="font-size:0.8rem;color:var(--grey);">${l.date}</td>
+        <td><span class="badge ${STATUS_BADGE[l.status]}">${STATUS_LABEL[l.status]}</span></td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="viewLead(${l.id})">👁 View</button>
+            ${l.status === 'new' ? `<button class="btn btn-primary btn-sm" onclick="markContacted(${l.id})">📞 Contact</button>` : ''}
+            ${l.status === 'contacted' ? `<button class="btn btn-primary btn-sm" onclick="window.location.href='vendor-quotations.html'">📄 Quote</button>` : ''}
+            ${l.status === 'won' ? `<button class="btn btn-success btn-sm" onclick="window.location.href='vendor-projects.html'">🏗 Project</button>` : ''}
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function viewLead(id) {
+    const l = SC_LEADS.find(x => x.id === id);
+    document.getElementById('modal-lead-title').textContent = `Lead — ${l.customer}`;
+    document.getElementById('modal-lead-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        ${[['Customer',l.customer],['Phone',l.phone],['Location',l.area+', Bangalore'],['System Size',l.system],
+           ['Property Type',l.type],['Monthly Bill',l.bill],['Lead Date',l.date],['Status',STATUS_LABEL[l.status]]
+          ].map(([k,v])=>`<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px;">
+            <div style="font-size:0.7rem;color:var(--grey);margin-bottom:2px;">${k}</div>
+            <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${v}</div>
+          </div>`).join('')}
+      </div>
+      <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px;">
+        <div style="font-size:0.72rem;color:var(--grey);margin-bottom:6px;">CUSTOMER NOTES</div>
+        <div style="font-size:0.875rem;color:var(--dark-3);line-height:1.6;">${l.notes}</div>
+      </div>`;
+    document.getElementById('lead-modal').classList.add('open');
+  }
+
+  function markContacted(id) {
+    const l = SC_LEADS.find(x => x.id === id);
+    l.status = 'contacted';
+    renderLeads();
+    showToast(`${l.customer} marked as Contacted!`, 'success');
+  }
+
+  function closeLeadModal() { document.getElementById('lead-modal').classList.remove('open'); }
+
+  renderLeads();
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — SunConnect Vendor</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item "   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item "       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item "  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item active"    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item "       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item "     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Project Management</div>
+        <div class="breadcrumb">Track all installations from survey to handover</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="view-list" onclick="setView('list')">≡ List</button>
+          <button class="btn btn-primary btn-sm" id="view-kanban" onclick="setView('kanban')">⊞ Kanban</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon gold">🏗️</div><div><div class="stat-value">6</div><div class="stat-label">Total Projects</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue">⚡</div><div><div class="stat-value">4</div><div class="stat-label">In Progress</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-value">2</div><div class="stat-label">Completed This Month</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">💰</div><div><div class="stat-value">₹19.9L</div><div class="stat-label">Pipeline Value</div></div></div>
+      </div>
+
+      <!-- Kanban View -->
+      <div id="kanban-view">
+        <div class="kanban-board" id="kanban-board"></div>
+      </div>
+
+      <!-- List View -->
+      <div id="list-view" style="display:none;">
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Project ID</th><th>Customer</th><th>Location</th><th>System</th><th>Stage</th><th>Progress</th><th>ETA</th><th>Value</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="projects-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Project Detail Modal -->
+<div class="modal-overlay" id="proj-modal">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-header">
+      <div class="modal-title" id="proj-modal-title">Project Details</div>
+      <button class="modal-close" onclick="closeProjModal()">✕</button>
+    </div>
+    <div id="proj-modal-body"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      <button class="btn btn-ghost" onclick="closeProjModal()">Close</button>
+      <button class="btn btn-outline" onclick="showToast('Customer notified of update!','success');closeProjModal()">📲 Notify Customer</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="showToast('Stage updated!','success');closeProjModal()">✅ Mark Stage Complete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  const STAGES   = ['survey','material','installation','inspection','completed'];
+  const STAGE_LABELS = { survey:'🔍 Survey', material:'📦 Material', installation:'🔧 Installation', inspection:'✅ Inspection', completed:'🎉 Completed' };
+  const STAGE_BADGE  = { survey:'badge-blue', material:'badge-gold', installation:'badge-purple', inspection:'badge-gold', completed:'badge-green' };
+
+  function setView(v) {
+    document.getElementById('kanban-view').style.display = v==='kanban' ? 'block' : 'none';
+    document.getElementById('list-view').style.display   = v==='list'   ? 'block' : 'none';
+    document.getElementById('view-kanban').className     = `btn btn-sm ${v==='kanban'?'btn-primary':'btn-ghost'}`;
+    document.getElementById('view-list').className       = `btn btn-sm ${v==='list'  ?'btn-primary':'btn-ghost'}`;
+  }
+
+  // Kanban
+  function renderKanban() {
+    document.getElementById('kanban-board').innerHTML = STAGES.map(stage => {
+      const projects = SC_PROJECTS.filter(p => p.stage === stage);
+      return `
+        <div class="kanban-column">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">${STAGE_LABELS[stage]}</div>
+            <div class="kanban-col-count">${projects.length}</div>
+          </div>
+          ${projects.map(p => `
+            <div class="kanban-card" onclick="viewProject('${p.id}')">
+              <div class="kanban-card-title">${p.customer}</div>
+              <div class="kanban-card-meta">📍 ${p.area} &nbsp;·&nbsp; ${p.system}</div>
+              <div class="kanban-card-meta" style="margin-top:4px;">💰 ${p.value}</div>
+              <div style="margin-top:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                  <span style="font-size:0.7rem;color:var(--grey);">Progress</span>
+                  <span style="font-size:0.7rem;font-weight:700;color:var(--primary);">${p.progress}%</span>
+                </div>
+                <div class="progress-bar-wrap" style="height:5px;"><div class="progress-bar-fill ${p.stage==='completed'?'green':''}" style="width:${p.progress}%"></div></div>
+              </div>
+              <div style="margin-top:8px;font-size:0.7rem;color:var(--grey);">ETA: ${p.eta}</div>
+            </div>`).join('')}
+          ${!projects.length ? `<div style="text-align:center;padding:20px;color:var(--grey-light);font-size:0.8rem;">No projects</div>` : ''}
+        </div>`;
+    }).join('');
+  }
+
+  // List
+  function renderList() {
+    document.getElementById('projects-tbody').innerHTML = SC_PROJECTS.map(p => `
+      <tr>
+        <td><span class="badge badge-grey">${p.id}</span></td>
+        <td><strong>${p.customer}</strong></td>
+        <td>📍 ${p.area}</td>
+        <td>${p.system}</td>
+        <td><span class="badge ${STAGE_BADGE[p.stage]}">${STAGE_LABELS[p.stage]}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="progress-bar-wrap" style="width:80px;"><div class="progress-bar-fill ${p.stage==='completed'?'green':''}" style="width:${p.progress}%"></div></div>
+            <span style="font-size:0.78rem;font-weight:700;">${p.progress}%</span>
+          </div>
+        </td>
+        <td style="font-size:0.8rem;color:var(--grey);">${p.eta}</td>
+        <td><strong>${p.value}</strong></td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="viewProject('${p.id}')">👁</button>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Stage updated for ${p.customer}!','success')">✅ Update</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function viewProject(id) {
+    const p = SC_PROJECTS.find(x => x.id === id);
+    document.getElementById('proj-modal-title').textContent = `${p.id} — ${p.customer}`;
+    document.getElementById('proj-modal-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        ${[['Customer',p.customer],['Location',p.area+', Bangalore'],['System Size',p.system],
+           ['Current Stage',STAGE_LABELS[p.stage]],['Start Date',p.startDate],['ETA',p.eta],
+           ['Project Value',p.value],['Progress',p.progress+'%']
+          ].map(([k,v])=>`<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px;">
+            <div style="font-size:0.7rem;color:var(--grey);margin-bottom:2px;">${k}</div>
+            <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${v}</div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:0.72rem;color:var(--grey);margin-bottom:6px;">OVERALL PROGRESS</div>
+        <div class="progress-bar-wrap" style="height:10px;"><div class="progress-bar-fill ${p.stage==='completed'?'green':''}" style="width:${p.progress}%"></div></div>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:0;">
+        <span class="alert-icon">ℹ</span>
+        <div><div class="alert-title">Next Action</div>
+        <div class="alert-text">${
+          p.stage==='survey'      ? 'Complete site assessment and submit quotation to customer.' :
+          p.stage==='material'    ? 'Procure panels and inverter. Confirm delivery date with customer.' :
+          p.stage==='installation'? 'Panel mounting and wiring in progress. Schedule BESCOM inspection.' :
+          p.stage==='inspection'  ? 'BESCOM inspection pending. File subsidy after approval.' :
+          'Project complete. Collect final payment and submit warranty documents.'
+        }</div></div>
+      </div>`;
+    document.getElementById('proj-modal').classList.add('open');
+  }
+
+  function closeProjModal() { document.getElementById('proj-modal').classList.remove('open'); }
+
+  renderKanban();
+  renderList();
+</script>
+</body>
+</html>

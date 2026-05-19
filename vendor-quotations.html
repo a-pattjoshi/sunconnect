@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotations — SunConnect Vendor</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item "   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item "       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item active"  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item "    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item "       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item "     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Quotation Manager</div>
+        <div class="breadcrumb">Create, track and manage all customer quotations</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <button class="btn btn-primary btn-sm" onclick="openQuoteBuilder()">+ New Quotation</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon blue">📄</div><div><div class="stat-value">5</div><div class="stat-label">Total Quotes</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold">👁</div><div><div class="stat-value">2</div><div class="stat-label">Viewed by Customer</div></div></div>
+        <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-value">1</div><div class="stat-label">Accepted</div><div class="stat-change up">₹2,20,000</div></div></div>
+        <div class="stat-card"><div class="stat-icon red">⌛</div><div><div class="stat-value">2</div><div class="stat-label">Expiring Soon</div><div class="stat-change down">Action needed</div></div></div>
+      </div>
+
+      <!-- Quotations list -->
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:24px;">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <div class="section-title">All Quotations</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Quote ID</th><th>Customer</th><th>System</th><th>Panels & Inverter</th><th>Amount</th><th>Expiry</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="quotes-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Quote Builder -->
+      <div class="card" id="quote-builder" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">⚡ Quick Quote Builder</div>
+          <button class="btn btn-ghost btn-sm" onclick="closeQuoteBuilder()">✕ Cancel</button>
+        </div>
+        <p style="font-size:0.83rem;color:var(--grey);margin-bottom:20px;">Generate a professional quotation in under 60 seconds.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Customer Name</label>
+            <input class="form-input" type="text" id="q-customer" placeholder="e.g. Rohit Verma">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Customer Phone</label>
+            <input class="form-input" type="tel" id="q-phone" placeholder="10-digit number">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">System Size (kW)</label>
+            <select class="form-select" id="q-kw" onchange="calcQuote()">
+              <option value="1">1 kW</option><option value="2">2 kW</option><option value="3">3 kW</option>
+              <option value="4">4 kW</option><option value="5" selected>5 kW</option>
+              <option value="6">6 kW</option><option value="7">7 kW</option><option value="10">10 kW</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Panel Brand</label>
+            <select class="form-select" id="q-brand" onchange="calcQuote()">
+              <option value="Tata Solar" data-rate="60000">Tata Solar — Premium</option>
+              <option value="Waaree" data-rate="50000">Waaree — Quality</option>
+              <option value="Adani" data-rate="48000">Adani — Reliable</option>
+              <option value="Vikram" data-rate="45000">Vikram Solar — Affordable</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Inverter Brand</label>
+            <select class="form-select" id="q-inverter">
+              <option>GoodWe Smart Inverter</option>
+              <option>Delta M Series</option>
+              <option>Havells Solar</option>
+              <option>Sungrow</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Installation Location</label>
+            <input class="form-input" type="text" id="q-area" placeholder="e.g. Whitefield, Bangalore">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Structure Type</label>
+            <select class="form-select">
+              <option>GI Structure (Standard)</option>
+              <option>Aluminium Structure (Premium)</option>
+              <option>Elevated Tilt Frame</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quote Valid For</label>
+            <select class="form-select">
+              <option>7 days</option><option selected>14 days</option><option>30 days</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Live price preview -->
+        <div id="quote-preview" style="background:var(--primary-bg);border:1px solid var(--primary-light);border-radius:var(--radius);padding:20px;margin:16px 0;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--primary-dark);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Live Quote Preview</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;" id="price-breakdown"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Additional Notes / Terms</label>
+          <textarea class="form-textarea" placeholder="E.g. Price includes 5-year free maintenance. Subsidy processing handled by us. Payment: 30% advance, 70% post installation.">Price includes 5-year free maintenance as per PM Surya Ghar mandate. Government subsidy paperwork handled by Pratham Solar. Expected subsidy: ₹78,000 (Central) + ₹30,000 (Karnataka).
+
+Payment Schedule: 30% advance (₹___), 70% post installation completion.</textarea>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost" onclick="closeQuoteBuilder()">Cancel</button>
+          <button class="btn btn-outline" onclick="showToast('Quote saved as draft!','')">💾 Save Draft</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="sendQuote()">📤 Send to Customer</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  const STATUS_MAP = {
+    draft:'badge-grey', sent:'badge-blue', viewed:'badge-gold',
+    accepted:'badge-green', rejected:'badge-red'
+  };
+
+  document.getElementById('quotes-tbody').innerHTML = SC_QUOTATIONS.map(q => `
+    <tr>
+      <td><span class="badge badge-grey">${q.id}</span></td>
+      <td><strong>${q.customer}</strong></td>
+      <td>${q.system}</td>
+      <td style="font-size:0.8rem;color:var(--grey);">${q.panels}<br>${q.inverter}</td>
+      <td><strong>${q.amount}</strong></td>
+      <td style="font-size:0.8rem;${q.status!=='accepted'&&q.status!=='rejected'?'color:var(--red);font-weight:600;':''}">${q.expiry}</td>
+      <td><span class="badge ${STATUS_MAP[q.status]}">${q.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Opening quote ${q.id}…','')">👁 View</button>
+          ${q.status==='draft'?`<button class="btn btn-primary btn-sm" onclick="showToast('Quote sent to ${q.customer}!','success')">📤 Send</button>`:''}
+          ${q.status==='accepted'?`<button class="btn btn-success btn-sm" onclick="window.location.href='vendor-projects.html'">🏗 Start Project</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+
+  function openQuoteBuilder()  { document.getElementById('quote-builder').style.display='block'; document.getElementById('quote-builder').scrollIntoView({behavior:'smooth'}); calcQuote(); }
+  function closeQuoteBuilder() { document.getElementById('quote-builder').style.display='none'; }
+
+  function calcQuote() {
+    const kw     = parseInt(document.getElementById('q-kw').value)||5;
+    const sel    = document.getElementById('q-brand');
+    const rate   = parseInt(sel.options[sel.selectedIndex].dataset.rate)||50000;
+    const panels = kw * rate;
+    const inv    = kw <= 3 ? 18000 : kw <= 5 ? 25000 : 38000;
+    const struct = kw * 4500;
+    const inst   = kw * 3000;
+    const bos    = kw * 2500;
+    const total  = panels + inv + struct + inst + bos;
+    const subsidy= kw >= 3 ? 78000 : kw * 15000;
+
+    document.getElementById('price-breakdown').innerHTML = [
+      ['Solar Panels', `₹${panels.toLocaleString()}`],
+      ['Inverter', `₹${inv.toLocaleString()}`],
+      ['Structure', `₹${struct.toLocaleString()}`],
+      ['Installation', `₹${inst.toLocaleString()}`],
+      ['BOS Components', `₹${bos.toLocaleString()}`],
+      ['Gross Total', `₹${total.toLocaleString()}`],
+      ['Govt. Subsidy', `−₹${subsidy.toLocaleString()}`],
+      ['Net to Customer', `₹${(total-subsidy).toLocaleString()}`],
+    ].map(([l,v],i) => `
+      <div style="background:${i>=6?'var(--white)':'transparent'};border-radius:var(--radius-sm);padding:${i>=6?'10px':'4px 0'};">
+        <div style="font-size:0.72rem;color:var(--grey);">${l}</div>
+        <div style="font-size:${i>=6?'1.05rem':'0.9rem'};font-weight:${i>=6?800:600};color:${i===6?'var(--green)':i===7?'var(--primary-dark)':'var(--dark)'};">${v}</div>
+      </div>`).join('');
+  }
+
+  function sendQuote() {
+    const cust = document.getElementById('q-customer').value || 'Customer';
+    closeQuoteBuilder();
+    showToast(`Quotation sent to ${cust} successfully!`, 'success');
+  }
+</script>
+</body>
+</html>

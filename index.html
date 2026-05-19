@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SunConnect — Solar Marketplace</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <style>
+    .input-wrap { position: relative; }
+    .input-wrap .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--grey); font-size: 1rem; }
+    .error-msg { color: var(--red); font-size: 0.8rem; margin-top: 8px; display: none; }
+  </style>
+</head>
+<body>
+<div class="login-page">
+  <!-- LEFT HERO -->
+  <div class="login-hero">
+    <div class="hero-logo">
+      <div class="hero-logo-icon">☀</div>
+      <span class="hero-logo-text">SunConnect</span>
+    </div>
+    <h1 class="hero-headline">India's <span>Solar</span><br>Marketplace for<br>Bangalore</h1>
+    <p class="hero-sub">Connect with verified local solar installers, compare quotes, track your project in real-time, and unlock government subsidies — all in one place.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">10+</div><div class="hero-stat-label">Verified Installers</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">₹78K</div><div class="hero-stat-label">Avg Subsidy Saved</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">4.5★</div><div class="hero-stat-label">Avg Installer Rating</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM -->
+  <div class="login-form-wrap">
+    <div class="login-form-header">
+      <h2 class="login-form-title">Welcome back 👋</h2>
+      <p class="login-form-sub">Sign in to your SunConnect account</p>
+    </div>
+
+    <div class="login-form">
+      <!-- Role tabs -->
+      <div class="role-tabs">
+        <div class="role-tab active" id="tab-customer" onclick="selectRole('customer')">
+          <span class="role-tab-icon">🏠</span>
+          <span class="role-tab-label">I'm a Customer</span>
+        </div>
+        <div class="role-tab" id="tab-vendor" onclick="selectRole('vendor')">
+          <span class="role-tab-icon">🔧</span>
+          <span class="role-tab-label">I'm an Installer</span>
+        </div>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" id="email" placeholder="Enter your email" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <input class="form-input" type="password" id="password" placeholder="Enter your password" style="padding-right: 40px;" required>
+            <button type="button" class="eye-btn" onclick="togglePwd()">👁</button>
+          </div>
+        </div>
+        <p class="error-msg" id="error-msg">Invalid email or password. Please try again.</p>
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn" style="margin-top:8px;">
+          Sign In →
+        </button>
+      </form>
+
+      <!-- Demo hint -->
+      <div class="demo-hint" id="demo-hint">
+        <div class="demo-hint-label">🔑 Demo Credentials</div>
+        <p id="hint-text"><strong>Customer:</strong> customer@sunconnect.in / solar123</p>
+      </div>
+
+      <!-- IIMB Badge -->
+      <div class="iimb-badge">
+        <div class="iimb-logo-box">IIM<br>BANGALORE</div>
+        <div class="iimb-badge-text">MVP Project — EPGP 2026-27<br>Entrepreneurial Management | Group 3</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script>
+  let selectedRole = 'customer';
+
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('tab-customer').classList.toggle('active', role === 'customer');
+    document.getElementById('tab-vendor').classList.toggle('active', role === 'vendor');
+    document.getElementById('hint-text').innerHTML = role === 'customer'
+      ? '<strong>Customer:</strong> customer@sunconnect.in / solar123'
+      : '<strong>Installer:</strong> vendor@sunconnect.in / solar123';
+    document.getElementById('email').value    = role === 'customer' ? 'customer@sunconnect.in' : 'vendor@sunconnect.in';
+    document.getElementById('password').value = 'solar123';
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const email    = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('login-btn');
+    btn.textContent = 'Signing in…';
+    btn.disabled = true;
+    setTimeout(() => {
+      const role = scLogin(email, password);
+      if (role) {
+        window.location.replace(role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+      } else {
+        document.getElementById('error-msg').style.display = 'block';
+        btn.textContent = 'Sign In →';
+        btn.disabled = false;
+      }
+    }, 600);
+  }
+
+  function togglePwd() {
+    const p = document.getElementById('password');
+    p.type = p.type === 'password' ? 'text' : 'password';
+  }
+
+  // Auto-fill on load
+  window.onload = () => {
+    const u = scGetUser();
+    if (u) window.location.replace(u.role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+    selectRole('customer');
+  };
+</script>
+</body>
+</html>

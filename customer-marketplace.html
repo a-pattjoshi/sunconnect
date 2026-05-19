@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Installers — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item active" ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Find Solar Installers</div>
+        <div class="breadcrumb">Verified vendors in Bangalore — compare ratings, prices & services</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">2</span></button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <!-- Search -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search by installer name, area or brand…" oninput="applyFilters()">
+      </div>
+
+      <div class="marketplace-layout">
+        <!-- Filters -->
+        <div class="filter-panel">
+          <div class="filter-title">🎛 Filters</div>
+
+          <div class="filter-section">
+            <div class="filter-section-label">Area in Bangalore</div>
+            <label class="filter-option"><input type="checkbox" value="Whitefield"     onchange="applyFilters()"> Whitefield</label>
+            <label class="filter-option"><input type="checkbox" value="Koramangala"    onchange="applyFilters()"> Koramangala</label>
+            <label class="filter-option"><input type="checkbox" value="HSR Layout"     onchange="applyFilters()"> HSR Layout</label>
+            <label class="filter-option"><input type="checkbox" value="Indiranagar"    onchange="applyFilters()"> Indiranagar</label>
+            <label class="filter-option"><input type="checkbox" value="Jayanagar"      onchange="applyFilters()"> Jayanagar</label>
+            <label class="filter-option"><input type="checkbox" value="Marathahalli"   onchange="applyFilters()"> Marathahalli</label>
+            <label class="filter-option"><input type="checkbox" value="Electronic City" onchange="applyFilters()"> Electronic City</label>
+            <label class="filter-option"><input type="checkbox" value="BTM Layout"     onchange="applyFilters()"> BTM Layout</label>
+            <label class="filter-option"><input type="checkbox" value="Bellandur"      onchange="applyFilters()"> Bellandur</label>
+            <label class="filter-option"><input type="checkbox" value="Sarjapur Road"  onchange="applyFilters()"> Sarjapur Road</label>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-section-label">Minimum Rating</div>
+            <label class="filter-option"><input type="radio" name="rating" value="0"   onchange="applyFilters()" checked> All Ratings</label>
+            <label class="filter-option"><input type="radio" name="rating" value="4.5" onchange="applyFilters()"> 4.5★ & above</label>
+            <label class="filter-option"><input type="radio" name="rating" value="4.0" onchange="applyFilters()"> 4.0★ & above</label>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-section-label">Specialization</div>
+            <label class="filter-option"><input type="checkbox" value="Residential" onchange="applyFilters()"> Residential</label>
+            <label class="filter-option"><input type="checkbox" value="Commercial"  onchange="applyFilters()"> Commercial</label>
+            <label class="filter-option"><input type="checkbox" value="Industrial"  onchange="applyFilters()"> Industrial</label>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-section-label">Panel Brand</div>
+            <label class="filter-option"><input type="checkbox" value="Tata Solar" onchange="applyFilters()"> Tata Solar</label>
+            <label class="filter-option"><input type="checkbox" value="Waaree"     onchange="applyFilters()"> Waaree</label>
+            <label class="filter-option"><input type="checkbox" value="Adani"      onchange="applyFilters()"> Adani</label>
+            <label class="filter-option"><input type="checkbox" value="GoodWe"     onchange="applyFilters()"> GoodWe</label>
+          </div>
+
+          <button class="btn btn-outline btn-full btn-sm" onclick="clearFilters()">Clear All Filters</button>
+        </div>
+
+        <!-- Results -->
+        <div>
+          <div class="sort-bar">
+            <span id="result-count">Showing 10 installers</span>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.82rem;color:var(--grey);">Sort by:</span>
+              <select class="form-select" style="width:auto;padding:6px 10px;font-size:0.82rem;" onchange="applyFilters()">
+                <option value="rating">Top Rated</option>
+                <option value="installs">Most Installed</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="experience">Most Experienced</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="vendor-grid" id="vendor-grid"></div>
+
+          <div class="empty-state" id="empty-state" style="display:none;">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">No installers found</div>
+            <div class="empty-text">Try adjusting your filters or search term.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  function getFilters() {
+    const areas   = [...document.querySelectorAll('input[value]:checked')].filter(i => i.type === 'checkbox' && ['Whitefield','Koramangala','HSR Layout','Indiranagar','Jayanagar','Marathahalli','Electronic City','BTM Layout','Bellandur','Sarjapur Road'].includes(i.value)).map(i => i.value);
+    const specs   = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(i => ['Residential','Commercial','Industrial'].includes(i.value)).map(i => i.value);
+    const brands  = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(i => ['Tata Solar','Waaree','Adani','GoodWe'].includes(i.value)).map(i => i.value);
+    const minRat  = parseFloat(document.querySelector('input[name=rating]:checked')?.value || 0);
+    const search  = document.getElementById('search-input').value.toLowerCase();
+    const sortVal = document.querySelector('select').value;
+    return { areas, specs, brands, minRat, search, sortVal };
+  }
+
+  function applyFilters() {
+    const { areas, specs, brands, minRat, search, sortVal } = getFilters();
+    let data = SC_VENDORS.filter(v => {
+      if (areas.length  && !areas.some(a => v.area.includes(a)))                     return false;
+      if (specs.length  && !specs.some(s => v.specialization.includes(s)))           return false;
+      if (brands.length && !brands.some(b => v.brands.some(vb => vb.includes(b))))  return false;
+      if (v.rating < minRat)                                                          return false;
+      if (search && !v.name.toLowerCase().includes(search) && !v.area.toLowerCase().includes(search) && !v.brands.join(' ').toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    data.sort((a, b) => {
+      if (sortVal === 'rating')      return b.rating - a.rating;
+      if (sortVal === 'installs')    return b.installs - a.installs;
+      if (sortVal === 'price_low')   return a.priceMin - b.priceMin;
+      if (sortVal === 'price_high')  return b.priceMax - a.priceMax;
+      if (sortVal === 'experience')  return b.experience - a.experience;
+      return 0;
+    });
+
+    document.getElementById('result-count').textContent = `Showing ${data.length} installer${data.length !== 1 ? 's' : ''}`;
+    const grid  = document.getElementById('vendor-grid');
+    const empty = document.getElementById('empty-state');
+    if (!data.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = data.map(v => `
+      <a href="customer-vendor-profile.html?id=${v.id}" class="vendor-card">
+        <div class="vendor-card-header">
+          <div class="vendor-avatar">${v.icon}</div>
+          <div style="flex:1;">
+            <div class="vendor-name">${v.name}</div>
+            <div class="vendor-location">📍 ${v.area}</div>
+            <div class="rating-display" style="margin-top:4px;">
+              ${renderStars(v.rating)}
+              <span class="rating-number">${v.rating}</span>
+              <span class="rating-count">(${v.reviewCount} reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div class="vendor-tags">
+          ${v.badges.slice(0,2).map(b => `<span class="badge badge-gold">${b}</span>`).join('')}
+          <span class="badge badge-grey">${v.specialization}</span>
+        </div>
+        <div style="font-size:0.8rem;color:var(--grey);margin-bottom:12px;">
+          🏷 ₹${(v.priceMin/1000).toFixed(0)}K – ₹${(v.priceMax/1000).toFixed(0)}K per kW &nbsp;·&nbsp; ${v.brands.slice(0,2).join(', ')}
+        </div>
+        <div class="vendor-stats">
+          <div><div class="vendor-stat-value">${v.installs}+</div><div class="vendor-stat-label">Installs</div></div>
+          <div><div class="vendor-stat-value">${v.experience} yrs</div><div class="vendor-stat-label">Exp</div></div>
+          <div><div class="vendor-stat-value">${v.projectTimeline.split('–')[0]}d+</div><div class="vendor-stat-label">Timeline</div></div>
+        </div>
+      </a>`).join('');
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('input[type=checkbox]').forEach(i => i.checked = false);
+    document.querySelector('input[name=rating][value="0"]').checked = true;
+    document.getElementById('search-input').value = '';
+    document.querySelector('select').value = 'rating';
+    applyFilters();
+  }
+
+  applyFilters();
+</script>
+</body>
+</html>

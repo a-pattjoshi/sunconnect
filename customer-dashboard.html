@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — SunConnect Customer</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item active"  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="breadcrumb">Welcome back, Priya! ☀ Here's your solar overview.</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn" title="Notifications">🔔<span class="notif-badge">2</span></button>
+        <div style="font-size:0.78rem;color:var(--grey);">Thu, 15 May 2026</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Alert -->
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚡</span>
+        <div>
+          <div class="alert-title">Installation in Progress</div>
+          <div class="alert-text">Your 5 kW system at HSR Layout is currently being installed by SuryamTech Solar. Expected completion: 22 May 2026.</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon gold">🏗️</div>
+          <div>
+            <div class="stat-value">1</div>
+            <div class="stat-label">Active Project</div>
+            <div class="stat-change up">↑ In Progress</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">💬</div>
+          <div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">Quotes Received</div>
+            <div class="stat-change up">↑ 2 new this week</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">💰</div>
+          <div>
+            <div class="stat-value">₹1.08L</div>
+            <div class="stat-label">Subsidy Expected</div>
+            <div class="stat-change up">↑ PM Surya Ghar + KA</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">📅</div>
+          <div>
+            <div class="stat-value">18 days</div>
+            <div class="stat-label">Est. Go-Live</div>
+            <div class="stat-change">02 Jun 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-header"><div class="section-title">Quick Actions</div></div>
+      <div class="quick-actions">
+        <a href="customer-marketplace.html" class="quick-card">
+          <span class="quick-card-icon">🔍</span>
+          <div class="quick-card-label">Find Installers</div>
+          <div class="quick-card-sub">Browse 10+ vendors</div>
+        </a>
+        <a href="customer-tracker.html" class="quick-card">
+          <span class="quick-card-icon">📊</span>
+          <div class="quick-card-label">Track Project</div>
+          <div class="quick-card-sub">55% complete</div>
+        </a>
+        <a href="customer-financing.html" class="quick-card">
+          <span class="quick-card-icon">💰</span>
+          <div class="quick-card-label">Subsidy Calculator</div>
+          <div class="quick-card-sub">Check your savings</div>
+        </a>
+        <a href="customer-inquiry.html" class="quick-card">
+          <span class="quick-card-icon">📋</span>
+          <div class="quick-card-label">My Inquiry</div>
+          <div class="quick-card-sub">4 responses</div>
+        </a>
+      </div>
+
+      <div class="grid-2">
+        <!-- Project Snapshot -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">🏗️ Active Project</div>
+            <a href="customer-tracker.html" class="btn btn-outline btn-sm">Full Tracker →</a>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.95rem;font-weight:700;color:var(--dark);">5 kW System — HSR Layout</div>
+            <div style="font-size:0.8rem;color:var(--grey);margin-top:2px;">SuryamTech Solar &nbsp;|&nbsp; Started 28 Apr 2026</div>
+          </div>
+          <div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.8rem;color:var(--grey);">Overall Progress</span>
+            <span style="font-size:0.8rem;font-weight:700;color:var(--primary);">55%</span>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:55%"></div></div>
+          <div style="margin-top:16px;" class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot done">✓</div>
+              <div class="timeline-title">Survey & Quote Approved</div>
+              <div class="timeline-date">02 May 2026</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot done">✓</div>
+              <div class="timeline-title">Material Procured</div>
+              <div class="timeline-date">10 May 2026</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot active">●</div>
+              <div class="timeline-title">Installation In Progress</div>
+              <div class="timeline-date">Expected: 16–18 May 2026</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">○</div>
+              <div class="timeline-title">BESCOM Inspection & Handover</div>
+              <div class="timeline-date">Expected: 22 May 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quotes Received -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">📩 Quotes Received</div>
+            <a href="customer-inquiry.html" class="btn btn-outline btn-sm">View All</a>
+          </div>
+          <div id="quotes-list"></div>
+        </div>
+      </div>
+
+      <!-- Recommended Vendors -->
+      <div style="margin-top:24px;">
+        <div class="section-header">
+          <div class="section-title">⭐ Top Rated Installers in Bangalore</div>
+          <a href="customer-marketplace.html" class="btn btn-primary btn-sm">View All →</a>
+        </div>
+        <div class="vendor-grid" id="top-vendors"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  // Quotes
+  const quotes = [
+    { vendor:"SuryamTech Solar",     rating:4.6, amount:"₹2,75,000", status:"accepted", eta:"14 days" },
+    { vendor:"Pratham Solar",        rating:4.5, amount:"₹2,60,000", status:"received", eta:"30 days" },
+    { vendor:"Apollo Solar",         rating:4.3, amount:"₹2,40,000", status:"received", eta:"25 days" },
+    { vendor:"Charvi Solar Solution",rating:4.2, amount:"₹2,25,000", status:"received", eta:"35 days" },
+  ];
+  const statusMap = { accepted:'badge-green', received:'badge-blue', viewed:'badge-grey' };
+  document.getElementById('quotes-list').innerHTML = quotes.map(q => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${q.vendor}</div>
+        <div style="font-size:0.75rem;color:var(--grey);">${renderStars(q.rating)} ${q.rating} &nbsp;·&nbsp; ${q.eta}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.92rem;font-weight:700;color:var(--dark);">${q.amount}</div>
+        <span class="badge ${statusMap[q.status]}">${q.status}</span>
+      </div>
+    </div>`).join('');
+
+  // Top vendors
+  const top = SC_VENDORS.slice().sort((a,b) => b.rating - a.rating).slice(0,3);
+  document.getElementById('top-vendors').innerHTML = top.map(v => `
+    <a href="customer-vendor-profile.html?id=${v.id}" class="vendor-card">
+      <div class="vendor-card-header">
+        <div class="vendor-avatar">${v.icon}</div>
+        <div>
+          <div class="vendor-name">${v.name}</div>
+          <div class="vendor-location">📍 ${v.area}, Bangalore</div>
+          <div class="rating-display" style="margin-top:4px;">
+            ${renderStars(v.rating)}
+            <span class="rating-number">${v.rating}</span>
+            <span class="rating-count">(${v.reviewCount})</span>
+          </div>
+        </div>
+      </div>
+      <div class="vendor-tags">
+        ${v.badges.slice(0,2).map(b => `<span class="badge badge-gold">${b}</span>`).join('')}
+      </div>
+      <div class="vendor-stats">
+        <div><div class="vendor-stat-value">${v.installs}+</div><div class="vendor-stat-label">Installs</div></div>
+        <div><div class="vendor-stat-value">${v.experience} yrs</div><div class="vendor-stat-label">Experience</div></div>
+        <div><div class="vendor-stat-value">${v.projectTimeline}</div><div class="vendor-stat-label">Timeline</div></div>
+      </div>
+    </a>`).join('');
+</script>
+</body>
+</html>

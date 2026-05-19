@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="vendor-dashboard.html"   class="nav-item active"   ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="vendor-leads.html"       class="nav-item "       ><span class="nav-icon">📥</span>Leads</a>
+    <a href="vendor-quotations.html"  class="nav-item "  ><span class="nav-icon">📄</span>Quotations</a>
+    <a href="vendor-projects.html"    class="nav-item "    ><span class="nav-icon">🏗️</span>Projects</a>
+    <a href="vendor-labor.html"       class="nav-item "       ><span class="nav-icon">👷</span>Labor Pool</a>
+    <a href="vendor-profile.html"     class="nav-item "     ><span class="nav-icon">🏢</span>My Profile</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">SK</div>
+      <div class="user-info">
+        <div class="user-name">Satish Kumar</div>
+        <div class="user-role">Solar Installer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Installer Dashboard</div>
+        <div class="breadcrumb">Welcome back, Satish! Here's your business overview for May 2026.</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
+        <div style="font-size:0.78rem;color:var(--grey);">Thu, 15 May 2026</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="alert alert-info">
+        <span class="alert-icon">📥</span>
+        <div>
+          <div class="alert-title">3 new leads received today from SunConnect marketplace!</div>
+          <div class="alert-text">Rohit Verma (3 kW, Whitefield), Lakshmi Devi (3 kW, Brookefield), Pooja Nair (3 kW, Marathahalli) — <a href="vendor-leads.html" style="color:var(--blue);font-weight:600;">View Leads →</a></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon gold">📥</div>
+          <div>
+            <div class="stat-value">8</div>
+            <div class="stat-label">Active Leads</div>
+            <div class="stat-change up">↑ 3 new today</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">🏗️</div>
+          <div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">Active Projects</div>
+            <div class="stat-change up">↑ 1 near completion</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">📄</div>
+          <div>
+            <div class="stat-value">5</div>
+            <div class="stat-label">Open Quotations</div>
+            <div class="stat-change">1 accepted, 3 pending</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">💰</div>
+          <div>
+            <div class="stat-value">₹18.4L</div>
+            <div class="stat-label">Revenue This Month</div>
+            <div class="stat-change up">↑ 12% vs Apr</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-header"><div class="section-title">Quick Actions</div></div>
+      <div class="quick-actions" style="margin-bottom:28px;">
+        <a href="vendor-leads.html" class="quick-card">
+          <span class="quick-card-icon">📥</span>
+          <div class="quick-card-label">View Leads</div>
+          <div class="quick-card-sub">8 active leads</div>
+        </a>
+        <a href="vendor-quotations.html" class="quick-card">
+          <span class="quick-card-icon">📄</span>
+          <div class="quick-card-label">New Quotation</div>
+          <div class="quick-card-sub">Create in 30 sec</div>
+        </a>
+        <a href="vendor-projects.html" class="quick-card">
+          <span class="quick-card-icon">🏗️</span>
+          <div class="quick-card-label">My Projects</div>
+          <div class="quick-card-sub">4 active</div>
+        </a>
+        <a href="vendor-labor.html" class="quick-card">
+          <span class="quick-card-icon">👷</span>
+          <div class="quick-card-label">Labor Pool</div>
+          <div class="quick-card-sub">8 available now</div>
+        </a>
+        <a href="vendor-profile.html" class="quick-card">
+          <span class="quick-card-icon">🏢</span>
+          <div class="quick-card-label">My Profile</div>
+          <div class="quick-card-sub">4.5★ · 87 reviews</div>
+        </a>
+      </div>
+
+      <div class="grid-2">
+        <!-- Recent Leads -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">📥 Recent Leads</div>
+            <a href="vendor-leads.html" class="btn btn-outline btn-sm">All Leads →</a>
+          </div>
+          <div id="recent-leads"></div>
+        </div>
+
+        <!-- Active Projects -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">🏗️ Active Projects</div>
+            <a href="vendor-projects.html" class="btn btn-outline btn-sm">All Projects →</a>
+          </div>
+          <div id="active-projects"></div>
+        </div>
+      </div>
+
+      <!-- Performance -->
+      <div class="card" style="margin-top:24px;">
+        <div class="section-header">
+          <div class="section-title">📊 May 2026 Performance</div>
+          <span class="badge badge-green">↑ Strong Month</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
+          ${[
+            ['Lead Conversion Rate','18.5%','↑ from 15%','up'],
+            ['Avg Quote Value','₹2.82L','↑ 8% vs Apr','up'],
+            ['Customer Rating','4.5 ★','Stable',''],
+            ['Projects On-Time','87%','↑ from 82%','up'],
+            ['Subsidy Filed','6','All processed','up'],
+            ['Labor Utilisation','78%','2 workers idle',''],
+          ].map(([l,v,c,dir]) => `
+            <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px;">
+              <div style="font-size:0.72rem;color:var(--grey);margin-bottom:4px;">${l}</div>
+              <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">${v}</div>
+              <div style="font-size:0.73rem;margin-top:3px;" class="${dir==='up'?'text-green':'text-grey'}">${c}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('vendor');
+  renderSidebar('vendor');
+
+  const statusBadge = { new:'badge-blue', contacted:'badge-gold', quote_sent:'badge-purple', won:'badge-green', lost:'badge-red' };
+
+  document.getElementById('recent-leads').innerHTML = SC_LEADS.slice(0,4).map(l => `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:10px;">
+      <div>
+        <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${l.customer}</div>
+        <div style="font-size:0.75rem;color:var(--grey);">📍 ${l.area} &nbsp;·&nbsp; ${l.system} &nbsp;·&nbsp; ${l.type}</div>
+        <div style="font-size:0.73rem;color:var(--grey);margin-top:2px;">Bill: ${l.bill} &nbsp;·&nbsp; ${l.date}</div>
+      </div>
+      <span class="badge ${statusBadge[l.status]}" style="flex-shrink:0;">${l.status.replace('_',' ')}</span>
+    </div>`).join('');
+
+  const stageIcon = { survey:'🔍', material:'📦', installation:'🔧', inspection:'✅', completed:'🎉' };
+  document.getElementById('active-projects').innerHTML = SC_PROJECTS.filter(p => p.stage !== 'completed').map(p => `
+    <div style="padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${p.customer}</div>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--primary);">${p.progress}%</span>
+      </div>
+      <div style="font-size:0.75rem;color:var(--grey);margin-bottom:6px;">📍 ${p.area} &nbsp;·&nbsp; ${p.system} &nbsp;·&nbsp; ${stageIcon[p.stage]||'🏗'} ${p.stage}</div>
+      <div class="progress-bar-wrap" style="height:6px;"><div class="progress-bar-fill" style="width:${p.progress}%"></div></div>
+    </div>`).join('');
+</script>
+</body>
+</html>

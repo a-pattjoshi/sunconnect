@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installer Profile — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item active" ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title" id="top-bar-title">Installer Profile</div>
+        <div class="breadcrumb"><a href="customer-marketplace.html" style="color:var(--primary);">← Find Installers</a> &nbsp;/&nbsp; Profile</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">2</span></button>
+      </div>
+    </div>
+
+    <div class="page-content" id="profile-content">
+      <div style="text-align:center;padding:60px;"><div style="font-size:2rem;">⏳</div><p>Loading profile…</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Quote Modal -->
+<div class="modal-overlay" id="quote-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📄 Request a Quote</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <form onsubmit="submitQuote(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Property Type</label>
+          <select class="form-select">
+            <option>Residential — Independent House</option>
+            <option>Residential — Apartment</option>
+            <option>Commercial Office</option>
+            <option>Industrial / Factory</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Monthly Bill Amount</label>
+          <input class="form-input" type="text" placeholder="e.g. ₹4,500" value="₹5,500">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Location (Area)</label>
+          <input class="form-input" type="text" placeholder="e.g. HSR Layout" value="HSR Layout">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred System Size</label>
+          <select class="form-select">
+            <option>Not sure — need guidance</option>
+            <option>1–3 kW</option>
+            <option selected>4–5 kW</option>
+            <option>6–10 kW</option>
+            <option>10 kW+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Additional Notes</label>
+        <textarea class="form-textarea" placeholder="Any specific requirements, panel preferences, or questions…"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="flex:1;">Send Quote Request</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  const params = new URLSearchParams(window.location.search);
+  const id     = parseInt(params.get('id')) || 1;
+  const v      = SC_VENDORS.find(x => x.id === id) || SC_VENDORS[0];
+
+  document.getElementById('top-bar-title').textContent = v.name;
+
+  const totalReviews = Object.values(v.ratingBreakdown).reduce((a,b) => a+b, 0);
+
+  document.getElementById('profile-content').innerHTML = `
+    <div class="grid-2" style="gap:24px;align-items:start;">
+      <!-- LEFT COLUMN -->
+      <div style="grid-column:1/3;">
+        <div class="card" style="padding:0;overflow:hidden;margin-bottom:24px;">
+          <div class="vendor-profile-cover">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 120px 0 28px;">
+              <div style="color:rgba(255,255,255,0.08);font-size:5rem;font-weight:900;">${v.icon}</div>
+            </div>
+            <div class="vendor-profile-avatar">${v.icon}</div>
+          </div>
+          <div style="padding:48px 28px 24px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="font-size:1.5rem;margin-bottom:4px;">${v.name}</h2>
+                <div style="font-size:0.85rem;color:var(--grey);margin-bottom:10px;">👤 ${v.owner} &nbsp;·&nbsp; 📍 ${v.area}, Bangalore &nbsp;·&nbsp; 📞 <a href="tel:${v.phone}" style="color:var(--primary);">${v.phone}</a></div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                  ${v.badges.map(b => `<span class="badge badge-gold">${b}</span>`).join('')}
+                  <span class="badge badge-green">${v.specialization}</span>
+                </div>
+                <div class="rating-display">
+                  ${renderStars(v.rating)}
+                  <span class="rating-number" style="font-size:1.1rem;">${v.rating}</span>
+                  <span class="rating-count">(${v.reviewCount} verified reviews)</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <a href="customer-inquiry.html" class="btn btn-outline">📋 Add to Shortlist</a>
+                <button class="btn btn-primary" onclick="openModal()">📄 Request Quote</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Info -->
+      <div>
+        <div class="card mb-24">
+          <h4 style="margin-bottom:12px;">About</h4>
+          <p style="color:var(--dark-3);font-size:0.9rem;line-height:1.7;">${v.about}</p>
+        </div>
+
+        <div class="card mb-24">
+          <h4 style="margin-bottom:16px;">Services Offered</h4>
+          ${v.services.map(s => `
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--green);font-size:0.9rem;">✓</span>
+              <span style="font-size:0.875rem;color:var(--dark-3);">${s}</span>
+            </div>`).join('')}
+        </div>
+
+        <div class="card mb-24">
+          <h4 style="margin-bottom:16px;">Panel Brands Available</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            ${v.brands.map(b => `<span class="badge badge-blue" style="font-size:0.82rem;padding:5px 12px;">${b}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="margin-bottom:16px;">Key Details</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            ${[
+              ['📍 Service Areas', v.serviceAreas.join(', ')],
+              ['📅 Project Timeline', v.projectTimeline],
+              ['🏗️ Installations Done', v.installs + '+'],
+              ['🎓 Experience', v.experience + ' years'],
+              ['🛡️ Warranty', v.warranty],
+              ['💰 Price Range', `₹${(v.priceMin/1000).toFixed(0)}K–₹${(v.priceMax/1000).toFixed(0)}K per kW`]
+            ].map(([k,val]) => `
+              <div style="background:var(--bg);border-radius:var(--radius-sm);padding:12px;">
+                <div style="font-size:0.75rem;color:var(--grey);margin-bottom:3px;">${k}</div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--dark);">${val}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Ratings + Reviews -->
+      <div>
+        <div class="card mb-24">
+          <h4 style="margin-bottom:16px;">Rating Breakdown</h4>
+          <div style="display:flex;align-items:center;gap:24px;margin-bottom:20px;">
+            <div style="text-align:center;">
+              <div style="font-size:3rem;font-weight:800;color:var(--dark);line-height:1;">${v.rating}</div>
+              <div>${renderStars(v.rating)}</div>
+              <div style="font-size:0.75rem;color:var(--grey);margin-top:4px;">${v.reviewCount} reviews</div>
+            </div>
+            <div style="flex:1;">
+              ${[5,4,3,2,1].map(star => {
+                const count = v.ratingBreakdown[star] || 0;
+                const pct   = totalReviews ? Math.round(count/totalReviews*100) : 0;
+                return `<div class="rating-bar-row">
+                  <div class="rating-bar-label">${star}</div>
+                  <div class="rating-bar-wrap"><div class="rating-bar-fill" style="width:${pct}%"></div></div>
+                  <div class="rating-bar-count">${count}</div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <h4 style="margin-bottom:14px;">Customer Reviews</h4>
+          ${v.reviews.map(r => `
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">${r.initials}</div>
+                <div>
+                  <div class="review-author">${r.author}</div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    ${renderStars(r.rating)}
+                    <span class="review-date">${r.date}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="review-text">${r.text}</div>
+            </div>`).join('')}
+        </div>
+
+        <div class="card">
+          <h4 style="margin-bottom:12px;">Certifications</h4>
+          ${v.certifications.map(c => `
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--primary);">🏅</span>
+              <span style="font-size:0.875rem;font-weight:500;color:var(--dark-3);">${c}</span>
+            </div>`).join('')}
+          <button class="btn btn-primary btn-full" style="margin-top:18px;" onclick="openModal()">📄 Request a Free Quote</button>
+        </div>
+      </div>
+    </div>`;
+
+  function openModal()  { document.getElementById('quote-modal').classList.add('open'); }
+  function closeModal() { document.getElementById('quote-modal').classList.remove('open'); }
+  function submitQuote(e) {
+    e.preventDefault();
+    closeModal();
+    showToast(`Quote request sent to ${v.name}! They'll respond within 24 hours.`, 'success');
+  }
+</script>
+</body>
+</html>

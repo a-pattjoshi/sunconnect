@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Tracker — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item active"     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Project Tracker</div>
+        <div class="breadcrumb">Real-time visibility into your solar installation — PRJ-2026-042</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="btn btn-danger btn-sm" onclick="openFlagModal()">🚩 Raise a Flag</button>
+        <button class="notif-btn">🔔<span class="notif-badge">2</span></button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="alert alert-warning">
+        <span class="alert-icon">🔧</span>
+        <div>
+          <div class="alert-title">Installation in Progress — Panel mounting underway</div>
+          <div class="alert-text">SuryamTech Solar's team is on-site today. Inverter installation scheduled for 17 May. Call your site supervisor: <strong>Ravi Kumar — 9993642777</strong></div>
+        </div>
+      </div>
+
+      <!-- Project header -->
+      <div class="card mb-24">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+          <div>
+            <div style="font-size:1.25rem;font-weight:800;color:var(--dark);margin-bottom:4px;">5 kW Residential Solar System</div>
+            <div style="font-size:0.85rem;color:var(--grey);">📍 HSR Layout, Bangalore &nbsp;·&nbsp; 🏗️ SuryamTech Solar &nbsp;·&nbsp; Started: 28 Apr 2026</div>
+            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;">
+              <span class="badge badge-blue">Project ID: PRJ-2026-042</span>
+              <span class="badge badge-gold">Installation In Progress</span>
+              <span class="badge badge-green">Subsidy: Registered ✓</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.78rem;color:var(--grey);">Overall Progress</div>
+            <div style="font-size:2.5rem;font-weight:800;color:var(--primary);line-height:1.1;">55%</div>
+            <div style="font-size:0.78rem;color:var(--grey);">Est. Go-Live: 02 Jun 2026</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <div class="progress-bar-wrap" style="height:12px;">
+            <div class="progress-bar-fill" style="width:55%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.72rem;color:var(--grey);">
+            <span>Survey Done</span><span>Materials Ready</span><span>Installation</span><span>Inspection</span><span>Go-Live</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Timeline -->
+        <div class="card">
+          <h4 style="margin-bottom:20px;">📅 Installation Milestones</h4>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <!-- Right column -->
+        <div>
+          <!-- Project Details -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:16px;">⚙️ System Details</h4>
+            <div id="system-details" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+          </div>
+
+          <!-- Installer contact -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:14px;">📞 Your Installer</h4>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg);border-radius:var(--radius-sm);">
+              <div style="width:48px;height:48px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1rem;">RK</div>
+              <div style="flex:1;">
+                <div style="font-weight:700;color:var(--dark);">Ravi Kumar</div>
+                <div style="font-size:0.78rem;color:var(--grey);">SuryamTech Solar &nbsp;·&nbsp; Site Supervisor</div>
+              </div>
+              <a href="tel:9993642777" class="btn btn-primary btn-sm">📞 Call</a>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:10px;">
+              <button class="btn btn-ghost btn-sm btn-full" onclick="showToast('Message sent to SuryamTech Solar!','success')">💬 Message Installer</button>
+              <button class="btn btn-outline btn-sm btn-full" onclick="showToast('Review reminder sent!','success')">⭐ Leave Review</button>
+            </div>
+          </div>
+
+          <!-- Subsidy tracker -->
+          <div class="card mb-24">
+            <h4 style="margin-bottom:14px;">🏛️ Subsidy Status</h4>
+            <div id="subsidy-status" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+
+          <!-- Raise flag -->
+          <div class="card" style="border:1px solid var(--red-light);background:var(--red-light);">
+            <h4 style="margin-bottom:8px;color:#991B1B;">🚩 Raise a Flag or Complaint</h4>
+            <p style="font-size:0.83rem;color:#991B1B;margin-bottom:14px;">If something isn't right — delay, quality issue, or communication gap — flag it and SunConnect will escalate to the installer.</p>
+            <button class="btn btn-danger btn-full" onclick="openFlagModal()">Report an Issue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Flag Modal -->
+<div class="modal-overlay" id="flag-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🚩 Raise a Flag</div>
+      <button class="modal-close" onclick="closeFlagModal()">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Issue Type</label>
+      <select class="form-select">
+        <option>Installation Delay</option>
+        <option>Poor Workmanship / Quality</option>
+        <option>No Response from Installer</option>
+        <option>Material Not as Agreed</option>
+        <option>Subsidy Processing Delay</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Describe the Issue</label>
+      <textarea class="form-textarea" placeholder="Please describe what happened and what resolution you expect…"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Urgency</label>
+      <select class="form-select">
+        <option>Low — Just an FYI</option>
+        <option selected>Medium — Please follow up</option>
+        <option>High — Needs immediate attention</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" onclick="closeFlagModal()">Cancel</button>
+      <button class="btn btn-danger" style="flex:1;" onclick="submitFlag()">🚩 Submit Flag</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  document.getElementById('system-details').innerHTML = [
+    ['System Size','5 kW'],['Panels','Tata Solar × 5'],
+    ['Inverter','GoodWe 5 kW Smart'],['Monitoring','App + RMS'],
+    ['Total Cost','₹2,75,000'],['Subsidy (Central)','₹78,000'],
+    ['Subsidy (Karnataka)','₹30,000'],['Net Cost','₹1,67,000']
+  ].map(([k,val]) => `
+    <div style="background:var(--bg);border-radius:var(--radius-sm);padding:11px;">
+      <div style="font-size:0.7rem;color:var(--grey);margin-bottom:2px;">${k}</div>
+      <div style="font-size:0.875rem;font-weight:700;color:var(--dark);">${val}</div>
+    </div>`).join('');
+
+  document.getElementById('subsidy-status').innerHTML = [
+    { label:'PM Surya Ghar Registration', status:'done',    date:'05 May 2026',  amount:'₹78,000' },
+    { label:'BESCOM Grid Inspection',     status:'pending', date:'~22 May 2026', amount:'' },
+    { label:'Central Subsidy Credit',     status:'pending', date:'~15 Jun 2026', amount:'₹78,000' },
+    { label:'Karnataka State Subsidy',    status:'pending', date:'~20 Jun 2026', amount:'₹30,000' },
+  ].map(s => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);">
+      <span style="font-size:1.1rem;">${s.status === 'done' ? '✅' : '⏳'}</span>
+      <div style="flex:1;">
+        <div style="font-size:0.83rem;font-weight:600;color:var(--dark);">${s.label}</div>
+        <div style="font-size:0.73rem;color:var(--grey);">${s.date}</div>
+      </div>
+      ${s.amount ? `<span class="badge badge-green">${s.amount}</span>` : ''}
+    </div>`).join('');
+
+  // Render timeline
+  document.getElementById('timeline').innerHTML = SC_CUSTOMER_PROJECT.stages.map(s => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${s.status}">
+        ${s.status === 'done' ? '✓' : s.status === 'active' ? '●' : '○'}
+      </div>
+      <div class="timeline-title">${s.name}</div>
+      <div class="timeline-date">${s.date}</div>
+      <div class="timeline-desc">${s.desc}</div>
+    </div>`).join('');
+
+  function openFlagModal()  { document.getElementById('flag-modal').classList.add('open'); }
+  function closeFlagModal() { document.getElementById('flag-modal').classList.remove('open'); }
+  function submitFlag() {
+    closeFlagModal();
+    showToast('Flag raised! SunConnect will follow up with SuryamTech Solar within 24 hours.', 'warning');
+  }
+</script>
+</body>
+</html>

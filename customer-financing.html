@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financing & Subsidy — SunConnect</title>
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text"><div class="logo-icon">☀</div>SunConnect</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="customer-financing.html"   class="nav-item active"   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">PS</div>
+      <div class="user-info">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">End Customer</div>
+      </div>
+      <button class="logout-btn" onclick="scLogout()" title="Logout">⏻</button>
+    </div>
+  </div>
+</aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <div class="page-title">Financing & Subsidy</div>
+        <div class="breadcrumb">PM Surya Ghar subsidies, EMI calculators & bank partners for Bangalore</div>
+      </div>
+      <div class="top-bar-right">
+        <button class="notif-btn">🔔<span class="notif-badge">2</span></button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Hero banner -->
+      <div style="background:linear-gradient(135deg,#1F2937,#374151);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div style="color:var(--primary);font-weight:800;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">🏛️ PM Surya Ghar Muft Bijli Yojana</div>
+          <div style="color:#fff;font-size:1.5rem;font-weight:800;margin-bottom:6px;">Up to ₹1,08,000 in Government Subsidies</div>
+          <div style="color:rgba(255,255,255,0.55);font-size:0.875rem;">Central + Karnataka state subsidy for residential rooftop solar. Apply through your installer on SunConnect.</div>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="window.open('https://pmsuryaghar.gov.in/#/','_blank')">Apply for Subsidy →</button>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <!-- Subsidy Calculator -->
+        <div class="card">
+          <h4 style="margin-bottom:4px;">🧮 Subsidy Calculator</h4>
+          <p style="font-size:0.82rem;color:var(--grey);margin-bottom:20px;">Enter your system size to see your eligible subsidy amount.</p>
+
+          <div class="form-group">
+            <label class="form-label">System Size (kW)</label>
+            <input class="form-input" type="number" id="kw-input" value="5" min="1" max="50" oninput="calcSubsidy()">
+            <div class="form-hint">Most homes need 3–7 kW. Your 5 kW system is recommended based on your ₹5,500/month bill.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Customer Type</label>
+            <select class="form-select" onchange="calcSubsidy()">
+              <option value="residential">Residential (Eligible for subsidy)</option>
+              <option value="commercial">Commercial / Industrial (Not eligible)</option>
+            </select>
+          </div>
+
+          <div id="subsidy-result"></div>
+        </div>
+
+        <!-- EMI Calculator -->
+        <div class="card">
+          <h4 style="margin-bottom:4px;">📊 EMI Calculator</h4>
+          <p style="font-size:0.82rem;color:var(--grey);margin-bottom:20px;">Calculate your monthly EMI after subsidy deduction.</p>
+
+          <div class="form-group">
+            <label class="form-label">Total System Cost (₹)</label>
+            <input class="form-input" type="number" id="cost-input" value="275000" oninput="calcEMI()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subsidy Amount (₹)</label>
+            <input class="form-input" type="number" id="subsidy-input" value="108000" oninput="calcEMI()">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Interest Rate (%)</label>
+              <input class="form-input" type="number" id="rate-input" value="7.5" step="0.1" oninput="calcEMI()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tenure (Years)</label>
+              <input class="form-input" type="number" id="tenure-input" value="5" min="1" max="10" oninput="calcEMI()">
+            </div>
+          </div>
+          <div id="emi-result"></div>
+        </div>
+      </div>
+
+      <!-- Subsidy tiers -->
+      <div class="card mb-24">
+        <div class="section-header">
+          <div class="section-title">🏛️ PM Surya Ghar Subsidy Slabs (Central Government)</div>
+        </div>
+        <div class="subsidy-tier">
+          <div class="subsidy-tier-icon">⚡</div>
+          <div style="flex:1;">
+            <div class="subsidy-amount">₹30,000</div>
+            <div class="subsidy-condition">For systems up to 2 kW capacity</div>
+            <div style="font-size:0.78rem;color:var(--grey);margin-top:4px;">₹15,000 per kW for first 2 kW</div>
+          </div>
+          <span class="badge badge-green">Per kW: ₹15,000</span>
+        </div>
+        <div class="subsidy-tier">
+          <div class="subsidy-tier-icon">⚡⚡</div>
+          <div style="flex:1;">
+            <div class="subsidy-amount">₹78,000</div>
+            <div class="subsidy-condition">For systems of 3 kW capacity</div>
+            <div style="font-size:0.78rem;color:var(--grey);margin-top:4px;">₹30,000 for first 2 kW + ₹48,000 for 3rd kW</div>
+          </div>
+          <span class="badge badge-green">Most Popular</span>
+        </div>
+        <div class="subsidy-tier">
+          <div class="subsidy-tier-icon">🌞</div>
+          <div style="flex:1;">
+            <div class="subsidy-amount">₹78,000</div>
+            <div class="subsidy-condition">For systems above 3 kW (capped at 3 kW subsidy)</div>
+            <div style="font-size:0.78rem;color:var(--grey);margin-top:4px;">Subsidy is capped at 3 kW regardless of larger system size</div>
+          </div>
+          <span class="badge badge-blue">Cap applies</span>
+        </div>
+
+        <div class="alert alert-info" style="margin-top:16px;margin-bottom:0;">
+          <span class="alert-icon">ℹ</span>
+          <div>
+            <div class="alert-title">Karnataka State Top-Up Subsidy</div>
+            <div class="alert-text">Karnataka provides an additional ₹10,000–₹30,000 subsidy for residential solar under the KREDL scheme. SunConnect installers handle all subsidy paperwork on your behalf.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bank Partners -->
+      <div class="card mb-24">
+        <div class="section-header">
+          <div class="section-title">🏦 Bank & Financing Partners</div>
+          <span class="badge badge-green">All banks offer PM Surya Ghar loans</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Bank</th><th>Interest Rate</th><th>Max Tenure</th><th>Min Amount</th><th>Badge</th><th>Action</th></tr>
+            </thead>
+            <tbody id="banks-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="card">
+        <h4 style="margin-bottom:16px;">❓ Common Questions</h4>
+        <div id="faq-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script>
+  scRequireRole('customer');
+  renderSidebar('customer');
+
+  document.getElementById('banks-tbody').innerHTML = SC_BANKS.map(b => `
+    <tr>
+      <td><strong>${b.name}</strong></td>
+      <td><span style="color:var(--green);font-weight:700;">${b.rate} p.a.</span></td>
+      <td>${b.maxTenure}</td>
+      <td>${b.minAmount}</td>
+      <td><span class="badge badge-gold">${b.badge}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="showToast('Connecting to ${b.name}…','success')">Apply →</button></td>
+    </tr>`).join('');
+
+  function calcSubsidy() {
+    const kw   = parseFloat(document.getElementById('kw-input').value) || 0;
+    const type = document.querySelector('select').value;
+    let central = 0, state = 30000, note = '';
+    if (type === 'commercial') {
+      document.getElementById('subsidy-result').innerHTML = `<div class="alert alert-warning" style="margin-top:12px;"><span class="alert-icon">⚠</span><div><div class="alert-title">Not Eligible</div><div class="alert-text">Commercial and industrial installations are not eligible for PM Surya Ghar subsidies. However, significant tax benefits (accelerated depreciation) are available.</div></div></div>`;
+      return;
+    }
+    if (kw <= 2)      { central = kw * 15000; note = `₹15,000 × ${kw} kW`; }
+    else if (kw <= 3) { central = 30000 + (kw - 2) * 48000; note = `₹30,000 (2 kW) + ₹${((kw-2)*48000).toLocaleString()}`; }
+    else              { central = 78000; note = `Capped at ₹78,000 for systems above 3 kW`; }
+    const total = central + state;
+    document.getElementById('subsidy-result').innerHTML = `
+      <div class="calc-result">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:8px;">
+          <div><div class="calc-result-label">Central Subsidy</div><div class="calc-result-value" style="font-size:1.1rem;">₹${central.toLocaleString()}</div></div>
+          <div><div class="calc-result-label">Karnataka Subsidy</div><div class="calc-result-value" style="font-size:1.1rem;">₹${state.toLocaleString()}</div></div>
+          <div><div class="calc-result-label">Total Subsidy</div><div class="calc-result-value" style="color:var(--green);">₹${total.toLocaleString()}</div></div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--grey);">${note} · Subsidy credited directly to bank account via DBT</div>
+      </div>`;
+  }
+
+  function calcEMI() {
+    const P = parseFloat(document.getElementById('cost-input').value) || 0;
+    const S = parseFloat(document.getElementById('subsidy-input').value) || 0;
+    const r = (parseFloat(document.getElementById('rate-input').value) || 0) / 1200;
+    const n = (parseFloat(document.getElementById('tenure-input').value) || 1) * 12;
+    const loan = Math.max(0, P - S);
+    if (!r || !n || !loan) return;
+    const emi = loan * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+    const total = emi * n;
+    document.getElementById('emi-result').innerHTML = `
+      <div class="calc-result">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:8px;">
+          <div><div class="calc-result-label">Loan Amount</div><div class="calc-result-value" style="font-size:1.1rem;">₹${Math.round(loan).toLocaleString()}</div></div>
+          <div><div class="calc-result-label">Monthly EMI</div><div class="calc-result-value" style="color:var(--primary);">₹${Math.round(emi).toLocaleString()}</div></div>
+          <div><div class="calc-result-label">Total Payout</div><div class="calc-result-value" style="font-size:1.1rem;">₹${Math.round(total).toLocaleString()}</div></div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--grey);">Your monthly savings on electricity will likely exceed the EMI for a 5 kW system in Bangalore.</div>
+      </div>`;
+  }
+
+  const faqs = [
+    { q:"Who applies for the subsidy — me or the installer?", a:"Your SunConnect-verified installer handles the entire PM Surya Ghar application on your behalf. The subsidy amount is credited directly to your bank account via DBT within 30–60 days of commissioning." },
+    { q:"Can I get a loan if I don't have a good CIBIL score?", a:"SBI and Canara Bank offer PM Surya Ghar loans with relaxed CIBIL requirements. The Jan Samarth portal also offers collateral-free loans for solar at 6.5% p.a." },
+    { q:"How long does subsidy disbursement take?", a:"Typically 45–60 days after the BESCOM inspector approves your grid connection. Some customers receive it faster (30 days) while others wait up to 75 days depending on the state portal." },
+    { q:"Are there subsidies for apartments / housing societies?", a:"Yes — Group Net Metering is available for apartments. The society can install a larger system and distribute savings among flat owners. Ask your SunConnect installer for details." },
+    { q:"What is the payback period for a 5 kW system in Bangalore?", a:"Typically 4–6 years. At ₹5,500/month current bill, a 5 kW system saves approximately ₹4,500/month. After subsidy, net cost is ~₹1.67 lakhs, giving a payback of ~3.1 years." }
+  ];
+
+  document.getElementById('faq-list').innerHTML = faqs.map((f, i) => `
+    <div style="border-bottom:1px solid var(--border);padding:14px 0;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;gap:12px;" onclick="toggleFaq(${i})">
+        <div style="font-size:0.9rem;font-weight:600;color:var(--dark);">${f.q}</div>
+        <span id="faq-icon-${i}" style="color:var(--primary);font-size:1rem;flex-shrink:0;">+</span>
+      </div>
+      <div id="faq-ans-${i}" style="display:none;font-size:0.85rem;color:var(--grey);margin-top:8px;line-height:1.6;">${f.a}</div>
+    </div>`).join('');
+
+  function toggleFaq(i) {
+    const ans  = document.getElementById(`faq-ans-${i}`);
+    const icon = document.getElementById(`faq-icon-${i}`);
+    const open = ans.style.display === 'block';
+    ans.style.display  = open ? 'none' : 'block';
+    icon.textContent   = open ? '+' : '−';
+  }
+
+  calcSubsidy();
+  calcEMI();
+</script>
+</body>
+</html>
