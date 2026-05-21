@@ -83,6 +83,7 @@
 </div>
 
 <script src="js/auth.js?v=5"></script>
+<script src="js/analytics.js?v=1"></script>
 <script>
   let selectedRole = 'customer';
 
@@ -100,6 +101,7 @@
 
   function handleLogin(e) {
     e.preventDefault();
+    scTrackSignin(); // ← track every sign-in button click
     const email    = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const btn      = document.getElementById('login-btn');
@@ -122,11 +124,21 @@
     p.type = p.type === 'password' ? 'text' : 'password';
   }
 
-  // Auto-fill on load
+  // Auto-fill on load + check for pending app_close rating
   window.onload = () => {
     const u = scGetUser();
     if (u) window.location.replace(u.role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
     selectRole('customer');
+
+    // Show "app_close" rating if user left while logged in (> 30s ago)
+    const pending = localStorage.getItem('sc_pending_rating');
+    if (pending) {
+      const age = Date.now() - parseInt(pending);
+      localStorage.removeItem('sc_pending_rating');
+      if (age > 30000) {
+        setTimeout(() => scShowRatingModal('app_close', null), 1200);
+      }
+    }
   };
 </script>
 </body>

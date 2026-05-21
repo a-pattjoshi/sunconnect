@@ -34,9 +34,19 @@ function scRequireRole(role) {
 }
 
 function scLogout() {
-  localStorage.removeItem('sc_session');
-  sessionStorage.removeItem('sc_session');
-  window.location.replace('index.html');
+  sessionStorage.setItem('sc_logout_nav', '1');
+  localStorage.removeItem('sc_pending_rating');
+  if (typeof scShowRatingModal === 'function') {
+    scShowRatingModal('logout', function() {
+      localStorage.removeItem('sc_session');
+      sessionStorage.removeItem('sc_session');
+      window.location.replace('index.html');
+    });
+  } else {
+    localStorage.removeItem('sc_session');
+    sessionStorage.removeItem('sc_session');
+    window.location.replace('index.html');
+  }
 }
 
 /* ── NAV DEFINITIONS ── */
@@ -150,6 +160,18 @@ function _setupNotifications(role) {
   btn.addEventListener('click', e => {
     e.stopPropagation();
     panel.classList.toggle('open');
+    // Show rating after user has viewed notifications for 3 seconds (once per session)
+    if (panel.classList.contains('open') && typeof scShowRatingModal === 'function') {
+      if (!sessionStorage.getItem('sc_notif_rated')) {
+        sessionStorage.setItem('sc_notif_rated', '1');
+        setTimeout(() => {
+          if (panel.classList.contains('open')) {
+            panel.classList.remove('open');
+            scShowRatingModal('notification', null);
+          }
+        }, 3500);
+      }
+    }
   });
   document.addEventListener('click', () => panel.classList.remove('open'));
   panel.addEventListener('click', e => e.stopPropagation());

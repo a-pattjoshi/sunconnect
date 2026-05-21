@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Analytics — SunConnect</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#0f172a 0%,#1e293b 100%); }
+    .adm-login-card { background: #1e293b; border: 1px solid #334155; border-radius: 20px; padding: 44px 40px; width: 100%; max-width: 420px; box-shadow: 0 24px 60px rgba(0,0,0,.4); }
+    .adm-login-logo { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 28px; }
+    .adm-logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,#F59E0B,#f97316); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .adm-login-title { font-size: 1.25rem; font-weight: 800; color: #f8fafc; }
+    .adm-login-sub { font-size: 0.82rem; color: #94a3b8; margin-bottom: 28px; text-align: center; }
+    .adm-input { width: 100%; padding: 12px 16px; background: #0f172a; border: 1.5px solid #334155; border-radius: 10px; color: #f8fafc; font-size: 0.9rem; outline: none; transition: border-color .2s; margin-bottom: 14px; }
+    .adm-input:focus { border-color: #F59E0B; }
+    .adm-btn { width: 100%; padding: 13px; background: linear-gradient(135deg,#F59E0B,#f97316); border: none; border-radius: 10px; color: #fff; font-size: 0.925rem; font-weight: 700; cursor: pointer; transition: opacity .2s; margin-top: 4px; }
+    .adm-btn:hover { opacity: 0.9; }
+    .adm-err { color: #f87171; font-size: 0.8rem; margin-top: 8px; text-align: center; display: none; }
+    .adm-badge { margin-top: 24px; padding: 12px; background: #0f172a; border-radius: 10px; text-align: center; font-size: 0.75rem; color: #64748b; }
+
+    /* ── DASHBOARD ── */
+    .adm-wrap { display: none; min-height: 100vh; }
+    .adm-header { background: #1e293b; border-bottom: 1px solid #334155; padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .adm-header-left { display: flex; align-items: center; gap: 14px; }
+    .adm-header-logo { width: 36px; height: 36px; background: linear-gradient(135deg,#F59E0B,#f97316); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .adm-header-title { font-size: 1rem; font-weight: 800; color: #f8fafc; }
+    .adm-header-sub { font-size: 0.75rem; color: #64748b; }
+    .adm-header-right { display: flex; align-items: center; gap: 12px; }
+    .adm-signout { padding: 7px 16px; background: transparent; border: 1.5px solid #334155; border-radius: 8px; color: #94a3b8; font-size: 0.8rem; cursor: pointer; transition: border-color .2s; }
+    .adm-signout:hover { border-color: #f87171; color: #f87171; }
+    .adm-refresh { padding: 7px 16px; background: #F59E0B; border: none; border-radius: 8px; color: #fff; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+
+    .adm-content { padding: 32px; max-width: 1200px; margin: 0 auto; }
+
+    /* ── STAT CARDS ── */
+    .adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px; }
+    .adm-stat { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 24px; }
+    .adm-stat-label { font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+    .adm-stat-value { font-size: 2.2rem; font-weight: 800; color: #f8fafc; line-height: 1; }
+    .adm-stat-sub { font-size: 0.78rem; color: #94a3b8; margin-top: 6px; }
+    .adm-stat.gold .adm-stat-value { color: #F59E0B; }
+    .adm-stat.green .adm-stat-value { color: #34d399; }
+    .adm-stat.blue .adm-stat-value { color: #60a5fa; }
+
+    /* ── CARDS ── */
+    .adm-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+    .adm-card-title { font-size: 0.875rem; font-weight: 700; color: #f8fafc; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+    /* ── RATING BARS ── */
+    .r-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .r-bar-label { font-size: 0.78rem; color: #94a3b8; width: 60px; flex-shrink: 0; }
+    .r-bar-wrap { flex: 1; background: #0f172a; border-radius: 100px; height: 8px; overflow: hidden; }
+    .r-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #F59E0B, #f97316); transition: width .6s ease; }
+    .r-bar-count { font-size: 0.75rem; color: #64748b; width: 30px; text-align: right; flex-shrink: 0; }
+
+    /* ── TRIGGER BARS ── */
+    .t-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .t-bar-label { font-size: 0.78rem; color: #94a3b8; width: 110px; flex-shrink: 0; }
+    .t-bar-wrap { flex: 1; background: #0f172a; border-radius: 100px; height: 8px; overflow: hidden; }
+    .t-bar-fill { height: 100%; border-radius: 100px; background: #60a5fa; transition: width .6s ease; }
+    .t-bar-avg { font-size: 0.75rem; color: #F59E0B; font-weight: 700; width: 40px; text-align: right; flex-shrink: 0; }
+
+    /* ── TABLE ── */
+    .adm-table-wrap { overflow-x: auto; }
+    .adm-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .adm-table th { padding: 10px 14px; text-align: left; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid #334155; }
+    .adm-table td { padding: 12px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; vertical-align: middle; }
+    .adm-table tr:hover td { background: #0f172a; }
+    .adm-badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 600; }
+    .adm-badge.logout { background: rgba(245,158,11,.15); color: #F59E0B; }
+    .adm-badge.notification { background: rgba(96,165,250,.15); color: #60a5fa; }
+    .adm-badge.app_close { background: rgba(52,211,153,.15); color: #34d399; }
+    .adm-badge.customer { background: rgba(167,139,250,.15); color: #a78bfa; }
+    .adm-badge.vendor { background: rgba(251,146,60,.15); color: #fb923c; }
+    .adm-badge.unknown { background: rgba(100,116,139,.15); color: #94a3b8; }
+    .stars-display { color: #F59E0B; letter-spacing: 1px; }
+    .empty-state { text-align: center; padding: 40px; color: #475569; font-size: 0.875rem; }
+
+    .adm-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) { .adm-grid2 { grid-template-columns: 1fr; } .adm-content { padding: 16px; } .adm-header { padding: 0 16px; } }
+
+    .adm-clear-btn { padding: 7px 16px; background: transparent; border: 1.5px solid #334155; border-radius: 8px; color: #f87171; font-size: 0.78rem; cursor: pointer; }
+    .adm-clear-btn:hover { background: rgba(248,113,113,.1); }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="adm-login" id="adm-login">
+  <div class="adm-login-card">
+    <div class="adm-login-logo">
+      <div class="adm-logo-icon">☀️</div>
+    </div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div class="adm-login-title">SunConnect Admin</div>
+      <div class="adm-login-sub" style="margin-top:4px;">Analytics & Insights Dashboard</div>
+    </div>
+    <form onsubmit="adminLogin(event)">
+      <input class="adm-input" type="email" id="adm-email" placeholder="Admin email" required autocomplete="off">
+      <input class="adm-input" type="password" id="adm-pass" placeholder="Password" required>
+      <div class="adm-err" id="adm-err">Invalid credentials. Please try again.</div>
+      <button type="submit" class="adm-btn">Sign In to Analytics →</button>
+    </form>
+    <div class="adm-badge">🔒 Restricted access — SunConnect team only</div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="adm-wrap" id="adm-dash">
+  <div class="adm-header">
+    <div class="adm-header-left">
+      <div class="adm-header-logo">☀️</div>
+      <div>
+        <div class="adm-header-title">SunConnect Analytics</div>
+        <div class="adm-header-sub">Real-time platform insights</div>
+      </div>
+    </div>
+    <div class="adm-header-right">
+      <span id="adm-last-updated" style="font-size:0.75rem;color:#475569;"></span>
+      <button class="adm-refresh" onclick="renderDashboard()">↻ Refresh</button>
+      <button class="adm-signout" onclick="adminLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="adm-content">
+
+    <!-- Summary Stats -->
+    <div class="adm-stats" id="adm-stats"></div>
+
+    <div class="adm-grid2">
+      <!-- Rating Distribution -->
+      <div class="adm-card">
+        <div class="adm-card-title">⭐ Rating Distribution (1–5 Stars)</div>
+        <div id="star-bars"></div>
+      </div>
+
+      <!-- By Trigger -->
+      <div class="adm-card">
+        <div class="adm-card-title">📍 Ratings by Trigger Point</div>
+        <div id="trigger-bars"></div>
+      </div>
+    </div>
+
+    <!-- Sign-in Timeline -->
+    <div class="adm-card">
+      <div class="adm-card-title" style="justify-content:space-between;">
+        <span>🔐 Sign-In Click History</span>
+        <span id="signin-count-badge" style="font-size:0.75rem;background:rgba(245,158,11,.15);color:#F59E0B;padding:3px 10px;border-radius:100px;font-weight:700;"></span>
+      </div>
+      <div id="signin-table"></div>
+    </div>
+
+    <!-- All Ratings Table -->
+    <div class="adm-card">
+      <div class="adm-card-title" style="justify-content:space-between;">
+        <span>🌟 All Rating Events</span>
+        <button class="adm-clear-btn" onclick="clearData()">🗑 Clear All Data</button>
+      </div>
+      <div class="adm-table-wrap">
+        <table class="adm-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Timestamp</th><th>Trigger</th><th>User Role</th><th>Rating</th>
+            </tr>
+          </thead>
+          <tbody id="ratings-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/analytics.js?v=1"></script>
+<script>
+  const ADMIN_CREDS = { email: 'admin@sunconnect.in', password: 'admin@2026' };
+
+  function adminLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('adm-email').value.trim().toLowerCase();
+    const pass  = document.getElementById('adm-pass').value;
+    if (email === ADMIN_CREDS.email && pass === ADMIN_CREDS.password) {
+      sessionStorage.setItem('sc_admin', '1');
+      document.getElementById('adm-login').style.display = 'none';
+      document.getElementById('adm-dash').style.display  = 'block';
+      renderDashboard();
+    } else {
+      document.getElementById('adm-err').style.display = 'block';
+    }
+  }
+
+  function adminLogout() {
+    sessionStorage.removeItem('sc_admin');
+    document.getElementById('adm-login').style.display = 'flex';
+    document.getElementById('adm-dash').style.display  = 'none';
+  }
+
+  function clearData() {
+    if (!confirm('Clear ALL analytics data? This cannot be undone.')) return;
+    localStorage.removeItem('sc_analytics');
+    renderDashboard();
+  }
+
+  function fmtDate(ts) {
+    try {
+      const d = new Date(ts);
+      return d.toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
+    } catch(e) { return ts; }
+  }
+
+  function starsHtml(n) {
+    return '<span class="stars-display">' + '★'.repeat(n) + '<span style="color:#334155">' + '★'.repeat(5-n) + '</span></span>';
+  }
+
+  function avg(arr) {
+    if (!arr.length) return 0;
+    return (arr.reduce((a,b) => a+b, 0) / arr.length).toFixed(1);
+  }
+
+  function renderDashboard() {
+    const d = scGetAnalytics();
+    const ratings = d.ratings || [];
+    const signinEvents = d.signinEvents || [];
+
+    document.getElementById('adm-last-updated').textContent = 'Updated: ' + new Date().toLocaleTimeString('en-IN');
+
+    // ── STATS ──
+    const avgRating = ratings.length ? avg(ratings.map(r => r.score)) : '—';
+    const todayStr  = new Date().toDateString();
+    const todayRatings = ratings.filter(r => new Date(r.ts).toDateString() === todayStr).length;
+    const todaySignins = signinEvents.filter(s => new Date(s.ts).toDateString() === todayStr).length;
+
+    document.getElementById('adm-stats').innerHTML = [
+      { label: 'Sign-in Clicks (Total)', value: d.signinClicks, sub: `${todaySignins} today`, cls: 'gold' },
+      { label: 'Total Ratings', value: ratings.length, sub: `${todayRatings} today`, cls: 'blue' },
+      { label: 'Average Rating', value: avgRating + (ratings.length ? ' ★' : ''), sub: ratings.length ? `from ${ratings.length} responses` : 'No ratings yet', cls: 'green' },
+      { label: 'Logout Ratings', value: ratings.filter(r=>r.trigger==='logout').length, sub: avg(ratings.filter(r=>r.trigger==='logout').map(r=>r.score)) + ' ★ avg', cls: '' },
+      { label: 'Notification Ratings', value: ratings.filter(r=>r.trigger==='notification').length, sub: avg(ratings.filter(r=>r.trigger==='notification').map(r=>r.score)) + ' ★ avg', cls: '' },
+      { label: 'App-Close Ratings', value: ratings.filter(r=>r.trigger==='app_close').length, sub: avg(ratings.filter(r=>r.trigger==='app_close').map(r=>r.score)) + ' ★ avg', cls: '' },
+    ].map(s => `
+      <div class="adm-stat ${s.cls}">
+        <div class="adm-stat-label">${s.label}</div>
+        <div class="adm-stat-value">${s.value}</div>
+        <div class="adm-stat-sub">${s.sub}</div>
+      </div>`).join('');
+
+    // ── STAR DISTRIBUTION ──
+    const total = ratings.length || 1;
+    document.getElementById('star-bars').innerHTML = [5,4,3,2,1].map(star => {
+      const count = ratings.filter(r => r.score === star).length;
+      const pct   = Math.round(count / total * 100);
+      return `<div class="r-bar-row">
+        <div class="r-bar-label">${'★'.repeat(star)} ${star}</div>
+        <div class="r-bar-wrap"><div class="r-bar-fill" style="width:${pct}%"></div></div>
+        <div class="r-bar-count">${count}</div>
+      </div>`;
+    }).join('') || '<div class="empty-state">No ratings yet</div>';
+
+    // ── TRIGGER BREAKDOWN ──
+    const triggers = [
+      { key: 'logout',       label: '🔴 On Logout' },
+      { key: 'notification', label: '🔔 Notifications' },
+      { key: 'app_close',    label: '🟢 App Close' },
+    ];
+    const maxCount = Math.max(1, ...triggers.map(t => ratings.filter(r => r.trigger === t.key).length));
+    document.getElementById('trigger-bars').innerHTML = triggers.map(t => {
+      const group  = ratings.filter(r => r.trigger === t.key);
+      const count  = group.length;
+      const avgVal = group.length ? avg(group.map(r => r.score)) : '—';
+      const pct    = Math.round(count / maxCount * 100);
+      return `<div class="t-bar-row">
+        <div class="t-bar-label">${t.label}</div>
+        <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${pct}%"></div></div>
+        <div class="t-bar-avg">${avgVal}★</div>
+      </div><div style="font-size:0.72rem;color:#475569;margin-bottom:14px;padding-left:122px;">${count} response${count!==1?'s':''}</div>`;
+    }).join('') || '<div class="empty-state">No ratings yet</div>';
+
+    // ── SIGN-IN TABLE ──
+    document.getElementById('signin-count-badge').textContent = d.signinClicks + ' total clicks';
+    if (!signinEvents.length) {
+      document.getElementById('signin-table').innerHTML = '<div class="empty-state">No sign-in events recorded yet.</div>';
+    } else {
+      document.getElementById('signin-table').innerHTML = `
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead><tr><th>#</th><th>Timestamp</th></tr></thead>
+            <tbody>${[...signinEvents].reverse().slice(0,20).map((e,i) => `
+              <tr>
+                <td style="color:#475569;">${signinEvents.length - i}</td>
+                <td>${fmtDate(e.ts)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+          ${signinEvents.length > 20 ? `<div style="text-align:center;padding:12px;font-size:0.75rem;color:#475569;">Showing 20 of ${signinEvents.length} events</div>` : ''}
+        </div>`;
+    }
+
+    // ── RATINGS TABLE ──
+    if (!ratings.length) {
+      document.getElementById('ratings-tbody').innerHTML = `<tr><td colspan="5" class="empty-state">No ratings collected yet. They'll appear here once users submit feedback.</td></tr>`;
+    } else {
+      document.getElementById('ratings-tbody').innerHTML = [...ratings].reverse().map((r, i) => `
+        <tr>
+          <td style="color:#475569;">${ratings.length - i}</td>
+          <td>${fmtDate(r.ts)}</td>
+          <td><span class="adm-badge ${r.trigger}">${r.trigger === 'app_close' ? '🟢 App Close' : r.trigger === 'logout' ? '🔴 Logout' : '🔔 Notification'}</span></td>
+          <td><span class="adm-badge ${r.role}">${r.role}</span></td>
+          <td>${starsHtml(r.score)} <span style="color:#94a3b8;font-size:0.8rem;margin-left:4px;">${r.score}/5</span></td>
+        </tr>`).join('');
+    }
+  }
+
+  // Check if already logged in this session
+  window.onload = () => {
+    if (sessionStorage.getItem('sc_admin')) {
+      document.getElementById('adm-login').style.display = 'none';
+      document.getElementById('adm-dash').style.display  = 'block';
+      renderDashboard();
+    }
+  };
+</script>
+</body>
+</html>
