@@ -160,16 +160,14 @@ function _setupNotifications(role) {
   btn.addEventListener('click', e => {
     e.stopPropagation();
     panel.classList.toggle('open');
-    // Show rating after user has viewed notifications for 3 seconds (once per session)
+    // Show rating 1 second after the user opens notifications (once per session)
     if (panel.classList.contains('open') && typeof scShowRatingModal === 'function') {
       if (!sessionStorage.getItem('sc_notif_rated')) {
         sessionStorage.setItem('sc_notif_rated', '1');
         setTimeout(() => {
-          if (panel.classList.contains('open')) {
-            panel.classList.remove('open');
-            scShowRatingModal('notification', null);
-          }
-        }, 3500);
+          panel.classList.remove('open');   // close panel first, then show modal
+          scShowRatingModal('notification', null);
+        }, 1000);
       }
     }
   });
