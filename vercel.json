@@ -1,4 +1,19 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/customer-dashboard", "destination": "/customer-dashboard.html" },
+    { "source": "/vendor-dashboard", "destination": "/vendor-dashboard.html" },
+    { "source": "/customer-marketplace", "destination": "/customer-marketplace.html" },
+    { "source": "/customer-inquiry", "destination": "/customer-inquiry.html" },
+    { "source": "/customer-tracker", "destination": "/customer-tracker.html" },
+    { "source": "/customer-financing", "destination": "/customer-financing.html" },
+    { "source": "/customer-vendor-profile", "destination": "/customer-vendor-profile.html" },
+    { "source": "/vendor-leads", "destination": "/vendor-leads.html" },
+    { "source": "/vendor-quotations", "destination": "/vendor-quotations.html" },
+    { "source": "/vendor-projects", "destination": "/vendor-projects.html" },
+    { "source": "/vendor-labor", "destination": "/vendor-labor.html" },
+    { "source": "/vendor-profile", "destination": "/vendor-profile.html" }
+  ]
 }
