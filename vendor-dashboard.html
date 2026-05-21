@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vendor Dashboard — SunConnect</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
@@ -146,21 +147,7 @@
           <div class="section-title">📊 May 2026 Performance</div>
           <span class="badge badge-green">↑ Strong Month</span>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
-          ${[
-            ['Lead Conversion Rate','18.5%','↑ from 15%','up'],
-            ['Avg Quote Value','₹2.82L','↑ 8% vs Apr','up'],
-            ['Customer Rating','4.5 ★','Stable',''],
-            ['Projects On-Time','87%','↑ from 82%','up'],
-            ['Subsidy Filed','6','All processed','up'],
-            ['Labor Utilisation','78%','2 workers idle',''],
-          ].map(([l,v,c,dir]) => `
-            <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px;">
-              <div style="font-size:0.72rem;color:var(--grey);margin-bottom:4px;">${l}</div>
-              <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">${v}</div>
-              <div style="font-size:0.73rem;margin-top:3px;" class="${dir==='up'?'text-green':'text-grey'}">${c}</div>
-            </div>`).join('')}
-        </div>
+        <div id="perf-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;"></div>
       </div>
 
     </div>
@@ -183,6 +170,20 @@
         <div style="font-size:0.73rem;color:var(--grey);margin-top:2px;">Bill: ${l.bill} &nbsp;·&nbsp; ${l.date}</div>
       </div>
       <span class="badge ${statusBadge[l.status]}" style="flex-shrink:0;">${l.status.replace('_',' ')}</span>
+    </div>`).join('');
+
+  document.getElementById('perf-stats').innerHTML = [
+    ['Lead Conversion Rate','18.5%','↑ from 15%','up'],
+    ['Avg Quote Value','₹2.82L','↑ 8% vs Apr','up'],
+    ['Customer Rating','4.5 ★','Stable',''],
+    ['Projects On-Time','87%','↑ from 82%','up'],
+    ['Subsidy Filed','6','All processed','up'],
+    ['Labor Utilisation','78%','2 workers idle',''],
+  ].map(([l,v,c,dir]) => `
+    <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px;">
+      <div style="font-size:0.72rem;color:var(--grey);margin-bottom:4px;">${l}</div>
+      <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">${v}</div>
+      <div style="font-size:0.73rem;margin-top:3px;" class="${dir==='up'?'text-green':'text-grey'}">${c}</div>
     </div>`).join('');
 
   const stageIcon = { survey:'🔍', material:'📦', installation:'🔧', inspection:'✅', completed:'🎉' };
