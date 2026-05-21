@@ -124,13 +124,15 @@
             <div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 120px 0 28px;">
               <div style="color:rgba(255,255,255,0.08);font-size:5rem;font-weight:900;">${v.icon}</div>
             </div>
-            <div class="vendor-profile-avatar">${v.icon}</div>
+            <div class="vendor-profile-avatar" style="${v.logo ? 'background:#fff;padding:6px;' : ''}">
+              ${v.logo ? `<img src="${v.logo}" alt="${v.name}" style="width:100%;height:100%;object-fit:contain;border-radius:50%;" onerror="this.textContent='${v.icon}'">` : v.icon}
+            </div>
           </div>
           <div style="padding:48px 28px 24px;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <h2 style="font-size:1.5rem;margin-bottom:4px;">${v.name}</h2>
-                <div style="font-size:0.85rem;color:var(--grey);margin-bottom:10px;">👤 ${v.owner} &nbsp;·&nbsp; 📍 ${v.area}, Bangalore &nbsp;·&nbsp; 📞 <a href="tel:${v.phone}" style="color:var(--primary);">${v.phone}</a></div>
+                <div style="font-size:0.85rem;color:var(--grey);margin-bottom:10px;">👤 ${v.owner} &nbsp;·&nbsp; 📍 ${v.area}, Bangalore &nbsp;·&nbsp; 📞 <a href="tel:${v.phone}" style="color:var(--primary);">${v.phone}</a>${v.website ? ` &nbsp;·&nbsp; 🌐 <a href="${v.website}" target="_blank" rel="noopener" style="color:var(--primary);">${v.website.replace(/^https?:\/\//,'')}</a>` : ''}</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
                   ${v.badges.map(b => `<span class="badge badge-gold">${b}</span>`).join('')}
                   <span class="badge badge-green">${v.specialization}</span>

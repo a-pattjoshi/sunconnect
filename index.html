@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SunConnect — Solar Marketplace</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
-    .input-wrap { position: relative; }
-    .input-wrap .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--grey); font-size: 1rem; }
-    .error-msg { color: var(--red); font-size: 0.8rem; margin-top: 8px; display: none; }
+    .error-msg { color: var(--red); font-size: 0.85rem; margin-top: 4px; display: none; }
   </style>
 </head>
 <body>
@@ -33,45 +31,33 @@
   <div class="login-form-wrap">
     <div class="login-form-header">
       <h2 class="login-form-title">Welcome back 👋</h2>
-      <p class="login-form-sub">Sign in to your SunConnect account</p>
+      <p class="login-form-sub">Choose how you'd like to sign in</p>
     </div>
 
     <div class="login-form">
-      <!-- Role tabs -->
-      <div class="role-tabs">
-        <div class="role-tab active" id="tab-customer" onclick="selectRole('customer')">
-          <span class="role-tab-icon">🏠</span>
-          <span class="role-tab-label">I'm a Customer</span>
-        </div>
-        <div class="role-tab" id="tab-vendor" onclick="selectRole('vendor')">
-          <span class="role-tab-icon">🔧</span>
-          <span class="role-tab-label">I'm an Installer</span>
-        </div>
-      </div>
+      <!-- One-click sign-in cards -->
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px;">
 
-      <form id="login-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input class="form-input" type="email" id="email" placeholder="Enter your email" autocomplete="email" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div class="input-wrap">
-            <input class="form-input" type="password" id="password" placeholder="Enter your password" style="padding-right: 40px;" required>
-            <button type="button" class="eye-btn" onclick="togglePwd()">👁</button>
+        <button class="signin-card" id="btn-customer" onclick="handleQuickLogin('customer')" style="cursor:pointer;border:2px solid var(--primary-light,#e8f4fd);border-radius:16px;background:#fff;padding:24px 20px;display:flex;align-items:center;gap:18px;text-align:left;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onmouseover="this.style.borderColor='var(--primary)';this.style.boxShadow='0 4px 18px rgba(251,146,60,0.15)'" onmouseout="this.style.borderColor='var(--primary-light,#e8f4fd)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'">
+          <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#fff7ed,#fed7aa);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:1.05rem;color:var(--dark);margin-bottom:3px;">Continue as Customer</div>
+            <div style="font-size:0.82rem;color:var(--grey);line-height:1.4;">Explore installers, track your solar project &amp; access subsidies</div>
           </div>
-        </div>
-        <p class="error-msg" id="error-msg">Invalid email or password. Please try again.</p>
-        <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn" style="margin-top:8px;">
-          Sign In →
+          <div style="font-size:1.3rem;color:var(--primary);">→</div>
         </button>
-      </form>
 
-      <!-- Demo hint -->
-      <div class="demo-hint" id="demo-hint">
-        <div class="demo-hint-label">🔑 Demo Credentials</div>
-        <p id="hint-text"><strong>Customer:</strong> customer@sunconnect.in / solar123</p>
+        <button class="signin-card" id="btn-vendor" onclick="handleQuickLogin('vendor')" style="cursor:pointer;border:2px solid #e8f5e9;border-radius:16px;background:#fff;padding:24px 20px;display:flex;align-items:center;gap:18px;text-align:left;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.06);" onmouseover="this.style.borderColor='#22c55e';this.style.boxShadow='0 4px 18px rgba(34,197,94,0.15)'" onmouseout="this.style.borderColor='#e8f5e9';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'">
+          <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#f0fdf4,#bbf7d0);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">🔧</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:1.05rem;color:var(--dark);margin-bottom:3px;">Continue as Installer</div>
+            <div style="font-size:0.82rem;color:var(--grey);line-height:1.4;">Manage leads, quotations, projects &amp; your labor pool</div>
+          </div>
+          <div style="font-size:1.3rem;color:#22c55e;">→</div>
+        </button>
       </div>
+
+      <p class="error-msg" id="error-msg" style="text-align:center;">Sign in failed. Please try again.</p>
 
       <!-- IIMB Badge -->
       <div class="iimb-badge">
@@ -85,50 +71,37 @@
 <script src="js/auth.js?v=5"></script>
 <script src="js/analytics.js?v=1"></script>
 <script>
-  let selectedRole = 'customer';
+  const DEMO_CREDS = {
+    customer: { email: 'customer@sunconnect.in', password: 'solar123' },
+    vendor:   { email: 'vendor@sunconnect.in',   password: 'solar123' }
+  };
 
-  function selectRole(role) {
-    selectedRole = role;
-    document.getElementById('tab-customer').classList.toggle('active', role === 'customer');
-    document.getElementById('tab-vendor').classList.toggle('active', role === 'vendor');
-    document.getElementById('hint-text').innerHTML = role === 'customer'
-      ? '<strong>Customer:</strong> customer@sunconnect.in / solar123'
-      : '<strong>Installer:</strong> vendor@sunconnect.in / solar123';
-    document.getElementById('email').value    = role === 'customer' ? 'customer@sunconnect.in' : 'vendor@sunconnect.in';
-    document.getElementById('password').value = 'solar123';
-    document.getElementById('error-msg').style.display = 'none';
-  }
-
-  function handleLogin(e) {
-    e.preventDefault();
-    scTrackSignin(); // ← track every sign-in button click
-    const email    = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const btn      = document.getElementById('login-btn');
-    btn.textContent = 'Signing in…';
+  function handleQuickLogin(role) {
+    scTrackSignin();
+    const btn = document.getElementById('btn-' + role);
+    const origContent = btn.innerHTML;
     btn.disabled = true;
+    btn.style.opacity = '0.75';
+    btn.querySelector('div:last-child').textContent = '…';
+
     setTimeout(() => {
-      const role = scLogin(email, password);
-      if (role) {
-        window.location.replace(role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+      const { email, password } = DEMO_CREDS[role];
+      const result = scLogin(email, password);
+      if (result) {
+        window.location.replace(result === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
       } else {
         document.getElementById('error-msg').style.display = 'block';
-        btn.textContent = 'Sign In →';
         btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerHTML = origContent;
       }
-    }, 600);
+    }, 500);
   }
 
-  function togglePwd() {
-    const p = document.getElementById('password');
-    p.type = p.type === 'password' ? 'text' : 'password';
-  }
-
-  // Auto-fill on load + check for pending app_close rating
+  // Auto-redirect if already logged in + check for pending app_close rating
   window.onload = () => {
     const u = scGetUser();
     if (u) window.location.replace(u.role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
-    selectRole('customer');
 
     // Show "app_close" rating if user left while logged in (> 30s ago)
     const pending = localStorage.getItem('sc_pending_rating');
