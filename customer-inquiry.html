@@ -15,11 +15,11 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Menu</div>
-    <a href="customer-dashboard.html"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
-    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
-    <a href="customer-inquiry.html"     class="nav-item active"     ><span class="nav-icon">📋</span>My Inquiry</a>
-    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
-    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+    <a href="/customer-dashboard"   class="nav-item "  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="/customer-marketplace" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="/customer-inquiry"     class="nav-item active"     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="/customer-tracker"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="/customer-financing"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
   </nav>
   <div class="sidebar-footer">
     <div class="user-chip">
@@ -90,7 +90,7 @@
         <div class="card">
           <div class="section-header">
             <div class="section-title">💬 Quotes Received</div>
-            <a href="customer-marketplace.html" class="btn btn-outline btn-sm">+ Browse More Installers</a>
+            <a href="/customer-marketplace" class="btn btn-outline btn-sm">+ Browse More Installers</a>
           </div>
           <div class="table-wrap">
             <table>
@@ -202,7 +202,7 @@
   </div>
 </div>
 
-<script src="js/auth.js?v=6"></script>
+<script src="js/auth.js?v=7"></script>
 <script src="js/analytics.js?v=1"></script>
 <script src="js/data.js?v=5"></script>
 <script>
@@ -265,7 +265,7 @@
   const smap = { accepted:'badge-green', reviewing:'badge-blue', declined:'badge-red' };
   document.getElementById('quotes-tbody').innerHTML = quotes.map((q,i) => `
     <tr>
-      <td><a href="customer-vendor-profile.html?id=${i+1}" style="color:var(--primary);font-weight:600;">${q.vendor}</a></td>
+      <td><a href="/customer-vendor-profile?id=${i+1}" style="color:var(--primary);font-weight:600;">${q.vendor}</a></td>
       <td><div class="rating-display">${renderStars(q.rating)}<span style="font-size:0.8rem;font-weight:600;margin-left:4px;">${q.rating}</span></div></td>
       <td>${q.system}</td>
       <td><strong>${q.amount}</strong></td>
@@ -274,7 +274,7 @@
       <td><span class="badge ${smap[q.status]}">${q.status}</span></td>
       <td>
         ${q.status === 'accepted'
-          ? `<a href="customer-tracker.html" class="btn btn-success btn-sm">Track →</a>`
+          ? `<a href="/customer-tracker" class="btn btn-success btn-sm">Track →</a>`
           : `<button class="btn btn-primary btn-sm" onclick="showToast('Quote request sent to ${q.vendor}','success')">View Quote</button>`}
       </td>
     </tr>`).join('');

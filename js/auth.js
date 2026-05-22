@@ -25,9 +25,9 @@ function scGetUser() {
 
 function scRequireRole(role) {
   const u = scGetUser();
-  if (!u) { window.location.replace('index.html'); return null; }
+  if (!u) { window.location.replace('/'); return null; }
   if (u.role !== role) {
-    window.location.replace(u.role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+    window.location.replace(u.role === 'customer' ? '/customer-dashboard' : '/vendor-dashboard');
     return null;
   }
   return u;
@@ -40,31 +40,31 @@ function scLogout() {
     scShowRatingModal('logout', function() {
       localStorage.removeItem('sc_session');
       sessionStorage.removeItem('sc_session');
-      window.location.replace('index.html');
+      window.location.replace('/');
     });
   } else {
     localStorage.removeItem('sc_session');
     sessionStorage.removeItem('sc_session');
-    window.location.replace('index.html');
+    window.location.replace('/');
   }
 }
 
 /* ── NAV DEFINITIONS ── */
 const CUSTOMER_NAV = [
-  { icon: '🏠', label: 'Dashboard',          href: 'customer-dashboard.html' },
-  { icon: '🔍', label: 'Find Installers',    href: 'customer-marketplace.html' },
-  { icon: '📋', label: 'My Inquiry',         href: 'customer-inquiry.html' },
-  { icon: '📊', label: 'Project Tracker',    href: 'customer-tracker.html' },
-  { icon: '💰', label: 'Financing & Subsidy',href: 'customer-financing.html' },
+  { icon: '🏠', label: 'Dashboard',          href: '/customer-dashboard' },
+  { icon: '🔍', label: 'Find Installers',    href: '/customer-marketplace' },
+  { icon: '📋', label: 'My Inquiry',         href: '/customer-inquiry' },
+  { icon: '📊', label: 'Project Tracker',    href: '/customer-tracker' },
+  { icon: '💰', label: 'Financing & Subsidy',href: '/customer-financing' },
 ];
 
 const VENDOR_NAV = [
-  { icon: '🏠', label: 'Dashboard',  href: 'vendor-dashboard.html' },
-  { icon: '📥', label: 'Leads',      href: 'vendor-leads.html' },
-  { icon: '📄', label: 'Quotations', href: 'vendor-quotations.html' },
-  { icon: '🏗️', label: 'Projects',   href: 'vendor-projects.html' },
-  { icon: '👷', label: 'Labor Pool', href: 'vendor-labor.html' },
-  { icon: '🏢', label: 'My Profile', href: 'vendor-profile.html' },
+  { icon: '🏠', label: 'Dashboard',  href: '/vendor-dashboard' },
+  { icon: '📥', label: 'Leads',      href: '/vendor-leads' },
+  { icon: '📄', label: 'Quotations', href: '/vendor-quotations' },
+  { icon: '🏗️', label: 'Projects',   href: '/vendor-projects' },
+  { icon: '👷', label: 'Labor Pool', href: '/vendor-labor' },
+  { icon: '🏢', label: 'My Profile', href: '/vendor-profile' },
 ];
 
 function renderSidebar(role) {
@@ -114,17 +114,17 @@ function _renderMobileBottomNav(role) {
   if (document.getElementById('mobile-bottom-nav')) return;
   const cur = window.location.pathname.split('/').pop() || 'index.html';
   const items = role === 'customer' ? [
-    { icon: '🏠', label: 'Home',       href: 'customer-dashboard.html' },
-    { icon: '🔍', label: 'Installers', href: 'customer-marketplace.html' },
-    { icon: '📋', label: 'Inquiry',    href: 'customer-inquiry.html' },
-    { icon: '📊', label: 'Tracker',    href: 'customer-tracker.html' },
-    { icon: '💰', label: 'Finance',    href: 'customer-financing.html' },
+    { icon: '🏠', label: 'Home',       href: '/customer-dashboard' },
+    { icon: '🔍', label: 'Installers', href: '/customer-marketplace' },
+    { icon: '📋', label: 'Inquiry',    href: '/customer-inquiry' },
+    { icon: '📊', label: 'Tracker',    href: '/customer-tracker' },
+    { icon: '💰', label: 'Finance',    href: '/customer-financing' },
   ] : [
-    { icon: '🏠', label: 'Home',     href: 'vendor-dashboard.html' },
-    { icon: '📥', label: 'Leads',    href: 'vendor-leads.html' },
-    { icon: '📄', label: 'Quotes',   href: 'vendor-quotations.html' },
-    { icon: '🏗️', label: 'Projects', href: 'vendor-projects.html' },
-    { icon: '🏢', label: 'Profile',  href: 'vendor-profile.html' },
+    { icon: '🏠', label: 'Home',     href: '/vendor-dashboard' },
+    { icon: '📥', label: 'Leads',    href: '/vendor-leads' },
+    { icon: '📄', label: 'Quotes',   href: '/vendor-quotations' },
+    { icon: '🏗️', label: 'Projects', href: '/vendor-projects' },
+    { icon: '🏢', label: 'Profile',  href: '/vendor-profile' },
   ];
   const nav = document.createElement('nav');
   nav.id = 'mobile-bottom-nav';

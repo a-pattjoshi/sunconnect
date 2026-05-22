@@ -15,11 +15,11 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Menu</div>
-    <a href="customer-dashboard.html"   class="nav-item active"  ><span class="nav-icon">🏠</span>Dashboard</a>
-    <a href="customer-marketplace.html" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
-    <a href="customer-inquiry.html"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
-    <a href="customer-tracker.html"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
-    <a href="customer-financing.html"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
+    <a href="/customer-dashboard"   class="nav-item active"  ><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="/customer-marketplace" class="nav-item " ><span class="nav-icon">🔍</span>Find Installers</a>
+    <a href="/customer-inquiry"     class="nav-item "     ><span class="nav-icon">📋</span>My Inquiry</a>
+    <a href="/customer-tracker"     class="nav-item "     ><span class="nav-icon">📊</span>Project Tracker</a>
+    <a href="/customer-financing"   class="nav-item "   ><span class="nav-icon">💰</span>Financing &amp; Subsidy</a>
   </nav>
   <div class="sidebar-footer">
     <div class="user-chip">
@@ -94,22 +94,22 @@
       <!-- Quick Actions -->
       <div class="section-header"><div class="section-title">Quick Actions</div></div>
       <div class="quick-actions">
-        <a href="customer-marketplace.html" class="quick-card">
+        <a href="/customer-marketplace" class="quick-card">
           <span class="quick-card-icon">🔍</span>
           <div class="quick-card-label">Find Installers</div>
           <div class="quick-card-sub">Browse 10+ vendors</div>
         </a>
-        <a href="customer-tracker.html" class="quick-card">
+        <a href="/customer-tracker" class="quick-card">
           <span class="quick-card-icon">📊</span>
           <div class="quick-card-label">Track Project</div>
           <div class="quick-card-sub">55% complete</div>
         </a>
-        <a href="customer-financing.html" class="quick-card">
+        <a href="/customer-financing" class="quick-card">
           <span class="quick-card-icon">💰</span>
           <div class="quick-card-label">Subsidy Calculator</div>
           <div class="quick-card-sub">Check your savings</div>
         </a>
-        <a href="customer-inquiry.html" class="quick-card">
+        <a href="/customer-inquiry" class="quick-card">
           <span class="quick-card-icon">📋</span>
           <div class="quick-card-label">My Inquiry</div>
           <div class="quick-card-sub">4 responses</div>
@@ -121,7 +121,7 @@
         <div class="card">
           <div class="section-header">
             <div class="section-title">🏗️ Active Project</div>
-            <a href="customer-tracker.html" class="btn btn-outline btn-sm">Full Tracker →</a>
+            <a href="/customer-tracker" class="btn btn-outline btn-sm">Full Tracker →</a>
           </div>
           <div style="margin-bottom:12px;">
             <div style="font-size:0.95rem;font-weight:700;color:var(--dark);">5 kW System — HSR Layout</div>
@@ -160,7 +160,7 @@
         <div class="card">
           <div class="section-header">
             <div class="section-title">📩 Quotes Received</div>
-            <a href="customer-inquiry.html" class="btn btn-outline btn-sm">View All</a>
+            <a href="/customer-inquiry" class="btn btn-outline btn-sm">View All</a>
           </div>
           <div id="quotes-list"></div>
         </div>
@@ -170,7 +170,7 @@
       <div style="margin-top:24px;">
         <div class="section-header">
           <div class="section-title">⭐ Top Rated Installers in Bangalore</div>
-          <a href="customer-marketplace.html" class="btn btn-primary btn-sm">View All →</a>
+          <a href="/customer-marketplace" class="btn btn-primary btn-sm">View All →</a>
         </div>
         <div class="vendor-grid" id="top-vendors"></div>
       </div>
@@ -179,7 +179,7 @@
   </div>
 </div>
 
-<script src="js/auth.js?v=6"></script>
+<script src="js/auth.js?v=7"></script>
 <script src="js/analytics.js?v=1"></script>
 <script src="js/data.js?v=5"></script>
 <script>
@@ -209,7 +209,7 @@
   // Top vendors
   const top = SC_VENDORS.slice().sort((a,b) => b.rating - a.rating).slice(0,3);
   document.getElementById('top-vendors').innerHTML = top.map(v => `
-    <a href="customer-vendor-profile.html?id=${v.id}" class="vendor-card">
+    <a href="/customer-vendor-profile?id=${v.id}" class="vendor-card">
       <div class="vendor-card-header">
         <div class="vendor-avatar">${v.icon}</div>
         <div>
