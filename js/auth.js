@@ -103,8 +103,38 @@ function renderSidebar(role) {
     topBar.insertBefore(btn, topBar.firstChild);
   }
 
+  // Mobile bottom navigation bar
+  _renderMobileBottomNav(role);
+
   // Wire notification bell
   _setupNotifications(role);
+}
+
+function _renderMobileBottomNav(role) {
+  if (document.getElementById('mobile-bottom-nav')) return;
+  const cur = window.location.pathname.split('/').pop() || 'index.html';
+  const items = role === 'customer' ? [
+    { icon: '🏠', label: 'Home',       href: 'customer-dashboard.html' },
+    { icon: '🔍', label: 'Installers', href: 'customer-marketplace.html' },
+    { icon: '📋', label: 'Inquiry',    href: 'customer-inquiry.html' },
+    { icon: '📊', label: 'Tracker',    href: 'customer-tracker.html' },
+    { icon: '💰', label: 'Finance',    href: 'customer-financing.html' },
+  ] : [
+    { icon: '🏠', label: 'Home',     href: 'vendor-dashboard.html' },
+    { icon: '📥', label: 'Leads',    href: 'vendor-leads.html' },
+    { icon: '📄', label: 'Quotes',   href: 'vendor-quotations.html' },
+    { icon: '🏗️', label: 'Projects', href: 'vendor-projects.html' },
+    { icon: '🏢', label: 'Profile',  href: 'vendor-profile.html' },
+  ];
+  const nav = document.createElement('nav');
+  nav.id = 'mobile-bottom-nav';
+  nav.className = 'mobile-bottom-nav';
+  nav.innerHTML = items.map(it => `
+    <a href="${it.href}" class="${cur === it.href ? 'active' : ''}">
+      <span class="mbn-icon">${it.icon}</span>
+      <span class="mbn-label">${it.label}</span>
+    </a>`).join('');
+  document.body.appendChild(nav);
 }
 
 function toggleSidebar() {
