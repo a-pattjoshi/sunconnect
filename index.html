@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SunConnect — Solar Marketplace</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    (function(){try{var s=localStorage.getItem('sc_session')||sessionStorage.getItem('sc_session');if(s){var u=JSON.parse(s);if(u&&u.role)window.location.replace(u.role==='customer'?'/customer-dashboard':'/vendor-dashboard');}}catch(e){}})();
+  </script>
+  <link rel="preload" href="css/style.css?v=7" as="style">
   <link rel="preload" href="js/bundle.min.js?v=1" as="script">
   <link rel="stylesheet" href="css/style.css?v=7">
   <style>
