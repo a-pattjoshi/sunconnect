@@ -79,23 +79,20 @@
   function handleQuickLogin(role) {
     scTrackSignin();
     const btn = document.getElementById('btn-' + role);
-    const origContent = btn.innerHTML;
     btn.disabled = true;
-    btn.style.opacity = '0.75';
-    btn.querySelector('div:last-child').textContent = '…';
+    btn.style.opacity = '0.65';
+    btn.style.transform = 'scale(0.98)';
 
-    setTimeout(() => {
-      const { email, password } = DEMO_CREDS[role];
-      const result = scLogin(email, password);
-      if (result) {
-        window.location.replace(result === 'customer' ? '/customer-dashboard' : '/vendor-dashboard');
-      } else {
-        document.getElementById('error-msg').style.display = 'block';
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.innerHTML = origContent;
-      }
-    }, 500);
+    const { email, password } = DEMO_CREDS[role];
+    const result = scLogin(email, password);
+    if (result) {
+      window.location.replace(result === 'customer' ? '/customer-dashboard' : '/vendor-dashboard');
+    } else {
+      document.getElementById('error-msg').style.display = 'block';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.transform = '';
+    }
   }
 
   // Auto-redirect if already logged in + check for pending app_close rating
