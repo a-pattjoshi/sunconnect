@@ -1,12 +1,5 @@
 {
   "name": "sunconnect",
   "version": "1.0.0",
-  "description": "SunConnect Solar Marketplace MVP",
-  "scripts": {
-    "start": "npx serve . -l $PORT"
-  },
-  "dependencies": {
-    "@vercel/analytics": "^2.0.1",
-    "serve": "^14.2.3"
-  }
+  "description": "SunConnect Solar Marketplace MVP"
 }
