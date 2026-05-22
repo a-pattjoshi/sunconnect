@@ -176,7 +176,7 @@
   </div>
 </div>
 
-<script src="js/analytics.js?v=1"></script>
+<script src="js/analytics.js?v=2"></script>
 <script>
   const ADMIN_CREDS = { email: 'admin@sunconnect.in', password: 'admin@2026' };
 
@@ -200,9 +200,10 @@
     document.getElementById('adm-dash').style.display  = 'none';
   }
 
-  function clearData() {
-    if (!confirm('Clear ALL analytics data? This cannot be undone.')) return;
+  async function clearData() {
+    if (!confirm('Clear ALL analytics data from Supabase + this device? This cannot be undone.')) return;
     localStorage.removeItem('sc_analytics');
+    await scClearRemoteEvents();
     renderDashboard();
   }
 
@@ -210,38 +211,70 @@
     try {
       const d = new Date(ts);
       return d.toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
-    } catch(e) { return ts; }
+    } catch(e) { return ts || '—'; }
   }
 
   function starsHtml(n) {
+    n = parseInt(n) || 0;
     return '<span class="stars-display">' + '★'.repeat(n) + '<span style="color:#334155">' + '★'.repeat(5-n) + '</span></span>';
   }
 
   function avg(arr) {
-    if (!arr.length) return 0;
+    if (!arr.length) return '—';
     return (arr.reduce((a,b) => a+b, 0) / arr.length).toFixed(1);
   }
 
-  function renderDashboard() {
-    const d = scGetAnalytics();
-    const ratings = d.ratings || [];
-    const signinEvents = d.signinEvents || [];
+  /* ── Merge Supabase + localStorage events ── */
+  function mergeData(remoteEvents) {
+    const local = scGetAnalytics();
 
-    document.getElementById('adm-last-updated').textContent = 'Updated: ' + new Date().toLocaleTimeString('en-IN');
+    // Build unified events list from Supabase
+    const ratings = [], signins = [];
+    if (remoteEvents && remoteEvents.length) {
+      remoteEvents.forEach(e => {
+        if (e.event_type === 'rating') {
+          ratings.push({ score: e.score, trigger: e.trigger, role: e.role, ts: e.created_at, session_id: e.session_id, source: 'remote' });
+        } else if (e.event_type === 'signin') {
+          signins.push({ ts: e.created_at, role: e.role, session_id: e.session_id, source: 'remote' });
+        }
+      });
+    }
+
+    // Merge local ratings not already in remote (fallback if Supabase not configured)
+    const isRemoteConfigured = SC_SUPABASE_URL && !SC_SUPABASE_URL.includes('YOUR_');
+    if (!isRemoteConfigured) {
+      local.ratings.forEach(r => ratings.push({ ...r, source: 'local' }));
+      local.signinEvents.forEach(s => signins.push({ ...s, source: 'local' }));
+    }
+
+    const uniqueSessions = new Set([...ratings, ...signins].map(e => e.session_id).filter(Boolean)).size;
+    return { ratings, signins, signinClicks: isRemoteConfigured ? signins.length : local.signinClicks, uniqueSessions, isRemoteConfigured };
+  }
+
+  async function renderDashboard() {
+    // Show loading state
+    document.getElementById('adm-stats').innerHTML = '<div style="color:#475569;font-size:0.875rem;padding:20px;">⏳ Loading from Supabase…</div>';
+    document.getElementById('adm-last-updated').textContent = 'Fetching…';
+
+    const remoteEvents = await scFetchRemoteEvents();
+    const { ratings, signins, signinClicks, uniqueSessions, isRemoteConfigured } = mergeData(remoteEvents);
+
+    const source = isRemoteConfigured ? '☁️ Supabase' : '💾 Local only';
+    document.getElementById('adm-last-updated').textContent = `${source} · Updated: ${new Date().toLocaleTimeString('en-IN')}`;
+
+    const todayStr = new Date().toDateString();
+    const todayRatings = ratings.filter(r => new Date(r.ts).toDateString() === todayStr).length;
+    const todaySignins = signins.filter(s => new Date(s.ts).toDateString() === todayStr).length;
+    const avgRating    = ratings.length ? avg(ratings.map(r => r.score)) : '—';
 
     // ── STATS ──
-    const avgRating = ratings.length ? avg(ratings.map(r => r.score)) : '—';
-    const todayStr  = new Date().toDateString();
-    const todayRatings = ratings.filter(r => new Date(r.ts).toDateString() === todayStr).length;
-    const todaySignins = signinEvents.filter(s => new Date(s.ts).toDateString() === todayStr).length;
-
     document.getElementById('adm-stats').innerHTML = [
-      { label: 'Sign-in Clicks (Total)', value: d.signinClicks, sub: `${todaySignins} today`, cls: 'gold' },
+      { label: 'Total Sign-ins', value: signinClicks, sub: `${todaySignins} today`, cls: 'gold' },
+      { label: 'Unique Sessions', value: isRemoteConfigured ? uniqueSessions : '—', sub: isRemoteConfigured ? 'distinct users' : 'needs Supabase', cls: 'blue' },
       { label: 'Total Ratings', value: ratings.length, sub: `${todayRatings} today`, cls: 'blue' },
-      { label: 'Average Rating', value: avgRating + (ratings.length ? ' ★' : ''), sub: ratings.length ? `from ${ratings.length} responses` : 'No ratings yet', cls: 'green' },
+      { label: 'Average Rating', value: avgRating !== '—' ? avgRating + ' ★' : '—', sub: ratings.length ? `from ${ratings.length} responses` : 'No ratings yet', cls: 'green' },
       { label: 'Logout Ratings', value: ratings.filter(r=>r.trigger==='logout').length, sub: avg(ratings.filter(r=>r.trigger==='logout').map(r=>r.score)) + ' ★ avg', cls: '' },
       { label: 'Notification Ratings', value: ratings.filter(r=>r.trigger==='notification').length, sub: avg(ratings.filter(r=>r.trigger==='notification').map(r=>r.score)) + ' ★ avg', cls: '' },
-      { label: 'App-Close Ratings', value: ratings.filter(r=>r.trigger==='app_close').length, sub: avg(ratings.filter(r=>r.trigger==='app_close').map(r=>r.score)) + ' ★ avg', cls: '' },
     ].map(s => `
       <div class="adm-stat ${s.cls}">
         <div class="adm-stat-label">${s.label}</div>
@@ -251,15 +284,15 @@
 
     // ── STAR DISTRIBUTION ──
     const total = ratings.length || 1;
-    document.getElementById('star-bars').innerHTML = [5,4,3,2,1].map(star => {
-      const count = ratings.filter(r => r.score === star).length;
+    document.getElementById('star-bars').innerHTML = ratings.length ? [5,4,3,2,1].map(star => {
+      const count = ratings.filter(r => parseInt(r.score) === star).length;
       const pct   = Math.round(count / total * 100);
       return `<div class="r-bar-row">
         <div class="r-bar-label">${'★'.repeat(star)} ${star}</div>
         <div class="r-bar-wrap"><div class="r-bar-fill" style="width:${pct}%"></div></div>
         <div class="r-bar-count">${count}</div>
       </div>`;
-    }).join('') || '<div class="empty-state">No ratings yet</div>';
+    }).join('') : '<div class="empty-state">No ratings yet</div>';
 
     // ── TRIGGER BREAKDOWN ──
     const triggers = [
@@ -278,44 +311,38 @@
         <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${pct}%"></div></div>
         <div class="t-bar-avg">${avgVal}★</div>
       </div><div style="font-size:0.72rem;color:#475569;margin-bottom:14px;padding-left:122px;">${count} response${count!==1?'s':''}</div>`;
-    }).join('') || '<div class="empty-state">No ratings yet</div>';
+    }).join('');
 
     // ── SIGN-IN TABLE ──
-    document.getElementById('signin-count-badge').textContent = d.signinClicks + ' total clicks';
-    if (!signinEvents.length) {
-      document.getElementById('signin-table').innerHTML = '<div class="empty-state">No sign-in events recorded yet.</div>';
-    } else {
-      document.getElementById('signin-table').innerHTML = `
-        <div class="adm-table-wrap">
-          <table class="adm-table">
-            <thead><tr><th>#</th><th>Timestamp</th></tr></thead>
-            <tbody>${[...signinEvents].reverse().slice(0,20).map((e,i) => `
-              <tr>
-                <td style="color:#475569;">${signinEvents.length - i}</td>
-                <td>${fmtDate(e.ts)}</td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
-          ${signinEvents.length > 20 ? `<div style="text-align:center;padding:12px;font-size:0.75rem;color:#475569;">Showing 20 of ${signinEvents.length} events</div>` : ''}
-        </div>`;
-    }
+    document.getElementById('signin-count-badge').textContent = signinClicks + ' total';
+    document.getElementById('signin-table').innerHTML = signins.length ? `
+      <div class="adm-table-wrap">
+        <table class="adm-table">
+          <thead><tr><th>#</th><th>Timestamp</th><th>Role</th><th>Session</th></tr></thead>
+          <tbody>${[...signins].slice(0,30).map((e,i) => `
+            <tr>
+              <td style="color:#475569;">${i+1}</td>
+              <td>${fmtDate(e.ts)}</td>
+              <td><span class="adm-badge ${e.role||'unknown'}">${e.role||'unknown'}</span></td>
+              <td style="color:#475569;font-size:0.72rem;">${(e.session_id||'').slice(0,8)}…</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        ${signins.length > 30 ? `<div style="text-align:center;padding:12px;font-size:0.75rem;color:#475569;">Showing 30 of ${signins.length} events</div>` : ''}
+      </div>` : '<div class="empty-state">No sign-in events recorded yet.</div>';
 
     // ── RATINGS TABLE ──
-    if (!ratings.length) {
-      document.getElementById('ratings-tbody').innerHTML = `<tr><td colspan="5" class="empty-state">No ratings collected yet. They'll appear here once users submit feedback.</td></tr>`;
-    } else {
-      document.getElementById('ratings-tbody').innerHTML = [...ratings].reverse().map((r, i) => `
-        <tr>
-          <td style="color:#475569;">${ratings.length - i}</td>
-          <td>${fmtDate(r.ts)}</td>
-          <td><span class="adm-badge ${r.trigger}">${r.trigger === 'app_close' ? '🟢 App Close' : r.trigger === 'logout' ? '🔴 Logout' : '🔔 Notification'}</span></td>
-          <td><span class="adm-badge ${r.role}">${r.role}</span></td>
-          <td>${starsHtml(r.score)} <span style="color:#94a3b8;font-size:0.8rem;margin-left:4px;">${r.score}/5</span></td>
-        </tr>`).join('');
-    }
+    document.getElementById('ratings-tbody').innerHTML = ratings.length ? ratings.slice(0,50).map((r, i) => `
+      <tr>
+        <td style="color:#475569;">${i+1}</td>
+        <td>${fmtDate(r.ts)}</td>
+        <td><span class="adm-badge ${r.trigger}">${r.trigger === 'app_close' ? '🟢 App Close' : r.trigger === 'logout' ? '🔴 Logout' : '🔔 Notification'}</span></td>
+        <td><span class="adm-badge ${r.role||'unknown'}">${r.role||'unknown'}</span></td>
+        <td>${starsHtml(r.score)} <span style="color:#94a3b8;font-size:0.8rem;margin-left:4px;">${r.score}/5</span></td>
+      </tr>`).join('') :
+      `<tr><td colspan="5" class="empty-state">No ratings yet — they'll appear here once users submit feedback.</td></tr>`;
   }
 
-  // Check if already logged in this session
   window.onload = () => {
     if (sessionStorage.getItem('sc_admin')) {
       document.getElementById('adm-login').style.display = 'none';

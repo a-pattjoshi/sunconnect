@@ -1,5 +1,17 @@
 /* ── SUNCONNECT — Analytics & Rating Module ── */
 
+/* ── SUPABASE CONFIG — replace with your values ──────────────────────
+   Get these from: supabase.com → your project → Settings → API        */
+const SC_SUPABASE_URL = 'YOUR_SUPABASE_URL';       // e.g. https://xxxx.supabase.co
+const SC_SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';  // anon / public key
+
+/* ── SESSION ID — unique per browser session ── */
+const _SC_SID = sessionStorage.getItem('sc_sid') || (() => {
+  const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  sessionStorage.setItem('sc_sid', id);
+  return id;
+})();
+
 const _SC_AK = 'sc_analytics';
 
 function scGetAnalytics() {
@@ -16,25 +28,76 @@ function _scSave(data) {
   try { localStorage.setItem(_SC_AK, JSON.stringify(data)); } catch(e) {}
 }
 
+/* ── POST TO SUPABASE (fire-and-forget, never blocks UI) ── */
+function _scPost(payload) {
+  if (!SC_SUPABASE_URL || SC_SUPABASE_URL.includes('YOUR_')) return;
+  fetch(SC_SUPABASE_URL + '/rest/v1/sc_events', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SC_SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SC_SUPABASE_KEY,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify({ ...payload, session_id: _SC_SID })
+  }).catch(() => {}); // fail silently — never break the app
+}
+
 /* ── SIGN-IN TRACKING ── */
 function scTrackSignin() {
   const d = scGetAnalytics();
+  const user = (typeof scGetUser === 'function') ? scGetUser() : null;
   d.signinClicks++;
   d.signinEvents.push({ ts: new Date().toISOString() });
   _scSave(d);
+  _scPost({ event_type: 'signin', role: user ? user.role : 'unknown' });
 }
 
 /* ── RATING STORAGE ── */
 function _scSaveRating(score, trigger) {
   const d = scGetAnalytics();
   const user = (typeof scGetUser === 'function') ? scGetUser() : null;
-  d.ratings.push({
+  const entry = {
     score,
     trigger,
     role: user ? user.role : 'unknown',
     ts: new Date().toISOString()
-  });
+  };
+  d.ratings.push(entry);
   _scSave(d);
+  _scPost({ event_type: 'rating', score, trigger, role: entry.role });
+}
+
+/* ── FETCH ALL EVENTS FROM SUPABASE (for admin dashboard) ── */
+async function scFetchRemoteEvents() {
+  if (!SC_SUPABASE_URL || SC_SUPABASE_URL.includes('YOUR_')) return null;
+  try {
+    const res = await fetch(
+      SC_SUPABASE_URL + '/rest/v1/sc_events?select=*&order=created_at.desc&limit=1000',
+      {
+        headers: {
+          'apikey': SC_SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SC_SUPABASE_KEY
+        }
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch(e) { return null; }
+}
+
+/* ── DELETE ALL REMOTE EVENTS (admin clear) ── */
+async function scClearRemoteEvents() {
+  if (!SC_SUPABASE_URL || SC_SUPABASE_URL.includes('YOUR_')) return;
+  try {
+    await fetch(SC_SUPABASE_URL + '/rest/v1/sc_events?id=gte.0', {
+      method: 'DELETE',
+      headers: {
+        'apikey': SC_SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SC_SUPABASE_KEY
+      }
+    });
+  } catch(e) {}
 }
 
 /* ── RATING MODAL ─────────────────────────────────── */
@@ -128,10 +191,7 @@ function scSkipRating() {
   if (_scRatingCb) { const cb = _scRatingCb; _scRatingCb = null; cb(); }
 }
 
-/* ── CLOSE-APP DETECTION ───────────────────────────── */
-/* On beforeunload, mark that the user left while logged in.
-   index.html checks this flag on next load — if > 30s have passed,
-   shows the "app_close" rating (genuine tab close, not internal nav). */
+/* ── CLOSE-APP DETECTION ── */
 window.addEventListener('beforeunload', function() {
   if (typeof scGetUser === 'function' && scGetUser() && !sessionStorage.getItem('sc_logout_nav')) {
     localStorage.setItem('sc_pending_rating', Date.now().toString());
