@@ -96,7 +96,7 @@
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
       <button class="btn btn-ghost" onclick="closeLeadModal()">Close</button>
       <button class="btn btn-outline" onclick="showToast('Calling customer…','success');closeLeadModal()">📞 Call Customer</button>
-      <button class="btn btn-primary" style="flex:1;" onclick="window.location.href='vendor-quotations.html'">📄 Create Quotation →</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="window.location.href='/vendor-quotations'">📄 Create Quotation →</button>
     </div>
   </div>
 </div>
@@ -138,8 +138,8 @@
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <button class="btn btn-outline btn-sm" onclick="viewLead(${l.id})">👁 View</button>
             ${l.status === 'new' ? `<button class="btn btn-primary btn-sm" onclick="markContacted(${l.id})">📞 Contact</button>` : ''}
-            ${l.status === 'contacted' ? `<button class="btn btn-primary btn-sm" onclick="window.location.href='vendor-quotations.html'">📄 Quote</button>` : ''}
-            ${l.status === 'won' ? `<button class="btn btn-success btn-sm" onclick="window.location.href='vendor-projects.html'">🏗 Project</button>` : ''}
+            ${l.status === 'contacted' ? `<button class="btn btn-primary btn-sm" onclick="window.location.href='/vendor-quotations'">📄 Quote</button>` : ''}
+            ${l.status === 'won' ? `<button class="btn btn-success btn-sm" onclick="window.location.href='/vendor-projects'">🏗 Project</button>` : ''}
           </div>
         </td>
       </tr>`).join('');

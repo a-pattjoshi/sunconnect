@@ -186,7 +186,7 @@ Payment Schedule: 30% advance (₹___), 70% post installation completion.</texta
         <div style="display:flex;gap:6px;">
           <button class="btn btn-outline btn-sm" onclick="showToast('Opening quote ${q.id}…','')">👁 View</button>
           ${q.status==='draft'?`<button class="btn btn-primary btn-sm" onclick="showToast('Quote sent to ${q.customer}!','success')">📤 Send</button>`:''}
-          ${q.status==='accepted'?`<button class="btn btn-success btn-sm" onclick="window.location.href='vendor-projects.html'">🏗 Start Project</button>`:''}
+          ${q.status==='accepted'?`<button class="btn btn-success btn-sm" onclick="window.location.href='/vendor-projects'">🏗 Start Project</button>`:''}
         </div>
       </td>
     </tr>`).join('');

@@ -88,7 +88,7 @@
       const { email, password } = DEMO_CREDS[role];
       const result = scLogin(email, password);
       if (result) {
-        window.location.replace(result === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+        window.location.replace(result === 'customer' ? '/customer-dashboard' : '/vendor-dashboard');
       } else {
         document.getElementById('error-msg').style.display = 'block';
         btn.disabled = false;
@@ -101,7 +101,7 @@
   // Auto-redirect if already logged in + check for pending app_close rating
   window.onload = () => {
     const u = scGetUser();
-    if (u) window.location.replace(u.role === 'customer' ? 'customer-dashboard.html' : 'vendor-dashboard.html');
+    if (u) window.location.replace(u.role === 'customer' ? '/customer-dashboard' : '/vendor-dashboard');
 
     // Show "app_close" rating if user left while logged in (> 30s ago)
     const pending = localStorage.getItem('sc_pending_rating');

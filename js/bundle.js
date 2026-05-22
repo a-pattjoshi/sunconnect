@@ -226,8 +226,8 @@ function renderStars(r) {
 
 /* ── SUPABASE CONFIG — replace with your values ──────────────────────
    Get these from: supabase.com → your project → Settings → API        */
-const SC_SUPABASE_URL = 'YOUR_SUPABASE_URL';       // e.g. https://xxxx.supabase.co
-const SC_SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';  // anon / public key
+const SC_SUPABASE_URL = 'https://vlqccpafbvpzvftwwdeg.supabase.co';       // e.g. https://xxxx.supabase.co
+const SC_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZscWNjcGFmYnZwenZmdHd3ZGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MTc1NzcsImV4cCI6MjA5NDk5MzU3N30.7e8m2QJxbQkmVb0V_lRxDlgGMlpOdXVvVQpY35Y5ogc';  // anon / public key
 
 /* ── SESSION ID — unique per browser session ── */
 const _SC_SID = sessionStorage.getItem('sc_sid') || (() => {
