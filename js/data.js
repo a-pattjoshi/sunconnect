@@ -66,7 +66,7 @@ const SC_VENDORS = [
     about: "Apollo Solar Solutions does ~10 installations per month, strictly B2C residential. Average project cost ₹1.5–2 lakhs. We maintain ready stock of 10–15 kW capacity and source only from authorised distributors, ensuring a 25-year system lifespan.",
     services: ["Residential Solar", "System Sizing & Design", "Subsidy Documentation", "5-Year Free Maintenance"],
     certifications: ["MNRE Registered", "PM Surya Ghar Partner"],
-    serviceAreas: ["Jayanagar", "JP Nagar", "Banashankari", "Kanakapura Road", "Uttarahalli"],
+    serviceAreas: ["Bannerghatta", "JP Nagar", "Banashankari", "Kanakapura Road", "Jayanagar"],
     projectTimeline: "21–35 days", warranty: "25 yr panel / 5 yr inverter",
     ratingBreakdown: { 5: 34, 4: 18, 3: 7, 2: 3, 1: 1 },
     reviews: [
@@ -162,7 +162,7 @@ const SC_VENDORS = [
     about: "Anil Construction Solar is a growing firm with 33 installation requests in pipeline. Working on bank loan tie-ups (Jan Samarth portal) to ease the financing bottleneck. Strong social proof: every completed project brings 3–5 new referrals.",
     services: ["Residential Solar", "Roof Survey", "Subsidy Documentation", "Bank Loan Assistance"],
     certifications: ["MNRE Registered"],
-    serviceAreas: ["Electronic City", "Begur", "Hulimavu", "Bannerghatta Road"],
+    serviceAreas: ["Bannerghatta", "Electronic City", "Begur", "Hulimavu", "Bannerghatta Road"],
     projectTimeline: "35–60 days", warranty: "25 yr panel / 5 yr inverter",
     ratingBreakdown: { 5: 14, 4: 10, 3: 3, 2: 1, 1: 1 },
     reviews: [
@@ -312,7 +312,7 @@ const SC_CUSTOMER_PROJECT = {
     { name:"Quote Approved",       status:"done",    date:"02 May 2026", desc:"Quotation of ₹2,75,000 approved. 30% advance of ₹82,500 paid." },
     { name:"Subsidy Registration", status:"done",    date:"05 May 2026", desc:"PM Surya Ghar portal registration completed. Application #PMSG-BLR-20260505-7842." },
     { name:"Material Procurement", status:"done",    date:"10 May 2026", desc:"Tata Solar panels and GoodWe inverter ordered from authorised distributor." },
-    { name:"Installation",         status:"active",  date:"Expected: 26–28 May 2026", desc:"Panel mounting and DC wiring in progress. Inverter installation scheduled for 17 May." },
+    { name:"Installation",         status:"active",  date:"Expected: 26–28 May 2026", desc:"Panel mounting and DC wiring in progress. Inverter installation scheduled for 28 May." },
     { name:"BESCOM Inspection",    status:"pending", date:"Expected: 30 May 2026", desc:"BESCOM grid connection inspection will be scheduled after installation." },
     { name:"Subsidy Disbursement", status:"pending", date:"Expected: 20 Jun 2026", desc:"₹1,08,000 subsidy credited directly to your bank account after inspection." },
     { name:"Handover & Go-Live",   status:"pending", date:"Expected: 02 Jun 2026", desc:"System commissioning, app setup, and 25-year warranty documentation." }
