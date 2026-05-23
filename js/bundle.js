@@ -165,6 +165,15 @@ function _setupNotifications(role) {
 
   const notifs = role === 'customer' ? _CUSTOMER_NOTIFS : _VENDOR_NOTIFS;
 
+  // Wrap the bell button in a positioned container so the dropdown
+  // anchors to it correctly without putting a <div> inside a <button>
+  // (which is invalid HTML and causes browsers to mangle the DOM).
+  const wrapper = document.createElement('div');
+  wrapper.id = 'notif-wrapper';
+  wrapper.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
+  btn.parentElement.insertBefore(wrapper, btn);
+  wrapper.appendChild(btn);
+
   const panel = document.createElement('div');
   panel.id = 'notif-dropdown';
   panel.className = 'notif-dropdown';
@@ -183,8 +192,8 @@ function _setupNotifications(role) {
       </div>
     </div>`).join('')}`;
 
-  btn.style.position = 'relative';
-  btn.appendChild(panel);
+  // Panel is a sibling of the button inside the wrapper — valid HTML
+  wrapper.appendChild(panel);
 
   btn.addEventListener('click', e => {
     e.stopPropagation();
@@ -193,7 +202,7 @@ function _setupNotifications(role) {
   document.addEventListener('click', () => panel.classList.remove('open'));
   panel.addEventListener('click', e => e.stopPropagation());
 
-  // Inject Rate button beside the notification bell
+  // Inject ⭐ Rate button beside the notification bell wrapper
   if (!document.getElementById('sc-rate-btn')) {
     const rateBtn = document.createElement('button');
     rateBtn.id = 'sc-rate-btn';
@@ -206,7 +215,7 @@ function _setupNotifications(role) {
     rateBtn.onclick = () => {
       if (typeof scShowRatingModal === 'function') scShowRatingModal('notification', null);
     };
-    btn.insertAdjacentElement('beforebegin', rateBtn);
+    wrapper.insertAdjacentElement('beforebegin', rateBtn);
   }
 }
 
