@@ -28,19 +28,22 @@ function _scSave(data) {
   try { localStorage.setItem(_SC_AK, JSON.stringify(data)); } catch(e) {}
 }
 
-/* ── POST TO SUPABASE (fire-and-forget, never blocks UI) ── */
+/* ── POST TO SUPABASE (keepalive:true — survives page navigation) ── */
 function _scPost(payload) {
   if (!SC_SUPABASE_URL || SC_SUPABASE_URL.includes('YOUR_')) return;
-  fetch(SC_SUPABASE_URL + '/rest/v1/sc_events', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SC_SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SC_SUPABASE_KEY,
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify({ ...payload, session_id: _SC_SID })
-  }).catch(() => {}); // fail silently — never break the app
+  try {
+    fetch(SC_SUPABASE_URL + '/rest/v1/sc_events', {
+      method: 'POST',
+      keepalive: true,
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SC_SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SC_SUPABASE_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ ...payload, session_id: _SC_SID })
+    }).catch(() => {});
+  } catch(e) {}
 }
 
 /* ── SIGN-IN TRACKING ── */

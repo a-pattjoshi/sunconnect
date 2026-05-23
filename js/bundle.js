@@ -244,12 +244,13 @@ function _scSave(data) {
   try { localStorage.setItem(_SC_AK, JSON.stringify(data)); } catch(e) {}
 }
 
-/* ── POST TO SUPABASE (deferred 3s — never competes with page load) ── */
+/* ── POST TO SUPABASE (keepalive:true — survives page navigation) ── */
 function _scPost(payload) {
   if (!SC_SUPABASE_URL || SC_SUPABASE_URL.includes('YOUR_')) return;
-  setTimeout(function() {
+  try {
     fetch(SC_SUPABASE_URL + '/rest/v1/sc_events', {
       method: 'POST',
+      keepalive: true,   // survives window.location.replace() navigation
       headers: {
         'Content-Type': 'application/json',
         'apikey': SC_SUPABASE_KEY,
@@ -258,7 +259,7 @@ function _scPost(payload) {
       },
       body: JSON.stringify({ ...payload, session_id: _SC_SID })
     }).catch(() => {}); // fail silently — never break the app
-  }, 3000);
+  } catch(e) {}
 }
 
 /* ── SIGN-IN TRACKING ── */

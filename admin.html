@@ -201,7 +201,10 @@
   }
 
   async function clearData() {
-    if (!confirm('Clear ALL analytics data from Supabase + this device? This cannot be undone.')) return;
+    const first = confirm('⚠️ WARNING: This will permanently delete ALL ratings and sign-in data from Supabase. This cannot be undone.');
+    if (!first) return;
+    const typed = prompt('Type DELETE in capitals to confirm:');
+    if (typed !== 'DELETE') { alert('Cancelled — data not deleted.'); return; }
     localStorage.removeItem('sc_analytics');
     await scClearRemoteEvents();
     renderDashboard();
