@@ -4,3 +4,5 @@ node_modules/
 create_demo_script.py
 .vercel
 .env*
+package.json
+package-lock.json

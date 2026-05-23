@@ -1,7 +1,4 @@
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "installCommand": "",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -15,26 +12,11 @@
     },
     {
       "source": "/",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800" }]
     },
     {
-      "source": "/(.*)\\.html",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" }]
+      "source": "/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800" }]
     }
-  ],
-  "rewrites": [
-    { "source": "/admin",                  "destination": "/admin.html" },
-    { "source": "/customer-dashboard",     "destination": "/customer-dashboard.html" },
-    { "source": "/vendor-dashboard",       "destination": "/vendor-dashboard.html" },
-    { "source": "/customer-marketplace",   "destination": "/customer-marketplace.html" },
-    { "source": "/customer-inquiry",       "destination": "/customer-inquiry.html" },
-    { "source": "/customer-tracker",       "destination": "/customer-tracker.html" },
-    { "source": "/customer-financing",     "destination": "/customer-financing.html" },
-    { "source": "/customer-vendor-profile","destination": "/customer-vendor-profile.html" },
-    { "source": "/vendor-leads",           "destination": "/vendor-leads.html" },
-    { "source": "/vendor-quotations",      "destination": "/vendor-quotations.html" },
-    { "source": "/vendor-projects",        "destination": "/vendor-projects.html" },
-    { "source": "/vendor-labor",           "destination": "/vendor-labor.html" },
-    { "source": "/vendor-profile",         "destination": "/vendor-profile.html" }
   ]
 }
