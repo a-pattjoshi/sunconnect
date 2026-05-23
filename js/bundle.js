@@ -165,18 +165,15 @@ function _setupNotifications(role) {
 
   const notifs = role === 'customer' ? _CUSTOMER_NOTIFS : _VENDOR_NOTIFS;
 
-  // Wrap the bell button in a positioned container so the dropdown
-  // anchors to it correctly without putting a <div> inside a <button>
-  // (which is invalid HTML and causes browsers to mangle the DOM).
-  const wrapper = document.createElement('div');
-  wrapper.id = 'notif-wrapper';
-  wrapper.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
-  btn.parentElement.insertBefore(wrapper, btn);
-  wrapper.appendChild(btn);
-
+  // ── DROPDOWN ──────────────────────────────────────────────────────────
+  // Appended to <body> with position:fixed so it escapes any parent
+  // stacking context (sticky top-bar, overflow, z-index containment).
+  // Coordinates are computed from the button's getBoundingClientRect()
+  // each time the panel opens — zero DOM rearrangement needed.
   const panel = document.createElement('div');
   panel.id = 'notif-dropdown';
   panel.className = 'notif-dropdown';
+  panel.style.cssText = 'position:fixed;z-index:9999;display:none;';
   panel.innerHTML = `
     <div class="notif-header">
       <span class="notif-header-title">Notifications</span>
@@ -191,18 +188,32 @@ function _setupNotifications(role) {
         <div class="notif-item-time">${n.time}</div>
       </div>
     </div>`).join('')}`;
+  document.body.appendChild(panel);
 
-  // Panel is a sibling of the button inside the wrapper — valid HTML
-  wrapper.appendChild(panel);
+  let _panelOpen = false;
+
+  function _openPanel() {
+    const r = btn.getBoundingClientRect();
+    panel.style.top  = (r.bottom + 8) + 'px';
+    panel.style.right = (window.innerWidth - r.right) + 'px';
+    panel.style.left  = 'auto';
+    panel.style.display = 'block';
+    _panelOpen = true;
+  }
+  function _closePanel() {
+    panel.style.display = 'none';
+    _panelOpen = false;
+  }
 
   btn.addEventListener('click', e => {
     e.stopPropagation();
-    panel.classList.toggle('open');
+    _panelOpen ? _closePanel() : _openPanel();
   });
-  document.addEventListener('click', () => panel.classList.remove('open'));
+  document.addEventListener('click', () => { if (_panelOpen) _closePanel(); });
   panel.addEventListener('click', e => e.stopPropagation());
 
-  // Inject ⭐ Rate button beside the notification bell wrapper
+  // ── RATE BUTTON ───────────────────────────────────────────────────────
+  // Inserted as a simple sibling before .notif-btn — no DOM rearrangement.
   if (!document.getElementById('sc-rate-btn')) {
     const rateBtn = document.createElement('button');
     rateBtn.id = 'sc-rate-btn';
@@ -215,7 +226,7 @@ function _setupNotifications(role) {
     rateBtn.onclick = () => {
       if (typeof scShowRatingModal === 'function') scShowRatingModal('notification', null);
     };
-    wrapper.insertAdjacentElement('beforebegin', rateBtn);
+    btn.insertAdjacentElement('beforebegin', rateBtn);
   }
 }
 
