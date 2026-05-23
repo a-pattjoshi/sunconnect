@@ -34,11 +34,18 @@ function scRequireRole(role) {
 }
 
 function scLogout() {
-  sessionStorage.setItem('sc_logout_nav', '1');
-  localStorage.removeItem('sc_pending_rating');
-  localStorage.removeItem('sc_session');
-  sessionStorage.removeItem('sc_session');
-  window.location.replace('/');
+  function _doLogout() {
+    sessionStorage.setItem('sc_logout_nav', '1');
+    localStorage.removeItem('sc_pending_rating');
+    localStorage.removeItem('sc_session');
+    sessionStorage.removeItem('sc_session');
+    window.location.replace('/');
+  }
+  if (typeof scShowRatingModal === 'function') {
+    scShowRatingModal('logout', _doLogout);
+  } else {
+    _doLogout();
+  }
 }
 
 /* ── NAV DEFINITIONS ── */
@@ -182,19 +189,25 @@ function _setupNotifications(role) {
   btn.addEventListener('click', e => {
     e.stopPropagation();
     panel.classList.toggle('open');
-    // Show rating 1 second after the user opens notifications (once per session)
-    if (panel.classList.contains('open') && typeof scShowRatingModal === 'function') {
-      if (!sessionStorage.getItem('sc_notif_rated')) {
-        sessionStorage.setItem('sc_notif_rated', '1');
-        setTimeout(() => {
-          panel.classList.remove('open');   // close panel first, then show modal
-          scShowRatingModal('notification', null);
-        }, 1000);
-      }
-    }
   });
   document.addEventListener('click', () => panel.classList.remove('open'));
   panel.addEventListener('click', e => e.stopPropagation());
+
+  // Inject Rate button beside the notification bell
+  if (!document.getElementById('sc-rate-btn')) {
+    const rateBtn = document.createElement('button');
+    rateBtn.id = 'sc-rate-btn';
+    rateBtn.title = 'Rate your experience';
+    rateBtn.setAttribute('aria-label', 'Rate SunConnect');
+    rateBtn.style.cssText = 'background:none;border:1.5px solid var(--border,#e5e7eb);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:1rem;line-height:1;color:var(--grey,#6b7280);display:flex;align-items:center;gap:4px;transition:border-color .15s,color .15s;';
+    rateBtn.innerHTML = '⭐ <span style="font-size:0.72rem;font-weight:600;">Rate</span>';
+    rateBtn.onmouseover = () => { rateBtn.style.borderColor = '#F59E0B'; rateBtn.style.color = '#F59E0B'; };
+    rateBtn.onmouseout  = () => { rateBtn.style.borderColor = 'var(--border,#e5e7eb)'; rateBtn.style.color = 'var(--grey,#6b7280)'; };
+    rateBtn.onclick = () => {
+      if (typeof scShowRatingModal === 'function') scShowRatingModal('notification', null);
+    };
+    btn.insertAdjacentElement('beforebegin', rateBtn);
+  }
 }
 
 /* ── TOAST ── */
