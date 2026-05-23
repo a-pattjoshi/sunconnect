@@ -44,6 +44,7 @@
       <div class="top-bar-right">
         <button class="notif-btn" title="Notifications">🔔<span class="notif-badge">2</span></button>
         <div id="today-date" style="font-size:0.78rem;color:var(--grey);"></div>
+        <script>!function(){var n=new Date(),d=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];document.getElementById('today-date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();}();</script>
       </div>
     </div>
 
@@ -88,6 +89,7 @@
           <div class="stat-icon red">📅</div>
           <div>
             <div class="stat-value" id="days-to-golive">--</div>
+            <script>document.getElementById('days-to-golive').textContent=Math.max(0,Math.ceil((new Date(2026,5,5)-new Date())/864e5))+' days';</script>
             <div class="stat-label">Est. Go-Live</div>
             <div class="stat-change">05 Jun 2026</div>
           </div>
@@ -186,19 +188,6 @@
 <script>
   scRequireRole('customer');
   renderSidebar('customer');
-
-  // Dynamic date + days-to-golive
-  try {
-    const now = new Date();
-    const ds = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const ms = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const td = document.getElementById('today-date');
-    if (td) td.textContent = ds[now.getDay()] + ', ' + now.getDate() + ' ' + ms[now.getMonth()] + ' ' + now.getFullYear();
-    const goLive = new Date(2026, 5, 5); // Jun 5 2026 local time
-    const diff = Math.ceil((goLive - now) / (1000 * 60 * 60 * 24));
-    const dg = document.getElementById('days-to-golive');
-    if (dg) dg.textContent = (diff > 0 ? diff : 0) + ' days';
-  } catch(e) {}
 
   // Quotes
   const quotes = [
