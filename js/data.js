@@ -57,7 +57,7 @@ const SC_VENDORS = [
     email: "prashant@apollosolar.in", phone: "7204030568",
     website: null,
     logo: null,
-    area: "Jayanagar", city: "Bangalore", pincode: "560041",
+    area: "Bannerghatta", city: "Bangalore", pincode: "560041",
     rating: 4.3, reviewCount: 63, experience: 5, installs: 156,
     brands: ["Adani", "Waaree", "Vikram", "Rayzon", "RenewSys"],
     priceMin: 40000, priceMax: 60000,
@@ -153,7 +153,7 @@ const SC_VENDORS = [
     email: "anil@anilsolar.com", phone: "7240810000",
     website: null,
     logo: null,
-    area: "Electronic City", city: "Bangalore", pincode: "560100",
+    area: "Bannerghatta", city: "Bangalore", pincode: "560100",
     rating: 4.1, reviewCount: 29, experience: 3, installs: 62,
     brands: ["Waaree", "Rayzon"],
     priceMin: 36000, priceMax: 52000,
@@ -177,7 +177,7 @@ const SC_VENDORS = [
     email: "swapan@dynamiccontrol.in", phone: "9830861189",
     website: null,
     logo: null,
-    area: "Bellandur", city: "Bangalore", pincode: "560103",
+    area: "HSR Layout", city: "Bangalore", pincode: "560103",
     rating: 4.5, reviewCount: 76, experience: 5, installs: 310,
     brands: ["Tata Solar"],
     priceMin: 50000, priceMax: 72000,
@@ -201,7 +201,7 @@ const SC_VENDORS = [
     email: "akhil@manavsolar.com", phone: "—",
     website: "https://manavsolar.com",
     logo: "https://www.google.com/s2/favicons?domain=manavsolar.com&sz=64",
-    area: "Sarjapur Road", city: "Bangalore", pincode: "560035",
+    area: "Marathahalli", city: "Bangalore", pincode: "560035",
     rating: 4.8, reviewCount: 54, experience: 9, installs: 95,
     brands: ["Manav 3D Panels", "Tata Solar"],
     priceMin: 65000, priceMax: 120000,
@@ -225,7 +225,7 @@ const SC_VENDORS = [
     email: "anirudh@goodwe-blr.com", phone: "—",
     website: "https://en.goodwe.com/residential-solutions",
     logo: "https://www.google.com/s2/favicons?domain=goodwe.com&sz=64",
-    area: "BTM Layout", city: "Bangalore", pincode: "560076",
+    area: "Koramangala", city: "Bangalore", pincode: "560076",
     rating: 4.6, reviewCount: 108, experience: 8, installs: 430,
     brands: ["GoodWe Inverters", "Waaree", "Adani", "Tata Solar"],
     priceMin: 44000, priceMax: 68000,
@@ -275,21 +275,21 @@ const SC_LEADS = [
 
 /* ── QUOTATIONS ── */
 const SC_QUOTATIONS = [
-  { id:"QT-001", customer:"Srinivas G.",    date:"10 May 2026", system:"10 kW",  panels:"Tata Solar (10×1kW)", inverter:"GoodWe 10 kW", amount:"₹5,80,000", status:"sent",      expiry:"24 May 2026" },
-  { id:"QT-002", customer:"Anita Krishnan", date:"12 May 2026", system:"5 kW",   panels:"Waaree (5×1kW)",     inverter:"Havells 5 kW",  amount:"₹2,85,000", status:"viewed",    expiry:"26 May 2026" },
-  { id:"QT-003", customer:"Meenakshi V.",   date:"05 May 2026", system:"4 kW",   panels:"Tata Solar (4×1kW)", inverter:"Delta 4 kW",    amount:"₹2,20,000", status:"accepted",  expiry:"19 May 2026" },
-  { id:"QT-004", customer:"Ravi Shankar",   date:"11 May 2026", system:"7 kW",   panels:"Waaree (7×1kW)",     inverter:"GoodWe 7 kW",   amount:"₹3,85,000", status:"draft",     expiry:"25 May 2026" },
-  { id:"QT-005", customer:"Suresh Babu",    date:"03 May 2026", system:"15 kW",  panels:"Adani (15×1kW)",     inverter:"Sungrow 15 kW", amount:"₹7,50,000", status:"rejected",  expiry:"17 May 2026" }
+  { id:"QT-001", customer:"Srinivas G.",    date:"10 May 2026", system:"10 kW",  panels:"Tata Solar (10×1kW)", inverter:"GoodWe 10 kW", amount:"₹5,80,000", status:"sent",      expiry:"07 Jun 2026" },
+  { id:"QT-002", customer:"Anita Krishnan", date:"12 May 2026", system:"5 kW",   panels:"Waaree (5×1kW)",     inverter:"Havells 5 kW",  amount:"₹2,85,000", status:"viewed",    expiry:"09 Jun 2026" },
+  { id:"QT-003", customer:"Meenakshi V.",   date:"05 May 2026", system:"4 kW",   panels:"Tata Solar (4×1kW)", inverter:"Delta 4 kW",    amount:"₹2,20,000", status:"accepted",  expiry:"05 Jun 2026" },
+  { id:"QT-004", customer:"Ravi Shankar",   date:"11 May 2026", system:"7 kW",   panels:"Waaree (7×1kW)",     inverter:"GoodWe 7 kW",   amount:"₹3,85,000", status:"draft",     expiry:"08 Jun 2026" },
+  { id:"QT-005", customer:"Suresh Babu",    date:"03 May 2026", system:"15 kW",  panels:"Adani (15×1kW)",     inverter:"Sungrow 15 kW", amount:"₹7,50,000", status:"rejected",  expiry:"01 Jun 2026" }
 ];
 
 /* ── VENDOR PROJECTS ── */
 const SC_PROJECTS = [
-  { id:"PRJ-001", customer:"Meenakshi V.",   area:"Kadugodi",    system:"4 kW",  stage:"installation", startDate:"10 May 2026", eta:"22 May 2026",  value:"₹2,20,000", progress:65 },
-  { id:"PRJ-002", customer:"Pradeep S.",     area:"Whitefield",  system:"3 kW",  stage:"inspection",   startDate:"01 May 2026", eta:"18 May 2026",  value:"₹1,65,000", progress:80 },
-  { id:"PRJ-003", customer:"Savitha Rao",    area:"Marathahalli",system:"5 kW",  stage:"survey",       startDate:"13 May 2026", eta:"30 May 2026",  value:"₹2,75,000", progress:15 },
+  { id:"PRJ-001", customer:"Meenakshi V.",   area:"Kadugodi",    system:"4 kW",  stage:"installation", startDate:"10 May 2026", eta:"30 May 2026",  value:"₹2,20,000", progress:65 },
+  { id:"PRJ-002", customer:"Pradeep S.",     area:"Whitefield",  system:"3 kW",  stage:"inspection",   startDate:"01 May 2026", eta:"28 May 2026",  value:"₹1,65,000", progress:80 },
+  { id:"PRJ-003", customer:"Savitha Rao",    area:"Marathahalli",system:"5 kW",  stage:"survey",       startDate:"13 May 2026", eta:"10 Jun 2026",  value:"₹2,75,000", progress:15 },
   { id:"PRJ-004", customer:"Kavitha M.",     area:"Brookefield", system:"3 kW",  stage:"completed",    startDate:"15 Apr 2026", eta:"01 May 2026",  value:"₹1,70,000", progress:100 },
   { id:"PRJ-005", customer:"Ramesh T.",      area:"Whitefield",  system:"6 kW",  stage:"completed",    startDate:"01 Apr 2026", eta:"20 Apr 2026",  value:"₹3,30,000", progress:100 },
-  { id:"PRJ-006", customer:"Arjun Mehta",    area:"KR Puram",    system:"8 kW",  stage:"material",     startDate:"08 May 2026", eta:"25 May 2026",  value:"₹4,40,000", progress:35 }
+  { id:"PRJ-006", customer:"Arjun Mehta",    area:"KR Puram",    system:"8 kW",  stage:"material",     startDate:"08 May 2026", eta:"03 Jun 2026",  value:"₹4,40,000", progress:35 }
 ];
 
 /* ── CUSTOMER PROJECT TRACKER DATA ── */
@@ -305,16 +305,16 @@ const SC_CUSTOMER_PROJECT = {
   subsidy: "₹78,000 (PM Surya Ghar) + ₹30,000 (Karnataka)",
   netCost: "₹1,67,000",
   startDate: "28 Apr 2026",
-  eta: "02 Jun 2026",
+  eta: "05 Jun 2026",
   progress: 55,
   stages: [
     { name:"Survey & Assessment",  status:"done",    date:"29 Apr 2026", desc:"Roof inspection, shadow analysis, electricity bill review — all completed." },
     { name:"Quote Approved",       status:"done",    date:"02 May 2026", desc:"Quotation of ₹2,75,000 approved. 30% advance of ₹82,500 paid." },
     { name:"Subsidy Registration", status:"done",    date:"05 May 2026", desc:"PM Surya Ghar portal registration completed. Application #PMSG-BLR-20260505-7842." },
     { name:"Material Procurement", status:"done",    date:"10 May 2026", desc:"Tata Solar panels and GoodWe inverter ordered from authorised distributor." },
-    { name:"Installation",         status:"active",  date:"Expected: 16–18 May 2026", desc:"Panel mounting and DC wiring in progress. Inverter installation scheduled for 17 May." },
-    { name:"BESCOM Inspection",    status:"pending", date:"Expected: 22 May 2026", desc:"BESCOM grid connection inspection will be scheduled after installation." },
-    { name:"Subsidy Disbursement", status:"pending", date:"Expected: 15 Jun 2026", desc:"₹1,08,000 subsidy credited directly to your bank account after inspection." },
+    { name:"Installation",         status:"active",  date:"Expected: 26–28 May 2026", desc:"Panel mounting and DC wiring in progress. Inverter installation scheduled for 17 May." },
+    { name:"BESCOM Inspection",    status:"pending", date:"Expected: 30 May 2026", desc:"BESCOM grid connection inspection will be scheduled after installation." },
+    { name:"Subsidy Disbursement", status:"pending", date:"Expected: 20 Jun 2026", desc:"₹1,08,000 subsidy credited directly to your bank account after inspection." },
     { name:"Handover & Go-Live",   status:"pending", date:"Expected: 02 Jun 2026", desc:"System commissioning, app setup, and 25-year warranty documentation." }
   ]
 };

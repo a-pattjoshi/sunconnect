@@ -42,7 +42,7 @@
       </div>
       <div class="top-bar-right">
         <button class="notif-btn" title="Notifications">🔔<span class="notif-badge">2</span></button>
-        <div style="font-size:0.78rem;color:var(--grey);">Thu, 15 May 2026</div>
+        <div id="today-date" style="font-size:0.78rem;color:var(--grey);"></div>
       </div>
     </div>
 
@@ -53,7 +53,7 @@
         <span class="alert-icon">⚡</span>
         <div>
           <div class="alert-title">Installation in Progress</div>
-          <div class="alert-text">Your 5 kW system at HSR Layout is currently being installed by SuryamTech Solar. Expected completion: 22 May 2026.</div>
+          <div class="alert-text">Your 5 kW system at HSR Layout is currently being installed by SuryamTech Solar. Expected completion: 30 May 2026.</div>
         </div>
       </div>
 
@@ -86,9 +86,9 @@
         <div class="stat-card">
           <div class="stat-icon red">📅</div>
           <div>
-            <div class="stat-value">18 days</div>
+            <div class="stat-value" id="days-to-golive">--</div>
             <div class="stat-label">Est. Go-Live</div>
-            <div class="stat-change">02 Jun 2026</div>
+            <div class="stat-change">05 Jun 2026</div>
           </div>
         </div>
       </div>
@@ -148,12 +148,12 @@
             <div class="timeline-item">
               <div class="timeline-dot active">●</div>
               <div class="timeline-title">Installation In Progress</div>
-              <div class="timeline-date">Expected: 16–18 May 2026</div>
+              <div class="timeline-date">Expected: 26–28 May 2026</div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot pending">○</div>
               <div class="timeline-title">BESCOM Inspection & Handover</div>
-              <div class="timeline-date">Expected: 22 May 2026</div>
+              <div class="timeline-date">Expected: 30 May 2026</div>
             </div>
           </div>
         </div>
@@ -185,6 +185,17 @@
 <script>
   scRequireRole('customer');
   renderSidebar('customer');
+
+  // Dynamic date + days-to-golive
+  (function(){
+    const now = new Date();
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('today-date').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    const goLive = new Date('2026-06-05');
+    const diff = Math.ceil((goLive - now) / (1000*60*60*24));
+    document.getElementById('days-to-golive').textContent = (diff > 0 ? diff : 0) + ' days';
+  })();
 
   // Quotes
   const quotes = [
@@ -232,5 +243,7 @@
       </div>
     </a>`).join('');
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

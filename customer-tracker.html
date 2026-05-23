@@ -70,7 +70,7 @@
           <div style="text-align:right;">
             <div style="font-size:0.78rem;color:var(--grey);">Overall Progress</div>
             <div style="font-size:2.5rem;font-weight:800;color:var(--primary);line-height:1.1;">55%</div>
-            <div style="font-size:0.78rem;color:var(--grey);">Est. Go-Live: 02 Jun 2026</div>
+            <div style="font-size:0.78rem;color:var(--grey);">Est. Go-Live: 05 Jun 2026</div>
           </div>
         </div>
         <div style="margin-top:20px;">
@@ -188,9 +188,9 @@
 
   document.getElementById('subsidy-status').innerHTML = [
     { label:'PM Surya Ghar Registration', status:'done',    date:'05 May 2026',  amount:'₹78,000' },
-    { label:'BESCOM Grid Inspection',     status:'pending', date:'~22 May 2026', amount:'' },
-    { label:'Central Subsidy Credit',     status:'pending', date:'~15 Jun 2026', amount:'₹78,000' },
-    { label:'Karnataka State Subsidy',    status:'pending', date:'~20 Jun 2026', amount:'₹30,000' },
+    { label:'BESCOM Grid Inspection',     status:'pending', date:'~30 May 2026', amount:'' },
+    { label:'Central Subsidy Credit',     status:'pending', date:'~25 Jun 2026', amount:'₹78,000' },
+    { label:'Karnataka State Subsidy',    status:'pending', date:'~25 Jun 2026', amount:'₹30,000' },
   ].map(s => `
     <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);">
       <span style="font-size:1.1rem;">${s.status === 'done' ? '✅' : '⏳'}</span>
@@ -219,5 +219,7 @@
     showToast('Flag raised! SunConnect will follow up with SuryamTech Solar within 24 hours.', 'warning');
   }
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

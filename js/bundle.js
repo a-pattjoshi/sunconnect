@@ -36,17 +36,9 @@ function scRequireRole(role) {
 function scLogout() {
   sessionStorage.setItem('sc_logout_nav', '1');
   localStorage.removeItem('sc_pending_rating');
-  if (typeof scShowRatingModal === 'function') {
-    scShowRatingModal('logout', function() {
-      localStorage.removeItem('sc_session');
-      sessionStorage.removeItem('sc_session');
-      window.location.replace('/');
-    });
-  } else {
-    localStorage.removeItem('sc_session');
-    sessionStorage.removeItem('sc_session');
-    window.location.replace('/');
-  }
+  localStorage.removeItem('sc_session');
+  sessionStorage.removeItem('sc_session');
+  window.location.replace('/');
 }
 
 /* ── NAV DEFINITIONS ── */

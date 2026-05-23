@@ -63,12 +63,8 @@
             <label class="filter-option"><input type="checkbox" value="Koramangala"    onchange="applyFilters()"> Koramangala</label>
             <label class="filter-option"><input type="checkbox" value="HSR Layout"     onchange="applyFilters()"> HSR Layout</label>
             <label class="filter-option"><input type="checkbox" value="Indiranagar"    onchange="applyFilters()"> Indiranagar</label>
-            <label class="filter-option"><input type="checkbox" value="Jayanagar"      onchange="applyFilters()"> Jayanagar</label>
             <label class="filter-option"><input type="checkbox" value="Marathahalli"   onchange="applyFilters()"> Marathahalli</label>
-            <label class="filter-option"><input type="checkbox" value="Electronic City" onchange="applyFilters()"> Electronic City</label>
-            <label class="filter-option"><input type="checkbox" value="BTM Layout"     onchange="applyFilters()"> BTM Layout</label>
-            <label class="filter-option"><input type="checkbox" value="Bellandur"      onchange="applyFilters()"> Bellandur</label>
-            <label class="filter-option"><input type="checkbox" value="Sarjapur Road"  onchange="applyFilters()"> Sarjapur Road</label>
+            <label class="filter-option"><input type="checkbox" value="Bannerghatta"   onchange="applyFilters()"> Bannerghatta</label>
           </div>
 
           <div class="filter-section">
@@ -131,7 +127,7 @@
   renderSidebar('customer');
 
   function getFilters() {
-    const areas   = [...document.querySelectorAll('input[value]:checked')].filter(i => i.type === 'checkbox' && ['Whitefield','Koramangala','HSR Layout','Indiranagar','Jayanagar','Marathahalli','Electronic City','BTM Layout','Bellandur','Sarjapur Road'].includes(i.value)).map(i => i.value);
+    const areas   = [...document.querySelectorAll('input[value]:checked')].filter(i => i.type === 'checkbox' && ['Whitefield','Koramangala','HSR Layout','Indiranagar','Marathahalli','Bannerghatta'].includes(i.value)).map(i => i.value);
     const specs   = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(i => ['Residential','Commercial','Industrial'].includes(i.value)).map(i => i.value);
     const brands  = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(i => ['Tata Solar','Waaree','Adani','GoodWe'].includes(i.value)).map(i => i.value);
     const minRat  = parseFloat(document.querySelector('input[name=rating]:checked')?.value || 0);
@@ -206,5 +202,7 @@
 
   applyFilters();
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
