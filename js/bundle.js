@@ -143,7 +143,7 @@ function closeSidebar() {
 
 /* ── NOTIFICATIONS ── */
 const _CUSTOMER_NOTIFS = [
-  { icon:'🏗️', title:'SuryamTech Solar on-site today', body:'Panel mounting underway at HSR Layout. Est. completion 18 May.', time:'Just now' },
+  { icon:'🏗️', title:'SuryamTech Solar on-site today', body:'Panel mounting underway at HSR Layout. Est. completion 30 May.', time:'Just now' },
   { icon:'✅', title:'PM Surya Ghar registration confirmed', body:'Your subsidy of ₹78,000 (Central) is registered.', time:'2 hr ago' },
 ];
 const _VENDOR_NOTIFS = [
