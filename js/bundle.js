@@ -212,22 +212,8 @@ function _setupNotifications(role) {
   document.addEventListener('click', () => { if (_panelOpen) _closePanel(); });
   panel.addEventListener('click', e => e.stopPropagation());
 
-  // ── RATE BUTTON ───────────────────────────────────────────────────────
-  // Inserted as a simple sibling before .notif-btn — no DOM rearrangement.
-  if (!document.getElementById('sc-rate-btn')) {
-    const rateBtn = document.createElement('button');
-    rateBtn.id = 'sc-rate-btn';
-    rateBtn.title = 'Rate your experience';
-    rateBtn.setAttribute('aria-label', 'Rate SunConnect');
-    rateBtn.style.cssText = 'background:none;border:1.5px solid var(--border,#e5e7eb);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:1rem;line-height:1;color:var(--grey,#6b7280);display:flex;align-items:center;gap:4px;transition:border-color .15s,color .15s;';
-    rateBtn.innerHTML = '⭐ <span style="font-size:0.72rem;font-weight:600;">Rate</span>';
-    rateBtn.onmouseover = () => { rateBtn.style.borderColor = '#F59E0B'; rateBtn.style.color = '#F59E0B'; };
-    rateBtn.onmouseout  = () => { rateBtn.style.borderColor = 'var(--border,#e5e7eb)'; rateBtn.style.color = 'var(--grey,#6b7280)'; };
-    rateBtn.onclick = () => {
-      if (typeof scShowRatingModal === 'function') scShowRatingModal('notification', null);
-    };
-    btn.insertAdjacentElement('beforebegin', rateBtn);
-  }
+  // Rate button is hardcoded in each page's HTML with an inline onclick.
+  // No JS injection needed — avoids any execution-order dependency.
 }
 
 /* ── TOAST ── */
