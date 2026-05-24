@@ -186,7 +186,9 @@
                 <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">₹<span id="calc-lifetime">--</span></div>
               </div>
             </div>
-            <div id="calc-note" style="font-size:0.7rem;color:var(--grey);text-align:center;line-height:1.5;"></div>
+            <!-- Calculation breakdown -->
+            <div id="calc-breakdown" style="background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);padding:12px 14px;font-size:0.75rem;line-height:1.9;">
+            </div>
           </div>
         </div>
       </div>
@@ -204,30 +206,53 @@
           document.getElementById('calc-rate-val').textContent = rate % 1 === 0 ? String(rate) : rate.toFixed(1);
 
           var monthlyUnits   = kw * 4.5 * 30;
-          var monthlySavings = Math.min(monthlyUnits * rate, bill);
-          var annualSavings  = monthlyUnits * rate * 12;
+          var unitValue      = monthlyUnits * rate;               // gross monthly value before cap
+          var monthlySavings = Math.min(unitValue, bill);         // capped at actual bill
+          var annualSavings  = monthlySavings * 12;               // ✓ uses capped monthly, not raw generation
           var grossCost = kw * 55000;
           var subsidy   = kw <= 2 ? kw * 30000 : kw <= 3 ? 60000 + (kw - 2) * 18000 : 78000;
           var netCost   = Math.max(0, grossCost - subsidy);
           var roi       = annualSavings > 0 ? netCost / annualSavings : 0;
           var lifetime  = annualSavings * 25 - netCost;
+          var isCapped  = unitValue > bill;
 
           function fmt(n) {
             if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
             if (n >= 1000)   return Math.round(n / 1000) + 'K';
             return Math.round(n).toLocaleString('en-IN');
           }
+          function inr(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
 
           document.getElementById('calc-monthly').textContent  = Math.round(monthlySavings).toLocaleString('en-IN');
           document.getElementById('calc-annual').textContent   = fmt(annualSavings);
           document.getElementById('calc-roi').textContent      = roi.toFixed(1);
           document.getElementById('calc-lifetime').textContent = fmt(lifetime);
 
-          var pct = Math.round((monthlySavings / bill) * 100);
-          document.getElementById('calc-note').textContent =
-            kw + ' kW generates ~' + Math.round(monthlyUnits) + ' units/month · ' +
-            'covers ~' + pct + '% of your bill · ' +
-            'Net cost after ₹' + Math.round(subsidy / 1000) + 'K subsidy: ₹' + fmt(netCost);
+          // Calculation breakdown
+          var capNote = isCapped
+            ? '<span style="color:var(--primary);font-weight:600;">capped at your bill (' + inr(bill) + ')</span>'
+            : '<span style="color:var(--green);font-weight:600;">fully covered by solar</span>';
+          document.getElementById('calc-breakdown').innerHTML =
+            '<div style="color:var(--dark);font-weight:700;margin-bottom:6px;">📐 How we calculated</div>' +
+            '<div style="color:var(--grey);">' +
+              '<span style="color:var(--dark);">' + kw + ' kW</span> × 4.5 sun hrs × 30 days' +
+              ' = <span style="color:var(--dark);font-weight:600;">' + Math.round(monthlyUnits) + ' units/month</span>' +
+            '</div>' +
+            '<div style="color:var(--grey);">' +
+              Math.round(monthlyUnits) + ' units × ₹' + rate + '/unit' +
+              ' = <span style="color:var(--dark);font-weight:600;">' + inr(unitValue) + '/month</span>' +
+              (isCapped ? ' → ' + capNote : ' → ' + capNote) +
+            '</div>' +
+            '<div style="color:var(--grey);">' +
+              inr(monthlySavings) + '/month × 12' +
+              ' = <span style="color:var(--green);font-weight:700;">' + inr(annualSavings) + '/year</span>' +
+            '</div>' +
+            '<div style="color:var(--grey);margin-top:4px;padding-top:6px;border-top:1px solid var(--border);">' +
+              'System cost ' + inr(grossCost) + ' − ₹' + Math.round(subsidy/1000) + 'K subsidy' +
+              ' = <span style="color:var(--dark);font-weight:600;">' + inr(netCost) + ' net</span>' +
+              ' ÷ ' + inr(annualSavings) + '/yr' +
+              ' = <span style="color:var(--primary);font-weight:700;">' + roi.toFixed(1) + ' yr payback</span>' +
+            '</div>';
         }
         scCalc();
       </script>
