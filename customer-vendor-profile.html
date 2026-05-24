@@ -116,7 +116,7 @@
 
   document.getElementById('top-bar-title').textContent = v.name;
 
-  const totalReviews = Object.values(v.ratingBreakdown).reduce((a,b) => a+b, 0);
+  const totalReviews = v.ratingBreakdown ? Object.values(v.ratingBreakdown).reduce((a,b) => a+b, 0) : v.reviewCount || 0;
 
   document.getElementById('profile-content').innerHTML = `
     <div class="grid-2" style="gap:24px;align-items:start;">
