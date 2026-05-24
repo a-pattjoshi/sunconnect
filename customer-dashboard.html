@@ -123,6 +123,75 @@
         </a>
       </div>
 
+      <!-- ── SAVINGS CALCULATOR ─────────────────────────────────────── -->
+      <div class="card" style="margin-bottom:24px;">
+        <div class="section-header" style="margin-bottom:20px;">
+          <div class="section-title">⚡ Solar Savings Calculator</div>
+          <span class="badge badge-gold">Live estimate · Bangalore</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+          <!-- Sliders -->
+          <div>
+            <div style="margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <label style="font-size:0.8rem;font-weight:600;color:var(--dark);">Monthly Electricity Bill</label>
+                <span style="font-size:0.8rem;font-weight:700;color:var(--primary);">₹<span id="calc-bill-val">5,500</span></span>
+              </div>
+              <input type="range" id="calc-bill" min="1000" max="20000" step="500" value="5500"
+                     oninput="scCalc()" style="width:100%;accent-color:var(--primary);cursor:pointer;">
+              <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--grey-light);margin-top:2px;">
+                <span>₹1,000</span><span>₹20,000</span>
+              </div>
+            </div>
+            <div style="margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <label style="font-size:0.8rem;font-weight:600;color:var(--dark);">System Size</label>
+                <span style="font-size:0.8rem;font-weight:700;color:var(--primary);"><span id="calc-kw-val">5</span> kW</span>
+              </div>
+              <input type="range" id="calc-kw" min="1" max="10" step="0.5" value="5"
+                     oninput="scCalc()" style="width:100%;accent-color:var(--primary);cursor:pointer;">
+              <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--grey-light);margin-top:2px;">
+                <span>1 kW</span><span>10 kW</span>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <label style="font-size:0.8rem;font-weight:600;color:var(--dark);">Rate per Unit (₹/kWh)</label>
+                <span style="font-size:0.8rem;font-weight:700;color:var(--primary);">₹<span id="calc-rate-val">8</span></span>
+              </div>
+              <input type="range" id="calc-rate" min="5" max="12" step="0.5" value="8"
+                     oninput="scCalc()" style="width:100%;accent-color:var(--primary);cursor:pointer;">
+              <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--grey-light);margin-top:2px;">
+                <span>₹5</span><span>₹12</span>
+              </div>
+            </div>
+          </div>
+          <!-- Results -->
+          <div style="background:var(--bg);border-radius:var(--radius);padding:20px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
+                <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Monthly Savings</div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-monthly">3,240</span></div>
+              </div>
+              <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
+                <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Annual Savings</div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-annual">38,880</span></div>
+              </div>
+              <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
+                <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Payback Period</div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--primary);"><span id="calc-roi">5.0</span> yrs</div>
+              </div>
+              <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
+                <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">25-yr Net Gain</div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">₹<span id="calc-lifetime">8.8L</span></div>
+              </div>
+            </div>
+            <div id="calc-note" style="font-size:0.7rem;color:var(--grey);text-align:center;line-height:1.5;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- ─────────────────────────────────────────────────────────────── -->
+
       <div class="grid-2">
         <!-- Project Snapshot -->
         <div class="card">
@@ -236,6 +305,49 @@
         <div><div class="vendor-stat-value">${v.projectTimeline}</div><div class="vendor-stat-label">Timeline</div></div>
       </div>
     </a>`).join('');
+
+  // ── SAVINGS CALCULATOR ──────────────────────────────────────────────
+  function scCalc() {
+    const bill = parseInt(document.getElementById('calc-bill').value);
+    const kw   = parseFloat(document.getElementById('calc-kw').value);
+    const rate = parseFloat(document.getElementById('calc-rate').value);
+
+    // Update slider labels
+    document.getElementById('calc-bill-val').textContent = bill.toLocaleString('en-IN');
+    document.getElementById('calc-kw-val').textContent   = kw % 1 === 0 ? kw : kw.toFixed(1);
+    document.getElementById('calc-rate-val').textContent = rate % 1 === 0 ? rate : rate.toFixed(1);
+
+    // Calculations (Bangalore: 4.5 peak sun hours/day)
+    const monthlyUnits   = kw * 4.5 * 30;
+    const monthlySavings = Math.min(monthlyUnits * rate, bill);
+    const annualSavings  = monthlyUnits * rate * 12;
+
+    // PM Surya Ghar subsidy tiers (Central)
+    const grossCost = kw * 55000;
+    const subsidy   = kw <= 2 ? kw * 30000 : kw <= 3 ? 60000 + (kw - 2) * 18000 : 78000;
+    const netCost   = Math.max(0, grossCost - subsidy);
+    const roi       = annualSavings > 0 ? netCost / annualSavings : 0;
+    const lifetime  = annualSavings * 25 - netCost;
+
+    const fmt = n => {
+      if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+      if (n >= 1000)   return Math.round(n / 1000) + 'K';
+      return Math.round(n).toLocaleString('en-IN');
+    };
+
+    document.getElementById('calc-monthly').textContent  = Math.round(monthlySavings).toLocaleString('en-IN');
+    document.getElementById('calc-annual').textContent   = fmt(annualSavings);
+    document.getElementById('calc-roi').textContent      = roi.toFixed(1);
+    document.getElementById('calc-lifetime').textContent = fmt(lifetime);
+
+    const pct = Math.round((monthlySavings / bill) * 100);
+    document.getElementById('calc-note').textContent =
+      `${kw} kW generates ~${Math.round(monthlyUnits)} units/month · ` +
+      `covers ~${pct}% of your bill · ` +
+      `Net cost after ₹${Math.round(subsidy/1000)}K subsidy: ₹${fmt(netCost)}`;
+  }
+  scCalc(); // initial render
+  // ────────────────────────────────────────────────────────────────────
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
