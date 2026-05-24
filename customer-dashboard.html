@@ -171,19 +171,19 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
               <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
                 <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Monthly Savings</div>
-                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-monthly">3,240</span></div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-monthly">--</span></div>
               </div>
               <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
                 <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Annual Savings</div>
-                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-annual">38,880</span></div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--green);">₹<span id="calc-annual">--</span></div>
               </div>
               <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
                 <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">Payback Period</div>
-                <div style="font-size:1.25rem;font-weight:800;color:var(--primary);"><span id="calc-roi">5.0</span> yrs</div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--primary);"><span id="calc-roi">--</span> yrs</div>
               </div>
               <div style="background:#fff;border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border);">
                 <div style="font-size:0.7rem;color:var(--grey);margin-bottom:4px;">25-yr Net Gain</div>
-                <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">₹<span id="calc-lifetime">8.8L</span></div>
+                <div style="font-size:1.25rem;font-weight:800;color:var(--dark);">₹<span id="calc-lifetime">--</span></div>
               </div>
             </div>
             <div id="calc-note" style="font-size:0.7rem;color:var(--grey);text-align:center;line-height:1.5;"></div>
@@ -191,6 +191,46 @@
         </div>
       </div>
       <!-- ─────────────────────────────────────────────────────────────── -->
+      <script>
+        // scCalc is self-contained (no bundle needed) — runs right here,
+        // independent of any other script that might error out.
+        function scCalc() {
+          var bill = parseInt(document.getElementById('calc-bill').value) || 5500;
+          var kw   = parseFloat(document.getElementById('calc-kw').value)  || 5;
+          var rate = parseFloat(document.getElementById('calc-rate').value) || 8;
+
+          document.getElementById('calc-bill-val').textContent = bill.toLocaleString('en-IN');
+          document.getElementById('calc-kw-val').textContent   = kw % 1 === 0 ? String(kw) : kw.toFixed(1);
+          document.getElementById('calc-rate-val').textContent = rate % 1 === 0 ? String(rate) : rate.toFixed(1);
+
+          var monthlyUnits   = kw * 4.5 * 30;
+          var monthlySavings = Math.min(monthlyUnits * rate, bill);
+          var annualSavings  = monthlyUnits * rate * 12;
+          var grossCost = kw * 55000;
+          var subsidy   = kw <= 2 ? kw * 30000 : kw <= 3 ? 60000 + (kw - 2) * 18000 : 78000;
+          var netCost   = Math.max(0, grossCost - subsidy);
+          var roi       = annualSavings > 0 ? netCost / annualSavings : 0;
+          var lifetime  = annualSavings * 25 - netCost;
+
+          function fmt(n) {
+            if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+            if (n >= 1000)   return Math.round(n / 1000) + 'K';
+            return Math.round(n).toLocaleString('en-IN');
+          }
+
+          document.getElementById('calc-monthly').textContent  = Math.round(monthlySavings).toLocaleString('en-IN');
+          document.getElementById('calc-annual').textContent   = fmt(annualSavings);
+          document.getElementById('calc-roi').textContent      = roi.toFixed(1);
+          document.getElementById('calc-lifetime').textContent = fmt(lifetime);
+
+          var pct = Math.round((monthlySavings / bill) * 100);
+          document.getElementById('calc-note').textContent =
+            kw + ' kW generates ~' + Math.round(monthlyUnits) + ' units/month · ' +
+            'covers ~' + pct + '% of your bill · ' +
+            'Net cost after ₹' + Math.round(subsidy / 1000) + 'K subsidy: ₹' + fmt(netCost);
+        }
+        scCalc();
+      </script>
 
       <div class="grid-2">
         <!-- Project Snapshot -->
@@ -306,48 +346,8 @@
       </div>
     </a>`).join('');
 
-  // ── SAVINGS CALCULATOR ──────────────────────────────────────────────
-  function scCalc() {
-    const bill = parseInt(document.getElementById('calc-bill').value);
-    const kw   = parseFloat(document.getElementById('calc-kw').value);
-    const rate = parseFloat(document.getElementById('calc-rate').value);
-
-    // Update slider labels
-    document.getElementById('calc-bill-val').textContent = bill.toLocaleString('en-IN');
-    document.getElementById('calc-kw-val').textContent   = kw % 1 === 0 ? kw : kw.toFixed(1);
-    document.getElementById('calc-rate-val').textContent = rate % 1 === 0 ? rate : rate.toFixed(1);
-
-    // Calculations (Bangalore: 4.5 peak sun hours/day)
-    const monthlyUnits   = kw * 4.5 * 30;
-    const monthlySavings = Math.min(monthlyUnits * rate, bill);
-    const annualSavings  = monthlyUnits * rate * 12;
-
-    // PM Surya Ghar subsidy tiers (Central)
-    const grossCost = kw * 55000;
-    const subsidy   = kw <= 2 ? kw * 30000 : kw <= 3 ? 60000 + (kw - 2) * 18000 : 78000;
-    const netCost   = Math.max(0, grossCost - subsidy);
-    const roi       = annualSavings > 0 ? netCost / annualSavings : 0;
-    const lifetime  = annualSavings * 25 - netCost;
-
-    const fmt = n => {
-      if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
-      if (n >= 1000)   return Math.round(n / 1000) + 'K';
-      return Math.round(n).toLocaleString('en-IN');
-    };
-
-    document.getElementById('calc-monthly').textContent  = Math.round(monthlySavings).toLocaleString('en-IN');
-    document.getElementById('calc-annual').textContent   = fmt(annualSavings);
-    document.getElementById('calc-roi').textContent      = roi.toFixed(1);
-    document.getElementById('calc-lifetime').textContent = fmt(lifetime);
-
-    const pct = Math.round((monthlySavings / bill) * 100);
-    document.getElementById('calc-note').textContent =
-      `${kw} kW generates ~${Math.round(monthlyUnits)} units/month · ` +
-      `covers ~${pct}% of your bill · ` +
-      `Net cost after ₹${Math.round(subsidy/1000)}K subsidy: ₹${fmt(netCost)}`;
-  }
-  scCalc(); // initial render
-  // ────────────────────────────────────────────────────────────────────
+  // scCalc() is defined and called in its own <script> block above the
+  // grid-2 section — fully independent of bundle loading order.
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
