@@ -325,6 +325,13 @@
   scRequireRole('customer');
   renderSidebar('customer');
 
+  // Back-button guard: pressing back from the dashboard logs the user out
+  // and returns them to the home page instead of a broken "forward" state.
+  history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', function() {
+    scLogout();
+  });
+
   // Quotes
   const quotes = [
     { vendor:"SuryamTech Solar",     rating:4.6, amount:"₹2,75,000", status:"accepted", eta:"14 days" },
