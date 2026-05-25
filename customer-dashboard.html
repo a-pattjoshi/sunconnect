@@ -326,10 +326,15 @@
   renderSidebar('customer');
 
   // Back-button guard: pressing back from the dashboard logs the user out
-  // and returns them to the home page instead of a broken "forward" state.
+  // and returns them to the home page.
+  // We skip the rating modal here — the modal requires user interaction, and
+  // if the user presses back *again* to dismiss it the browser goes to a
+  // blank/new-tab URL instead of home. Immediate redirect is more reliable.
   history.pushState(null, '', window.location.href);
   window.addEventListener('popstate', function() {
-    scLogout();
+    sessionStorage.setItem('sc_logout_nav', '1'); // suppress "pending rating" on next load
+    try { localStorage.removeItem('sc_session'); sessionStorage.removeItem('sc_session'); } catch(e) {}
+    window.location.replace('/');
   });
 
   // Quotes
