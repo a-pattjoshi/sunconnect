@@ -252,10 +252,10 @@ const _SC_AK = 'sc_analytics';
 function scGetAnalytics() {
   try {
     const d = localStorage.getItem(_SC_AK);
-    const def = { signinClicks: 0, signinEvents: [], ratings: [] };
+    const def = { signinClicks: 0, signinEvents: [], ratings: [], videoViews: [] };
     if (!d) return def;
     const p = JSON.parse(d);
-    return { signinClicks: p.signinClicks||0, signinEvents: p.signinEvents||[], ratings: p.ratings||[] };
+    return { signinClicks: p.signinClicks||0, signinEvents: p.signinEvents||[], ratings: p.ratings||[], videoViews: p.videoViews||[] };
   } catch(e) { return { signinClicks: 0, signinEvents: [], ratings: [] }; }
 }
 
@@ -289,6 +289,15 @@ function scTrackSignin() {
   d.signinEvents.push({ ts: new Date().toISOString() });
   _scSave(d);
   _scPost({ event_type: 'signin', role: user ? user.role : 'unknown' });
+}
+
+/* ── VIDEO VIEW TRACKING ── */
+function scTrackVideoView() {
+  const d = scGetAnalytics();
+  d.videoViews = d.videoViews || [];
+  d.videoViews.push({ ts: new Date().toISOString() });
+  _scSave(d);
+  _scPost({ event_type: 'video_view', role: 'visitor' });
 }
 
 /* ── RATING STORAGE ── */

@@ -232,26 +232,29 @@
     const local = scGetAnalytics();
 
     // Build unified events list from Supabase
-    const ratings = [], signins = [];
+    const ratings = [], signins = [], videoViews = [];
     if (remoteEvents && remoteEvents.length) {
       remoteEvents.forEach(e => {
         if (e.event_type === 'rating') {
           ratings.push({ score: e.score, trigger: e.trigger, role: e.role, ts: e.created_at, session_id: e.session_id, source: 'remote' });
         } else if (e.event_type === 'signin') {
           signins.push({ ts: e.created_at, role: e.role, session_id: e.session_id, source: 'remote' });
+        } else if (e.event_type === 'video_view') {
+          videoViews.push({ ts: e.created_at, session_id: e.session_id, source: 'remote' });
         }
       });
     }
 
-    // Merge local ratings not already in remote (fallback if Supabase not configured)
+    // Merge local events not already in remote (fallback if Supabase not configured)
     const isRemoteConfigured = SC_SUPABASE_URL && !SC_SUPABASE_URL.includes('YOUR_');
     if (!isRemoteConfigured) {
       local.ratings.forEach(r => ratings.push({ ...r, source: 'local' }));
       local.signinEvents.forEach(s => signins.push({ ...s, source: 'local' }));
+      (local.videoViews || []).forEach(v => videoViews.push({ ...v, source: 'local' }));
     }
 
     const uniqueSessions = new Set([...ratings, ...signins].map(e => e.session_id).filter(Boolean)).size;
-    return { ratings, signins, signinClicks: isRemoteConfigured ? signins.length : local.signinClicks, uniqueSessions, isRemoteConfigured };
+    return { ratings, signins, videoViews, signinClicks: isRemoteConfigured ? signins.length : local.signinClicks, uniqueSessions, isRemoteConfigured };
   }
 
   async function renderDashboard() {
@@ -260,7 +263,7 @@
     document.getElementById('adm-last-updated').textContent = 'Fetching…';
 
     const remoteEvents = await scFetchRemoteEvents();
-    const { ratings, signins, signinClicks, uniqueSessions, isRemoteConfigured } = mergeData(remoteEvents);
+    const { ratings, signins, videoViews, signinClicks, uniqueSessions, isRemoteConfigured } = mergeData(remoteEvents);
 
     const source = isRemoteConfigured ? '☁️ Supabase' : '💾 Local only';
     document.getElementById('adm-last-updated').textContent = `${source} · Updated: ${new Date().toLocaleTimeString('en-IN')}`;
@@ -277,6 +280,7 @@
       { label: 'Total Ratings', value: ratings.length, sub: `${todayRatings} today`, cls: 'blue' },
       { label: 'Average Rating', value: avgRating !== '—' ? avgRating + ' ★' : '—', sub: ratings.length ? `from ${ratings.length} responses` : 'No ratings yet', cls: 'green' },
       { label: 'Notification Ratings', value: ratings.filter(r=>r.trigger==='notification').length, sub: avg(ratings.filter(r=>r.trigger==='notification').map(r=>r.score)) + ' ★ avg', cls: '' },
+      { label: '📹 Ad Video Views', value: videoViews.length, sub: `${videoViews.filter(v => new Date(v.ts).toDateString() === todayStr).length} today`, cls: 'blue' },
     ].map(s => `
       <div class="adm-stat ${s.cls}">
         <div class="adm-stat-label">${s.label}</div>
@@ -300,8 +304,8 @@
     const triggers = [
       { key: 'notification', label: '🔔 Notifications' },
     ];
-    const maxCount = Math.max(1, ...triggers.map(t => ratings.filter(r => r.trigger === t.key).length));
-    document.getElementById('trigger-bars').innerHTML = triggers.map(t => {
+    const maxCount = Math.max(1, ...triggers.map(t => ratings.filter(r => r.trigger === t.key).length), videoViews.length);
+    const triggerHtml = triggers.map(t => {
       const group  = ratings.filter(r => r.trigger === t.key);
       const count  = group.length;
       const avgVal = group.length ? avg(group.map(r => r.score)) : '—';
@@ -312,6 +316,14 @@
         <div class="t-bar-avg">${avgVal}★</div>
       </div><div style="font-size:0.72rem;color:#475569;margin-bottom:14px;padding-left:122px;">${count} response${count!==1?'s':''}</div>`;
     }).join('');
+    // Video views row (orange bar, no star rating)
+    const vPct = Math.round(videoViews.length / maxCount * 100);
+    const videoRow = `<div class="t-bar-row">
+        <div class="t-bar-label">📹 Ad Video</div>
+        <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${vPct}%;background:linear-gradient(90deg,#f97316,#F59E0B);"></div></div>
+        <div class="t-bar-avg" style="color:#f97316;">${videoViews.length}</div>
+      </div><div style="font-size:0.72rem;color:#475569;margin-bottom:14px;padding-left:122px;">${videoViews.length} play${videoViews.length!==1?'s':''} · ${videoViews.filter(v=>new Date(v.ts).toDateString()===todayStr).length} today</div>`;
+    document.getElementById('trigger-bars').innerHTML = triggerHtml + videoRow || '<div class="empty-state">No data yet</div>';
 
     // ── SIGN-IN TABLE ──
     document.getElementById('signin-count-badge').textContent = signinClicks + ' total';
