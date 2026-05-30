@@ -735,21 +735,21 @@ const SC_LEADS = [
 
 /* ── QUOTATIONS ── */
 const SC_QUOTATIONS = [
-  { id:"QT-001", customer:"Srinivas G.",    date:"10 May 2026", system:"10 kW",  panels:"Tata Solar (10×1kW)", inverter:"GoodWe 10 kW", amount:"₹5,80,000", status:"sent",      expiry:"24 May 2026" },
-  { id:"QT-002", customer:"Anita Krishnan", date:"12 May 2026", system:"5 kW",   panels:"Waaree (5×1kW)",     inverter:"Havells 5 kW",  amount:"₹2,85,000", status:"viewed",    expiry:"26 May 2026" },
-  { id:"QT-003", customer:"Meenakshi V.",   date:"05 May 2026", system:"4 kW",   panels:"Tata Solar (4×1kW)", inverter:"Delta 4 kW",    amount:"₹2,20,000", status:"accepted",  expiry:"19 May 2026" },
-  { id:"QT-004", customer:"Ravi Shankar",   date:"11 May 2026", system:"7 kW",   panels:"Waaree (7×1kW)",     inverter:"GoodWe 7 kW",   amount:"₹3,85,000", status:"draft",     expiry:"25 May 2026" },
-  { id:"QT-005", customer:"Suresh Babu",    date:"03 May 2026", system:"15 kW",  panels:"Adani (15×1kW)",     inverter:"Sungrow 15 kW", amount:"₹7,50,000", status:"rejected",  expiry:"17 May 2026" }
+  { id:"QT-001", customer:"Srinivas G.",    date:"10 May 2026", system:"10 kW",  panels:"Tata Solar (10×1kW)", inverter:"GoodWe 10 kW", amount:"₹5,80,000", status:"sent",      expiry:"20 Jun 2026" },
+  { id:"QT-002", customer:"Anita Krishnan", date:"12 May 2026", system:"5 kW",   panels:"Waaree (5×1kW)",     inverter:"Havells 5 kW",  amount:"₹2,85,000", status:"viewed",    expiry:"22 Jun 2026" },
+  { id:"QT-003", customer:"Meenakshi V.",   date:"05 May 2026", system:"4 kW",   panels:"Tata Solar (4×1kW)", inverter:"Delta 4 kW",    amount:"₹2,20,000", status:"accepted",  expiry:"15 Jun 2026" },
+  { id:"QT-004", customer:"Ravi Shankar",   date:"11 May 2026", system:"7 kW",   panels:"Waaree (7×1kW)",     inverter:"GoodWe 7 kW",   amount:"₹3,85,000", status:"draft",     expiry:"21 Jun 2026" },
+  { id:"QT-005", customer:"Suresh Babu",    date:"03 May 2026", system:"15 kW",  panels:"Adani (15×1kW)",     inverter:"Sungrow 15 kW", amount:"₹7,50,000", status:"rejected",  expiry:"13 Jun 2026" }
 ];
 
 /* ── VENDOR PROJECTS ── */
 const SC_PROJECTS = [
-  { id:"PRJ-001", customer:"Meenakshi V.",   area:"Kadugodi",    system:"4 kW",  stage:"installation", startDate:"10 May 2026", eta:"22 May 2026",  value:"₹2,20,000", progress:65 },
-  { id:"PRJ-002", customer:"Pradeep S.",     area:"Whitefield",  system:"3 kW",  stage:"inspection",   startDate:"01 May 2026", eta:"18 May 2026",  value:"₹1,65,000", progress:80 },
-  { id:"PRJ-003", customer:"Savitha Rao",    area:"Marathahalli",system:"5 kW",  stage:"survey",       startDate:"13 May 2026", eta:"30 May 2026",  value:"₹2,75,000", progress:15 },
+  { id:"PRJ-001", customer:"Meenakshi V.",   area:"Kadugodi",    system:"4 kW",  stage:"installation", startDate:"10 May 2026", eta:"10 Jun 2026",  value:"₹2,20,000", progress:65 },
+  { id:"PRJ-002", customer:"Pradeep S.",     area:"Whitefield",  system:"3 kW",  stage:"inspection",   startDate:"01 May 2026", eta:"5 Jun 2026",  value:"₹1,65,000", progress:80 },
+  { id:"PRJ-003", customer:"Savitha Rao",    area:"Marathahalli",system:"5 kW",  stage:"survey",       startDate:"13 May 2026", eta:"25 Jun 2026",  value:"₹2,75,000", progress:15 },
   { id:"PRJ-004", customer:"Kavitha M.",     area:"Brookefield", system:"3 kW",  stage:"completed",    startDate:"15 Apr 2026", eta:"01 May 2026",  value:"₹1,70,000", progress:100 },
   { id:"PRJ-005", customer:"Ramesh T.",      area:"Whitefield",  system:"6 kW",  stage:"completed",    startDate:"01 Apr 2026", eta:"20 Apr 2026",  value:"₹3,30,000", progress:100 },
-  { id:"PRJ-006", customer:"Arjun Mehta",    area:"KR Puram",    system:"8 kW",  stage:"material",     startDate:"08 May 2026", eta:"25 May 2026",  value:"₹4,40,000", progress:35 }
+  { id:"PRJ-006", customer:"Arjun Mehta",    area:"KR Puram",    system:"8 kW",  stage:"material",     startDate:"08 May 2026", eta:"18 Jun 2026",  value:"₹4,40,000", progress:35 }
 ];
 
 /* ── CUSTOMER PROJECT TRACKER DATA ── */
