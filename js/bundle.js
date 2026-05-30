@@ -105,6 +105,20 @@ function renderSidebar(role) {
   // Mobile bottom navigation bar
   _renderMobileBottomNav(role);
 
+  // Mobile logout button — injected into top-bar-right, shown only via CSS on mobile
+  // Keeps logout accessible without the sidebar on phones
+  const topBarRight = document.querySelector('.top-bar-right');
+  if (topBarRight && !document.getElementById('mobile-logout-btn')) {
+    const logoutBtn = document.createElement('button');
+    logoutBtn.id = 'mobile-logout-btn';
+    logoutBtn.className = 'mobile-logout-btn';
+    logoutBtn.title = 'Logout';
+    logoutBtn.setAttribute('aria-label', 'Logout');
+    logoutBtn.textContent = '⏻';
+    logoutBtn.onclick = scLogout;
+    topBarRight.appendChild(logoutBtn);
+  }
+
   // Wire notification bell
   _setupNotifications(role);
 }
