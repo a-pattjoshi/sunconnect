@@ -1,7 +1,7 @@
 /* ── SUNCONNECT — Auth & Navigation ── */
 
 const USERS = {
-  'customer@sunconnect.in': { password: 'solar123', role: 'customer', name: 'Priya Sharma',                    initials: 'PS' },
+  'customer@sunconnect.in': { password: 'solar123', role: 'customer', name: 'Neha Sharma',                    initials: 'PS' },
   'vendor@sunconnect.in':   { password: 'solar123', role: 'vendor',   name: 'Satish Kumar (Pratham Solar)',    initials: 'SK' }
 };
 
